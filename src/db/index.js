@@ -1,0 +1,50 @@
+import { createCard } from "./card";
+import * as SQLite from "expo-sqlite";
+const db = SQLite.openDatabase("db.db");
+const defaultCards = [
+  {
+    name: "Xài Chính",
+    type: "using",
+    money: 1000000000,
+    note: "Xài Chính",
+  },
+  {
+    name: "Mua lap mới",
+    type: "saving",
+    money: 1000000,
+    note: "Dành tiền mua lap mới",
+  },
+];
+
+export function initDb() {
+  db.transaction(
+    (tx) => {
+      tx.executeSql(
+        `create table if not exists cards (
+    id integer primary key autoincrement,
+    name text ,
+    type text,
+    money integer not null,
+    note text
+    );`
+      );
+      tx.executeSql(`create table if not exists categories(
+    id integer primary key autoincrement,
+    name text,
+    type text);
+    `);
+      tx.executeSql(`create table if not exists transactions(
+    id integer primary key autoincrement,
+    category integer,
+    cards integer,
+    cash integer,
+    date text);
+    `);
+    },
+    null,
+    () => {
+      console.log("wtf");
+      defaultCards.map(createCard);
+    }
+  );
+}
