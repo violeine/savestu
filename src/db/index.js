@@ -1,4 +1,5 @@
 import { createCard } from "./card";
+import { createCategory } from "./category";
 import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("db.db");
 const defaultCards = [
@@ -16,6 +17,16 @@ const defaultCards = [
   },
 ];
 
+const defaultCategory = [
+  {
+    name: "ăn",
+    type: "eat",
+  },
+  {
+    name: "xăng",
+    type: "something",
+  },
+];
 export function initDb() {
   db.transaction(
     (tx) => {
@@ -44,7 +55,8 @@ export function initDb() {
     null,
     () => {
       console.log("wtf");
-      defaultCards.map(createCard);
+      defaultCards.map((e) => createCard(e));
+      defaultCategory.map((e) => createCategory(e));
     }
   );
 }
