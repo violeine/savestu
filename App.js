@@ -1,3 +1,4 @@
+
 import React from 'react'
 import 'react-native-gesture-handler'
 import { NavigationContainer } from '@react-navigation/native'
@@ -5,12 +6,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import HomeScreen from './src/screens/HomeScreen'
-import HistoryScreen from './src/screens/HistoryScreen'
-import CardScreen from './src/screens/CardScreen'
-import AccountScreen from './src/screens/AccountScreen'
-
-
+import { HomeScreen } from "./src/screens/HomeScreen";
+import { HistoryScreen } from "./src/screens/HistoryScreen";
+import { CardScreen } from "./src/screens/CardScreen";
+import { AccountScreen } from "./src/screens/AccountScreen";
+import FloatingButton from "./src/components/FloatingButton";
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
