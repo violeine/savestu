@@ -1,86 +1,85 @@
 import React from 'react'
 import 'react-native-gesture-handler'
-import { createAppContainer } from 'react-navigation'
-import { createBottomTabNavigator } from 'react-navigation-tabs'
-import { AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
+import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { HomeScreen } from './src/screens/HomeScreen'
-import { HistoryScreen } from './src/screens/HistoryScreen'
-import { CardScreen } from './src/screens/CardScreen'
-import { AccountScreen } from './src/screens/AccountScreen'
+import HomeScreen from './src/screens/HomeScreen'
+import HistoryScreen from './src/screens/HistoryScreen'
+import CardScreen from './src/screens/CardScreen'
+import AccountScreen from './src/screens/AccountScreen'
 import FloatingButton from './src/components/FloatingButton'
 
 
+const Tab = createBottomTabNavigator();
 
-const TabNavigator = createBottomTabNavigator(
-	{
-		Home: {
-			screen: HomeScreen,
-			navigationOptions: {
-				tabBarIcon: ({ tintColor, focused }) => <AntDesign
-					name='home'
-					size={focused ? 32 : 28}
-					color={tintColor} />,
-			},
-		},
+const HomeStack = createStackNavigator();
 
-		History: {
-			screen: HistoryScreen,
-			navigationOptions: {
-				tabBarIcon: ({ tintColor, focused }) => <MaterialCommunityIcons
-					name='history'
-					size={focused ? 32 : 28}
-					color={tintColor} />
-			},
-		},
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+    </HomeStack.Navigator>
+  );
+}
 
-		FltButton: {
-			screen: () => null,
-			navigationOptions: {
-				tabBarIcon: <FloatingButton />,
-				tabBarLabel: () => null,
-			},
-		},
+const App = () => {
+	return (
+		<NavigationContainer>
+			<Tab.Navigator
+				screenOptions={
+					({ route }) => ({
+						tabBarIcon: ({ focused, color, size }) => {
+							let iconName
 
-		Card: {
-			screen: CardScreen,
-			navigationOptions: {
-				tabBarIcon: ({ tintColor, focused }) => <AntDesign
-					name='creditcard'
-					size={focused ? 28 : 24}
-					color={tintColor} />
-			},
-		},
+							if (route.name === 'Home') {
+								iconName = focused ? 'home' : 'home-outline'
+								size = focused ? 32 : 28
+							}
 
-		Account: {
-			screen: AccountScreen,
-			navigationOptions: {
-				tabBarIcon: ({ tintColor, focused }) => <MaterialCommunityIcons
-					name='account'
-					size={focused ? 32 : 28}
-					color={tintColor} />
-			}
-		},
-	}, // Button
+							else if (route.name === 'History') {
+								iconName = focused ? 'history' : 'history'
+								size = focused ? 32 : 28
+							}
+
+							else if (route.name === 'Card') {
+								iconName = focused ? 'account-card-details' : 'account-card-details-outline'
+								size = focused ? 32 : 28
+							}
+
+							else if (route.name === 'Account') {
+								iconName = focused ? 'account' : 'account-outline'
+								size = focused ? 32 : 28
+							}
+
+							return <MaterialCommunityIcons name={iconName} size={size} color={color} />
+						},
+					})
+				}
+
+				tabBarOptions={{
+					activeTintColor: '#2CC197',
+					inactiveTintColor: '#CDCCCE',
+					style: {
+						height: 55,
+					},
+					labelStyle: {
+
+					}
+				}}
+			>
+
+				<Tab.Screen name="Home" component={HomeStackScreen} />
+				<Tab.Screen name="History" component={HistoryScreen} />
+				<Tab.Screen name="Card" component={CardScreen} />
+				<Tab.Screen name="Account" component={AccountScreen} />
+
+			</Tab.Navigator>
 
 
-	{
-		tabBarOptions: {
-			showLabel: true,
-			activeTintColor: '#2CC197',
-			inactiveTintColor: '#CDCCCE',
-			style: {
-				height: 65,
-			},
-			tabStyle: {
-				paddingVertical: 5,	
-			},
-			labelStyle: {
-				fontSize: 11,
-			}
-		},
-	},
+		</NavigationContainer >
+	);
+}
 
-)
-
-export default createAppContainer(TabNavigator)
+export default App
