@@ -31,3 +31,30 @@ export function getCategory(f = console.log.bind(console)) {
     );
   });
 }
+
+export function updateCategory(
+  { name, type, id },
+  f = console.log.bind(console)
+) {
+  db.transaction(function (tx) {
+    tx.executeSql(
+      `update categories
+       set name=?, type=? where id=?
+      `,
+      [name, type, id]
+    );
+    getCategory(f);
+  });
+}
+
+export function deleteCategory(id, f = console.log.bind(console)) {
+  db.transaction(function (tx) {
+    tx.executeSql(
+      `delete from categories
+    where id=?
+    `,
+      [id]
+    );
+    getCategory(f);
+  });
+}

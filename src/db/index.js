@@ -33,23 +33,26 @@ export function initDb() {
       tx.executeSql(
         `create table if not exists cards (
     id integer primary key autoincrement,
-    name text ,
+    name text,
     type text,
     money integer not null,
     note text
     );`
       );
-      tx.executeSql(`create table if not exists categories(
+      tx.executeSql(`create table if not exists categories (
     id integer primary key autoincrement,
     name text,
     type text);
     `);
-      tx.executeSql(`create table if not exists transactions(
+      tx.executeSql(`create table if not exists transactions (
     id integer primary key autoincrement,
-    category integer,
-    cards integer,
+    category integer not null,
+    card integer not null,
     cash integer,
-    date text);
+    date text,
+    note text,
+    foreign key (category) references category (id),
+    foreign key (card) references card (id));
     `);
     },
     null,
