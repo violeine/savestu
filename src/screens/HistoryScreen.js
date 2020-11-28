@@ -7,8 +7,7 @@ import {
   Button,
   ScrollView,
 } from "react-native";
-import * as fs from "expo-file-system";
-import { initDb } from "../db/index";
+import { useInitDbHook, cleanUp } from "../db/index";
 import { getCard, createCard, updateCard, deleteCard } from "../db/card";
 import {
   getCategory,
@@ -24,27 +23,6 @@ import {
 } from "../db/transaction";
 
 export const HistoryScreen = () => {
-  const cleanUp = async () => {
-    console.log("delete db");
-    await fs.deleteAsync(`${fs.documentDirectory}/SQLite/db.db`);
-    const { exists } = await fs.getInfoAsync(
-      `${fs.documentDirectory}/SQLite/db.db`
-    );
-    if (!exists) console.log("deleted");
-    await init();
-  };
-  const init = async () => {
-    console.log("init db");
-    const { exists } = await fs.getInfoAsync(
-      `${fs.documentDirectory}/SQLite/db.db`
-    );
-    console.log(exists);
-    if (!exists) initDb();
-  };
-  useEffect(() => {
-    init();
-  }, []);
-
   const [cards, setCards] = useState(null);
   const [cardsInput, setCardInput] = useState({
     name: "",
@@ -79,6 +57,7 @@ export const HistoryScreen = () => {
     date: "",
     note: "",
   });
+
   const [transactionUpdate, setTransactionUpdate] = useState({
     category: "1",
     card: "1",

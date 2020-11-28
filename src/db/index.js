@@ -1,5 +1,7 @@
 import { createCard } from "./card";
 import { createCategory } from "./category";
+import { createContext, useState, useEffect } from "react";
+import * as fs from "expo-file-system";
 import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("db.db");
 const defaultCards = [
@@ -27,7 +29,8 @@ const defaultCategory = [
     type: "something",
   },
 ];
-export function initDb() {
+
+function initDb() {
   db.transaction(
     (tx) => {
       tx.executeSql(
@@ -57,9 +60,39 @@ export function initDb() {
     },
     null,
     () => {
-      console.log("wtf");
       defaultCards.map((e) => createCard(e));
       defaultCategory.map((e) => createCategory(e));
     }
   );
 }
+
+const cleanUp = async () => {
+  console.log("deleting db");
+  const { exists } = await fs.getInfoAsync(
+    `${fs.documentDirectory}/SQLite/db.db`
+  );
+  if (!exists) console.log("deleted");
+  else {
+    await fs.deleteAsync(`${fs.documentDirectory}/SQLite/db.db`);
+
+    const { exists } = await fs.getInfoAsync(
+      `${fs.documentDirectory}/SQLite/db.db`
+    );
+    console.log(exists);
+  }
+};
+
+const init = async () => {
+  const { exists } = await fs.getInfoAsync(
+    `${fs.documentDirectory}/SQLite/db.db`
+  );
+  console.log(exists);
+  if (!exists) initDb();
+};
+
+function useInitDbHook() {
+  useEffect(() => {
+    init();
+  }, []);
+}
+export { initDb, cleanUp, useInitDbHook };
