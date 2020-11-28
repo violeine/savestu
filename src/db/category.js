@@ -12,7 +12,7 @@ export function createCategory({ name, type }, f = console.log.bind(console)) {
       `select * from categories`,
       [],
       (_, { rows }) => {
-        f(JSON.stringify(rows));
+        f(rows);
       },
       (_, err) => console.error("Something went wrong, ", err)
     );
@@ -25,7 +25,7 @@ export function getCategory(f = console.log.bind(console)) {
       `select * from categories`,
       [],
       (_, { rows }) => {
-        f(JSON.stringify(rows));
+        f(rows);
       },
       (_, err) => console.error("Something went wrong, ", err)
     );

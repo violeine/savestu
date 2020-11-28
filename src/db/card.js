@@ -21,7 +21,7 @@ export function getCard(f = console.log.bind(console)) {
       `select * from cards`,
       [],
       (_, { rows }) => {
-        f(JSON.stringify(rows));
+        f(rows);
       },
       (_, err) => console.error("something went wrong, ", err)
     );

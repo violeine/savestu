@@ -69,15 +69,15 @@ export const HistoryScreen = () => {
   const [deleteId, setDeleteId] = useState("1");
 
   const getAllCards = () => {
-    getCard(setCards);
+    getCard((data) => setCards(JSON.stringify(data, null, 2)));
   };
 
   const getAllCategories = () => {
-    getCategory(setCategories);
+    getCategory((data) => setCategories(JSON.stringify(data, null, 2)));
   };
 
   const getAllTransactions = () => {
-    getTransaction(setTransactions);
+    getTransaction((data) => setCategories(JSON.stringify(data, null, 2)));
   };
 
   const clearOutput = () => {
