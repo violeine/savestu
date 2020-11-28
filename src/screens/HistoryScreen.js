@@ -77,7 +77,7 @@ export const HistoryScreen = () => {
   };
 
   const getAllTransactions = () => {
-    getTransaction((data) => setCategories(JSON.stringify(data, null, 2)));
+    getTransaction((data) => setTransactions(JSON.stringify(data, null, 2)));
   };
 
   const clearOutput = () => {

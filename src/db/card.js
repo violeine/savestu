@@ -28,6 +28,14 @@ export function getCard(f = console.log.bind(console)) {
   });
 }
 
+export function getCardById(id, f = console.log.bind(console)) {
+  db.transaction(function (tx) {
+    tx.executeSql(`select * from cards where id=?`, [id], (_, { rows }) => {
+      f(rows.item(0));
+    });
+  });
+}
+
 export function updateCard(
   { name, type, money, note, id },
   f = console.log.bind(console)

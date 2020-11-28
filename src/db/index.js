@@ -1,6 +1,6 @@
-import { createCard } from "./card";
+import { createCard, getCardById } from "./card";
 import { createCategory } from "./category";
-import { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import * as fs from "expo-file-system";
 import * as SQLite from "expo-sqlite";
 const db = SQLite.openDatabase("db.db");
@@ -91,8 +91,53 @@ const init = async () => {
 };
 
 function useInitDbHook() {
+  const dispatch = useCardDispatch();
   useEffect(() => {
     init();
+    getCardById(1, dispatch);
   }, []);
 }
-export { initDb, cleanUp, useInitDbHook };
+
+function setGlobalCard(id) {
+  const dispatch = useCardDispatch();
+  getCardById(id, dispatch);
+}
+const CardStateContext = createContext();
+const CardDispatchContext = createContext();
+
+function CardProvider({ children }) {
+  const [card, setCard] = useState({});
+  return (
+    <CardStateContext.Provider value={card}>
+      <CardDispatchContext.Provider value={setCard}>
+        {children}
+      </CardDispatchContext.Provider>
+    </CardStateContext.Provider>
+  );
+}
+
+function useCardState() {
+  const context = useContext(CardStateContext);
+  if (context === undefined) {
+    throw new Error("useCardState must be used within a CardProvider");
+  }
+  return context;
+}
+
+function useCardDispatch() {
+  const context = useContext(CardDispatchContext);
+  if (context === undefined) {
+    throw new Error("useCardDispatch must be used within a CardProvider");
+  }
+  return context;
+}
+
+export {
+  initDb,
+  cleanUp,
+  useInitDbHook,
+  CardProvider,
+  useCardState,
+  useCardDispatch,
+  setGlobalCard,
+};

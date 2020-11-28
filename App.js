@@ -9,7 +9,7 @@ import HomeScreen from "./src/screens/HomeScreen";
 import HistoryScreen from "./src/screens/HistoryScreen";
 import CardScreen from "./src/screens/CardScreen";
 import AccountScreen from "./src/screens/AccountScreen";
-import { useInitDbHook } from "./src/db";
+import { useInitDbHook, CardProvider } from "./src/db";
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -30,7 +30,7 @@ function HistoryStackScreen() {
   );
 }
 
-const App = () => {
+const Main = () => {
   useInitDbHook();
   return (
     <NavigationContainer>
@@ -84,5 +84,11 @@ const App = () => {
     </NavigationContainer>
   );
 };
+
+const App = () => (
+  <CardProvider>
+    <Main />
+  </CardProvider>
+);
 
 export default App;
