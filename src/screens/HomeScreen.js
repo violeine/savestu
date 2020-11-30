@@ -10,7 +10,7 @@ import AddButton from "../components/AddButton";
 const HomeScreen = ({ navigation }) => {
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [cardModalVisible, setCardModalVisible] = useState(false);
-  const [cardId, setCardId] = useState(1);
+  const [cardId, setCardId] = useState("1");
   const dispatch = useCardDispatch();
 
   useLayoutEffect(() =>
@@ -74,4 +74,3 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
-

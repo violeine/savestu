@@ -30,7 +30,7 @@ const defaultCategory = [
   },
 ];
 
-function initDb() {
+function initDb(setFinished) {
   db.transaction(
     (tx) => {
       tx.executeSql(
@@ -62,6 +62,7 @@ function initDb() {
     () => {
       defaultCards.map((e) => createCard(e));
       defaultCategory.map((e) => createCategory(e));
+      setFinished(true);
     }
   );
 }
@@ -82,20 +83,21 @@ const cleanUp = async () => {
   }
 };
 
-const init = async () => {
+const init = async (setFinished) => {
   const { exists } = await fs.getInfoAsync(
     `${fs.documentDirectory}/SQLite/db.db`
   );
-  console.log(exists);
-  if (!exists) initDb();
+  if (!exists) initDb(setFinished);
+  else setFinished(true);
 };
 
 function useInitDbHook() {
   const dispatch = useCardDispatch();
+  const [finish, setFinished] = useState(false);
   useEffect(() => {
-    init();
-    getCardById(1, dispatch);
+    init(setFinished);
   }, []);
+  if (finish) getCardById(1, dispatch);
 }
 
 function setGlobalCard(id) {
