@@ -52,8 +52,7 @@ function initDb(setFinished) {
     category integer not null,
     card integer not null,
     cash integer,
-    date text,
-    note text,
+    date text, note text,
     foreign key (category) references category (id),
     foreign key (card) references card (id));
     `);
@@ -91,13 +90,16 @@ const init = async (setFinished) => {
   else setFinished(true);
 };
 
-function useInitDbHook() {
+async function useInitDbHook() {
   const dispatch = useCardDispatch();
   const [finish, setFinished] = useState(false);
   useEffect(() => {
     init(setFinished);
   }, []);
-  if (finish) getCardById(1, dispatch);
+  if (finish) {
+    const data = await getCardById(1);
+    dispatch(data);
+  }
 }
 
 function setGlobalCard(id) {

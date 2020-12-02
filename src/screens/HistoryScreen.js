@@ -68,8 +68,9 @@ export const HistoryScreen = () => {
 
   const [deleteId, setDeleteId] = useState("1");
 
-  const getAllCards = () => {
-    getCard((data) => setCards(JSON.stringify(data, null, 2)));
+  const getAllCards = async () => {
+    const data = await getCard();
+    setCards(JSON.stringify(data, null, 2));
   };
 
   const getAllCategories = () => {
@@ -178,8 +179,9 @@ export const HistoryScreen = () => {
         />
         <Button
           title="Create card"
-          onPress={() => {
-            createCard(cardsInput, setCards);
+          onPress={async () => {
+            const data = await createCard(cardsInput);
+            setCards(JSON.stringify(data, null, 2));
           }}
         />
       </View>
@@ -272,9 +274,10 @@ export const HistoryScreen = () => {
         />
         <Button
           title="Update Card"
-          onPress={() => {
-            updateCard(cardUpdate, setCards);
-            setCardInput({});
+          onPress={async () => {
+            const data = await updateCard(cardUpdate);
+            setCards(JSON.stringify(data, null, 2));
+            setCardUpdate({});
           }}
         />
       </View>
@@ -294,8 +297,9 @@ export const HistoryScreen = () => {
         />
         <Button
           title="delete card"
-          onPress={() => {
-            deleteCard(deleteId, setCards);
+          onPress={async () => {
+            const data = await deleteCard(deleteId);
+            setCards(JSON.stringify(data, null, 2));
           }}
         />
       </View>
