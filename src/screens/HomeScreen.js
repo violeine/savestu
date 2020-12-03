@@ -62,6 +62,7 @@ const HomeScreen = ({ navigation }) => {
       <AddButton />
     </>
   );
+
 };
 
 const styles = StyleSheet.create({

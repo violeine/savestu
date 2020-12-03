@@ -1,8 +1,27 @@
-import * as React from 'react';
-import {StyleSheet, TouchableOpacity, Text, View, Modal,SectionList} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, 
+  TouchableOpacity, 
+  Text, 
+  View, Modal, FlatList,
+  ScrollView, ActivityIndicator} from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-const CardModal = ({visible, hideCardModal, showCardModal}) => {
+import {getCard} from "../db/card"
+
+const CardModal = ({visible, hideCardModal, showCardModal, listCards}) => {
+  console.log(listCards)
+
+  const renderItem = ({item}) => {
+    <TouchableOpacity
+      onPress={hideCardModal}
+    >
+      <FontAwesome5 name='wallet'/>
+      <View>
+      <Text>{item.type}</Text>
+      <Text>{item.money}</Text>
+      </View>
+    </TouchableOpacity>
+  }
 
   return (
     <View style={styles.centeredView}>
@@ -10,22 +29,20 @@ const CardModal = ({visible, hideCardModal, showCardModal}) => {
       animationType="slide"
       transparent={true}
       visible={visible}
-      onRequestClose={() => {
-        Alert.alert("Modal has been closed.");
-      }}
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-            <TouchableOpacity
-              onPress={hideCardModal}
-            >
-                <FontAwesome5 name='wallet'/>
-                <View>
-                    <Text>ALL ACCOUNTS:</Text>
-                    <Text>1865000</Text>
-                </View>
-            </TouchableOpacity>
 
+        {/* { 
+          listCards ?
+          <FlatList
+            data={listCards._array}
+            renderItem={renderItem}
+            keyExtractor={item => item.id + item.type}
+          />
+          :
+          <ActivityIndicator/> 
+        } */}
         </View>
       </View>
     </Modal>
