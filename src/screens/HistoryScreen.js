@@ -73,12 +73,14 @@ export const HistoryScreen = () => {
     setCards(JSON.stringify(data, null, 2));
   };
 
-  const getAllCategories = () => {
-    getCategory((data) => setCategories(JSON.stringify(data, null, 2)));
+  const getAllCategories = async () => {
+    const data = await getCategory();
+    setCategories(JSON.stringify(data, null, 2));
   };
 
-  const getAllTransactions = () => {
-    getTransaction((data) => setTransactions(JSON.stringify(data, null, 2)));
+  const getAllTransactions = async () => {
+    const data = await getTransaction();
+    setTransactions(JSON.stringify(data, null, 2));
   };
 
   const clearOutput = () => {
@@ -182,6 +184,7 @@ export const HistoryScreen = () => {
           onPress={async () => {
             const data = await createCard(cardsInput);
             setCards(JSON.stringify(data, null, 2));
+            getAllTransactions();
           }}
         />
       </View>
@@ -277,7 +280,6 @@ export const HistoryScreen = () => {
           onPress={async () => {
             const data = await updateCard(cardUpdate);
             setCards(JSON.stringify(data, null, 2));
-            setCardUpdate({});
           }}
         />
       </View>
@@ -300,6 +302,7 @@ export const HistoryScreen = () => {
           onPress={async () => {
             const data = await deleteCard(deleteId);
             setCards(JSON.stringify(data, null, 2));
+            getAllTransactions();
           }}
         />
       </View>
@@ -344,8 +347,9 @@ export const HistoryScreen = () => {
         />
         <Button
           title="Create category"
-          onPress={() => {
-            createCategory(categoryInput, setCategories);
+          onPress={async () => {
+            const data = await createCategory(categoryInput);
+            setCategories(JSON.stringify(data, null, 2));
           }}
         />
       </View>
@@ -404,8 +408,9 @@ export const HistoryScreen = () => {
         />
         <Button
           title="Update Category"
-          onPress={() => {
-            updateCategory(categoryUpdate, setCategories);
+          onPress={async () => {
+            const data = await updateCategory(categoryUpdate);
+            setCategories(JSON.stringify(data, null, 2));
           }}
         />
       </View>
@@ -425,8 +430,9 @@ export const HistoryScreen = () => {
         />
         <Button
           title="delete category"
-          onPress={() => {
-            deleteCategory(deleteId, setCategories);
+          onPress={async () => {
+            const data = await deleteCategory(deleteId);
+            setCategories(JSON.stringify(data, null, 2));
           }}
         />
       </View>
@@ -522,8 +528,10 @@ export const HistoryScreen = () => {
         />
         <Button
           title="Create transaction"
-          onPress={() => {
-            createTransaction(transactionInput, setTransactions);
+          onPress={async () => {
+            const data = await createTransaction(transactionInput);
+            setTransactions(JSON.stringify(data, null, 2));
+            getAllCards();
           }}
         />
       </View>
@@ -633,8 +641,10 @@ export const HistoryScreen = () => {
         />
         <Button
           title="Update Transaction"
-          onPress={() => {
-            updateTransaction(transactionUpdate, setTransactions);
+          onPress={async () => {
+            const data = await updateTransaction(transactionUpdate);
+            setTransactions(JSON.stringify(data, null, 2));
+            getAllCards();
           }}
         />
       </View>
@@ -654,8 +664,10 @@ export const HistoryScreen = () => {
         />
         <Button
           title="delete transaction"
-          onPress={() => {
-            deleteTransaction(deleteId, setTransactions);
+          onPress={async () => {
+            const data = await deleteTransaction(deleteId);
+            setTransactions(JSON.stringify(data, null, 2));
+            getAllCards();
           }}
         />
       </View>

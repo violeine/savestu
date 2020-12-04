@@ -3,23 +3,29 @@ import { createCategory } from "./category";
 import React, { createContext, useState, useEffect, useContext } from "react";
 import * as fs from "expo-file-system";
 import * as SQLite from "expo-sqlite";
+
 const db = SQLite.openDatabase("db.db");
+
 const defaultCards = [
   {
     name: "Xài Chính",
     type: "using",
-    money: 1000000000,
+    money: 10,
     note: "Xài Chính",
   },
   {
     name: "Mua lap mới",
     type: "saving",
-    money: 1000000,
+    money: 90,
     note: "Dành tiền mua lap mới",
   },
 ];
 
 const defaultCategory = [
+  {
+    name: "Tạo card",
+    type: "card init",
+  },
   {
     name: "ăn",
     type: "eat",
@@ -31,39 +37,83 @@ const defaultCategory = [
 ];
 
 function initDb(setFinished) {
+  console.log("initDb");
   db.transaction(
     (tx) => {
-      tx.executeSql(
-        `create table if not exists cards (
-    id integer primary key autoincrement,
-    name text,
-    type text,
-    money integer not null,
-    note text
-    );`
-      );
-      tx.executeSql(`create table if not exists categories (
-    id integer primary key autoincrement,
-    name text,
-    type text);
-    `);
-      tx.executeSql(`create table if not exists transactions (
-    id integer primary key autoincrement,
-    category integer not null,
-    card integer not null,
-    cash integer,
-    date text, note text,
-    foreign key (category) references category (id),
-    foreign key (card) references card (id));
-    `);
+      tx.executeSql(`
+        create table if not exists cards (
+          id integer primary key autoincrement,
+          name text,
+          type text,
+          money integer default 0,
+          note text
+        );
+      `);
+      tx.executeSql(`
+        create table if not exists categories (
+          id integer primary key autoincrement,
+          name text,
+          type text
+        );
+      `);
+      tx.executeSql(`
+        create table if not exists transactions (
+          id integer primary key autoincrement,
+          category integer not null
+            references categories (id)
+              on update cascade
+              on delete restrict,
+          card integer not null
+            references cards (id)
+              on update cascade
+              on delete cascade,
+          cash integer,
+          date text,
+          note text
+        );
+      `);
+      tx.executeSql(`
+         drop trigger if exists update_card_money_after_insert_transaction;
+       `);
+      tx.executeSql(`
+         drop trigger if exists update_card_money_after_update_transaction;
+       `);
+      tx.executeSql(`
+         drop trigger if exists update_card_money_after_delete_transaction;
+       `);
+      tx.executeSql(`
+         create trigger update_card_money_after_insert_transaction after insert on transactions
+           begin
+             update cards
+             set money = money + new.cash
+             where id = new.card;
+           end;
+       `);
+      tx.executeSql(`
+         create trigger update_card_money_after_update_transaction after update on transactions
+           begin
+             update cards
+             set money = money - old.cash + new.cash
+             where id = new.card;
+           end;
+       `);
+      tx.executeSql(`
+         create trigger update_card_money_after_delete_transaction after delete on transactions
+           begin
+             update cards
+             set money = money - old.cash
+             where id = old.card;
+           end;
+       `);
     },
     null,
     () => {
-      defaultCards.map((e) => createCard(e));
       defaultCategory.map((e) => createCategory(e));
+      defaultCards.map((e) => createCard(e));
       setFinished(true);
     }
   );
+  console.log("done");
 }
 
 const cleanUp = async () => {
