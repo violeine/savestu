@@ -38,6 +38,9 @@ const defaultCategory = [
 
 function initDb(setFinished) {
   console.log("initDb");
+  db.exec([{ sql: "PRAGMA foreign_keys = ON;", args: [] }], false, () =>
+    console.log("Foreign keys turned on")
+  );
   db.transaction(
     (tx) => {
       tx.executeSql(`
