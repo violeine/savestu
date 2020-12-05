@@ -110,9 +110,10 @@ function initDb(setFinished) {
        `);
     },
     null,
-    () => {
-      defaultCategory.map((e) => createCategory(e));
-      defaultCards.map((e) => createCard(e));
+    async () => {
+      await Promise.all(defaultCategory.map((e) => createCategory(e)));
+      await Promise.all(defaultCards.map((e) => createCard(e)));
+      console.log("run set card");
       setFinished(true);
     }
   );
@@ -155,10 +156,6 @@ async function useInitDbHook() {
   }
 }
 
-function setGlobalCard(id) {
-  const dispatch = useCardDispatch();
-  getCardById(id, dispatch);
-}
 const CardStateContext = createContext();
 const CardDispatchContext = createContext();
 
@@ -196,5 +193,4 @@ export {
   CardProvider,
   useCardState,
   useCardDispatch,
-  setGlobalCard,
 };

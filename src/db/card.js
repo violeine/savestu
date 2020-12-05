@@ -18,6 +18,7 @@ export async function createCard({ name, type, money, note }) {
     date: new Date().toLocaleDateString(),
     note: `Init card ${insertId}`,
   });
+  console.log("finish create Card");
   return await getCard();
 }
 
