@@ -54,8 +54,9 @@ const HomeScreen = ({ navigation }) => {
       />
       <Button
         title="Update Global Card"
-        onPress={() => {
-          getCardById(cardId, dispatch);
+        onPress={async () => {
+          const data = await getCardById(cardId);
+          dispatch(data);
         }}
       />
 

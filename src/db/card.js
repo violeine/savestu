@@ -1,70 +1,60 @@
-import * as SQLite from "expo-sqlite";
+import { execSql } from "./utils";
+import { stripObj } from "../services";
+import { createTransaction } from "./transaction";
 
-const db = SQLite.openDatabase("db.db");
-
-export function createCard(
-  { name, type, money, note },
-  f = console.log.bind(console)
-) {
-  db.transaction(function (tx) {
-    tx.executeSql(
-      `insert into cards (name, type, money, note) values (?,?,?,?)`,
-      [name, type, money, note]
-    );
-    getCard(f);
+export async function createCard({ name, type, money, note }) {
+  const [
+    ,
+    { insertId },
+  ] = await execSql(`insert into cards (name, type, note) values (?,?,?)`, [
+    name,
+    type,
+    note,
+  ]);
+  await createTransaction({
+    category: 1,
+    card: insertId,
+    cash: money,
+    date: new Date().toLocaleDateString(),
+    note: `Init card ${insertId}`,
   });
+  console.log("finish create Card");
+  return await getCard();
 }
 
-export function getCard(f = console.log.bind(console)) {
-  db.transaction(function (tx) {
-    tx.executeSql(
-      `select * from cards`,
-      [],
-      (_, { rows }) => {
-        f(rows);
-      },
-      (_, err) => console.error("something went wrong, ", err)
-    );
-  });
+export async function getCard() {
+  try {
+    const [, data] = await execSql(`select * from cards`, []);
+    return data.rows._array;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
-export function getCardById(id, f = console.log.bind(console)) {
-  db.transaction(function (tx) {
-    tx.executeSql(`select * from cards where id=?`, [id], (_, { rows }) => {
-      f(rows.item(0));
-    });
-  });
+export async function getCardById(id) {
+  try {
+    const [, { rows }] = await execSql(`select * from cards where id=?`, [id]);
+    return rows.item(0);
+  } catch (err) {
+    console.log(err);
+  }
 }
 
-export function updateCard(
-  { name, type, money, note, id },
-  f = console.log.bind(console)
-) {
-  db.transaction(function (tx) {
-    tx.executeSql(
-      `update cards
-       set
-      name=?,
-      type=?,
-      money=?,
-      note=?
-      where
-      id=?
-      `,
-      [name, type, money, note, id]
-    );
-    getCard(f);
-  });
+export async function updateCard(data) {
+  if (data.id) {
+    const oldData = await getCardById(data.id);
+    const { name, type, note, id } = { ...oldData, ...stripObj(data) };
+    await execSql(`update cards set name=?, type=?, note=?  where id=?`, [
+      name,
+      type,
+      note,
+      id,
+    ]);
+  }
+  return await getCard();
 }
 
-export function deleteCard(id, f = console.log.bind(console)) {
-  db.transaction(function (tx) {
-    tx.executeSql(
-      `delete from cards
-    where id=?
-    `,
-      [id]
-    );
-    getCard(f);
-  });
+export async function deleteCard(id) {
+  await execSql(`delete from cards where id=?  `, [id]);
+  return await getCard();
 }

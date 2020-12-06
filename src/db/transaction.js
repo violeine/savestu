@@ -1,63 +1,56 @@
-import * as SQLite from "expo-sqlite";
+import { execSql } from "./utils";
+import { stripObj } from "../services";
 
-const db = SQLite.openDatabase("db.db");
+export const createTransaction = async ({
+  category,
+  card,
+  cash,
+  date,
+  note,
+}) => {
+  await execSql(
+    `insert into transactions (category, card, cash, date, note) values (?,?,?,?,?)`,
+    [category, card, cash, date, note]
+  );
+  return await getTransaction();
+};
 
-export function createTransaction(
-  { category, card, cash, date, note },
-  f = console.log.bind(console)
-) {
-  db.transaction(function (tx) {
-    tx.executeSql(
-      `insert into transactions (category, card, cash, date, note) values (?,?,?,?,?)`,
-      [category, card, cash, date, note]
-    );
-    getTransaction(f);
-  });
-}
+export const getTransaction = async () => {
+  try {
+    const [, data] = await execSql(`select * from transactions`, []);
+    return data.rows._array;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-export function getTransaction(f = console.log.bind(console)) {
-  db.transaction(function (tx) {
-    tx.executeSql(
-      `select * from transactions`,
-      [],
-      (_, { rows }) => {
-        f(rows);
-      },
-      (_, err) => console.error("something went wrong, ", err)
-    );
-  });
-}
+export const getTransactionById = async (id) => {
+  const [, { rows }] = await execSql(`select * from transactions where id=?`, [
+    id,
+  ]);
+  return rows.item(0);
+};
 
-export function updateTransaction(
-  { category, card, cash, date, note, id },
-  f = console.log.bind(console)
-) {
-  db.transaction(function (tx) {
-    tx.executeSql(
-      `update transactions
-       set
-      category=?,
-      card=?,
-      cash=?,
-      date=?,
-      note=?
-      where
-      id=?
-      `,
-      [category, card, cash, date, note, id]
-    );
-    getTransaction(f);
-  });
-}
+export const updateTransaction = async (data) => {
+  const oldData = await getTransactionById(data.id);
+  const { category, card, cash, date, note, id } = {
+    ...oldData,
+    ...stripObj(data),
+  };
+  await execSql(
+    `update transactions
+    set category=?, card=?, cash=?, date=?, note=?
+    where id=?`,
+    [category, card, cash, date, note, id]
+  );
+  return await getTransaction();
+};
 
-export function deleteTransaction(id, f = console.log.bind(console)) {
-  db.transaction(function (tx) {
-    tx.executeSql(
-      `delete from transactions
-    where id=?
-    `,
-      [id]
-    );
-    getTransaction(f);
-  });
-}
+export const deleteTransaction = async (id) => {
+  await execSql(
+    `delete from transactions
+      where id=?`,
+    [id]
+  );
+  return await getTransaction();
+};
