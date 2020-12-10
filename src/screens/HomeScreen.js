@@ -59,7 +59,6 @@ const HomeScreen = ({ navigation }) => {
           dispatch(data);
         }}
       />
-
       <AddButton />
     </>
   );

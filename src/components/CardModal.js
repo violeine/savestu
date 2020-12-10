@@ -13,6 +13,14 @@ const CardModal = ({visible, hideCardModal, showCardModal}) => {
   const dispatch = useCardDispatch();
   const {id} = useCardState();
 
+  const getAllCards = async () => {
+    data = await getCard()
+    setListCards(data);
+  }
+   useEffect(()=>{
+    getAllCards()
+  },[visible])
+
   const transferData = (data) => {
     let result = [
       {
@@ -59,23 +67,15 @@ const CardModal = ({visible, hideCardModal, showCardModal}) => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-            <Button
-              title='Update'
-              onPress={
-                async () => {
-                  const data = await getCard();
-                  setListCards(data)
-                }
-              }
-            />
+          {listCards ?
             <SectionList
               sections={transferData(listCards)}
               keyExtractor={(item, index) => item+index}
               renderItem={renderItem}
-              renderSectionHeader={({section: {title}}) => (
-                <Text style={styles.header}>{title}</Text>
-              )}
-            />
+              renderSectionHeader={({section}) => (
+                <Text style={styles.header}>{section.title}</Text>)
+              }
+            />:null}
         </View>
       </View>
     </Modal>
