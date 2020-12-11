@@ -7,8 +7,14 @@ import {
   Button,
   ScrollView,
 } from "react-native";
-import { useInitDbHook, cleanUp } from "../db/index";
-import { getCard, createCard, updateCard, deleteCard } from "../db/card";
+import { cleanUp } from "../db/index";
+import {
+  getCard,
+  createCard,
+  updateCard,
+  deleteCard,
+  transferMoney,
+} from "../db/card";
 import {
   getCategory,
   createCategory,
@@ -66,6 +72,13 @@ export const HistoryScreen = () => {
     id: "1",
   });
 
+  const [transferMoneyInput, setTransferMoney] = useState({
+    sendId: "1",
+    receiveId: "2",
+    money: "15",
+    note: "Chuyển chơi",
+  });
+
   const [deleteId, setDeleteId] = useState("1");
 
   const getAllCards = async () => {
@@ -113,6 +126,85 @@ export const HistoryScreen = () => {
       <Text>--------------------------</Text>
       <Text> --------- Card --------- </Text>
       <Text>--------------------------</Text>
+      <View>
+        <Text>transferMonen</Text>
+        <TextInput
+          placeholder="sendId?"
+          value={transferMoneyInput.sendId}
+          onChangeText={(t) =>
+            setTransferMoney({
+              ...transferMoneyInput,
+              sendId: t,
+            })
+          }
+          style={{
+            borderColor: "gray",
+            borderWidth: 1,
+            width: 300,
+            padding: 5,
+            marginBottom: 2,
+          }}
+        />
+        <TextInput
+          placeholder="receiveId??"
+          value={transferMoneyInput.receiveId}
+          onChangeText={(t) =>
+            setTransferMoney({
+              ...transferMoneyInput,
+              receiveId: t,
+            })
+          }
+          style={{
+            borderColor: "gray",
+            borderWidth: 1,
+            width: 300,
+            padding: 5,
+            marginBottom: 2,
+          }}
+        />
+        <TextInput
+          placeholder="money"
+          value={transferMoneyInput.money}
+          onChangeText={(t) =>
+            setTransferMoney({
+              ...transferMoneyInput,
+              money: t,
+            })
+          }
+          style={{
+            borderColor: "gray",
+            borderWidth: 1,
+            width: 300,
+            padding: 5,
+            marginBottom: 2,
+          }}
+        />
+        <TextInput
+          placeholder="note"
+          onChangeText={(t) =>
+            setTransferMoney({
+              ...transferMoneyInput,
+              note: t,
+            })
+          }
+          value={transferMoneyInput.note}
+          style={{
+            borderColor: "gray",
+            borderWidth: 1,
+            width: 300,
+            padding: 5,
+            marginBottom: 2,
+          }}
+        />
+        <Button
+          title="Transfer"
+          onPress={async () => {
+            console.log(await transferMoney(transferMoneyInput));
+            getAllCards();
+            getAllTransactions();
+          }}
+        />
+      </View>
       <View>
         <Text>createCard</Text>
         <TextInput
@@ -186,8 +278,8 @@ export const HistoryScreen = () => {
         <Button
           title="Create card"
           onPress={async () => {
-            const data = await createCard(cardsInput);
-            setCards(JSON.stringify(data, null, 2));
+            console.log(await createCard(cardsInput));
+            getAllCards();
             getAllTransactions();
           }}
         />
@@ -282,8 +374,8 @@ export const HistoryScreen = () => {
         <Button
           title="Update Card"
           onPress={async () => {
-            const data = await updateCard(cardUpdate);
-            setCards(JSON.stringify(data, null, 2));
+            console.log(await updateCard(cardUpdate));
+            getAllCards();
           }}
         />
       </View>
@@ -304,8 +396,8 @@ export const HistoryScreen = () => {
         <Button
           title="delete card"
           onPress={async () => {
-            const data = await deleteCard(deleteId);
-            setCards(JSON.stringify(data, null, 2));
+            console.log(await deleteCard(deleteId));
+            getAllCards();
             getAllTransactions();
           }}
         />
@@ -352,8 +444,8 @@ export const HistoryScreen = () => {
         <Button
           title="Create category"
           onPress={async () => {
-            const data = await createCategory(categoryInput);
-            setCategories(JSON.stringify(data, null, 2));
+            console.log(await createCategory(categoryInput));
+            getAllCategories();
           }}
         />
       </View>
@@ -413,8 +505,8 @@ export const HistoryScreen = () => {
         <Button
           title="Update Category"
           onPress={async () => {
-            const data = await updateCategory(categoryUpdate);
-            setCategories(JSON.stringify(data, null, 2));
+            console.log(await updateCategory(categoryUpdate));
+            getAllCategories();
           }}
         />
       </View>
@@ -435,8 +527,8 @@ export const HistoryScreen = () => {
         <Button
           title="delete category"
           onPress={async () => {
-            const data = await deleteCategory(deleteId);
-            setCategories(JSON.stringify(data, null, 2));
+            console.log(await deleteCategory(deleteId));
+            getAllCategories();
           }}
         />
       </View>
@@ -533,9 +625,9 @@ export const HistoryScreen = () => {
         <Button
           title="Create transaction"
           onPress={async () => {
-            const data = await createTransaction(transactionInput);
-            setTransactions(JSON.stringify(data, null, 2));
+            console.log(await createTransaction(transactionInput));
             getAllCards();
+            getAllTransactions();
           }}
         />
       </View>
@@ -646,9 +738,9 @@ export const HistoryScreen = () => {
         <Button
           title="Update Transaction"
           onPress={async () => {
-            const data = await updateTransaction(transactionUpdate);
-            setTransactions(JSON.stringify(data, null, 2));
+            console.log(await updateTransaction(transactionUpdate));
             getAllCards();
+            getAllTransactions();
           }}
         />
       </View>
@@ -669,9 +761,9 @@ export const HistoryScreen = () => {
         <Button
           title="delete transaction"
           onPress={async () => {
-            const data = await deleteTransaction(deleteId);
-            setTransactions(JSON.stringify(data, null, 2));
+            console.log(await deleteTransaction(deleteId));
             getAllCards();
+            getAllTransactions();
           }}
         />
       </View>

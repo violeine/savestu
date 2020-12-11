@@ -1,4 +1,4 @@
-import { createCard, getCardById } from "./card";
+import { createCard, getCard } from "./card";
 import { createCategory } from "./category";
 import React, { createContext, useState, useEffect, useContext } from "react";
 import * as fs from "expo-file-system";
@@ -24,7 +24,11 @@ const defaultCards = [
 const defaultCategory = [
   {
     name: "Tạo card",
-    type: "card init",
+    type: "card initialize",
+  },
+  {
+    name: "Chuyển tiền",
+    type: "money transfer",
   },
   {
     name: "ăn",
@@ -151,7 +155,7 @@ async function useInitDbHook() {
     init(setFinished);
   }, []);
   if (finish) {
-    const data = await getCardById(1);
+    const data = (await getCard())[0];
     dispatch(data);
   }
 }
