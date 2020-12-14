@@ -1,14 +1,47 @@
-import React from 'react'
-import { View, Text, StatusBar } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { View, ScrollView, Text, Button, StyleSheet } from 'react-native';
 
-export const CardScreen = () => {
-    return (
-        <View style={{ flex: 1, backgroundColor: 'lightcoral', justifyContent: 'center', alignItems: 'center' }} >
-            <StatusBar barStyle="light-content" backgroundColor='#238f70'/>
-            <Text>Card Screen</Text>
-        </View>
-    )
+import { getCard } from '../db/card';
+import CardItem from '../components/CardItem'
+
+
+
+export default function CardScreen() {
+  const [card, setCard] = useState(undefined);
+
+  // Lấy dữ liệu db & gán cho biến card
+  const fetchData = async () => {
+    const data = await getCard();
+    setCard(data);
+  }
+
+  // Tự động chạy fetchData khi load xong screen
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+
+  return (
+    <ScrollView style={styles.centerItem} >
+      {// Get all element in loop
+        card
+          ? (
+            card.map(el => 
+              <CardItem el={el} />
+            )
+          )
+          : null
+      }
+      <Button title='Get card' onPress={fetchData} />
+    </ScrollView >
+  );
 }
 
-export default CardScreen
+
+const styles = StyleSheet.create({
+  centerItem: {
+    flex: 1,
+    
+  },
+});
 

@@ -11,30 +11,52 @@ import CardScreen from "./src/screens/CardScreen";
 import AccountScreen from "./src/screens/AccountScreen";
 import { useInitDbHook, CardProvider } from "./src/db";
 
-const Tab = createBottomTabNavigator();
-const HomeStack = createStackNavigator();
+
+const Stack = createStackNavigator();
 
 function HomeStackScreen() {
   return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen name="Home" component={HomeScreen} />
-    </HomeStack.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeScreen} />
+    </Stack.Navigator>
   );
 }
 
 function HistoryStackScreen() {
   return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen name="History" component={HistoryScreen} />
-    </HomeStack.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen name="History" component={HistoryScreen} />
+    </Stack.Navigator>
   );
 }
+
+function CardStackScreen() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Card"
+        component={CardScreen}
+        options={{
+          title: 'My Card',
+          headerStyle: {
+            backgroundColor: '#2CC197',
+          },
+          headerTintColor: '#fff',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+const Tab = createBottomTabNavigator();
 
 const Main = () => {
   useInitDbHook();
   return (
     <NavigationContainer>
       <Tab.Navigator
+        initialRouteName='Card'
+        
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -64,6 +86,7 @@ const Main = () => {
             );
           },
         })}
+
         tabBarOptions={{
           activeTintColor: "#2CC197",
           inactiveTintColor: "#CDCCCE",
@@ -78,7 +101,7 @@ const Main = () => {
       >
         <Tab.Screen name="Home" component={HomeStackScreen} />
         <Tab.Screen name="History" component={HistoryStackScreen} />
-        <Tab.Screen name="Card" component={CardScreen} />
+        <Tab.Screen name="Card" component={CardStackScreen} />
         <Tab.Screen name="Account" component={AccountScreen} />
       </Tab.Navigator>
     </NavigationContainer>
