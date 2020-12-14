@@ -6,13 +6,18 @@ import CardItem from '../components/CardItem'
 
 
 
-export default function CardScreen() {
+export default function CardScreen({navigation}) {
   const [card, setCard] = useState(undefined);
 
   // Lấy dữ liệu db & gán cho biến card
   const fetchData = async () => {
     const data = await getCard();
     setCard(data);
+  }
+
+  const onLongPressCardItem = (item) => {
+    navigation.navigate('Update',{type:'card', id : item.id})
+    console.log(item)
   }
 
   // Tự động chạy fetchData khi load xong screen
@@ -25,7 +30,7 @@ export default function CardScreen() {
     <ScrollView style={styles.centerItem} >
       {// Get each of element 
         card
-          ? card.map(el => <CardItem el={el} />)
+          ? card.map(el => <CardItem el={el} onLongPress={onLongPressCardItem}/>)
           : null
       }
       <Button title='Get card' onPress={fetchData} />

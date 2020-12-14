@@ -4,14 +4,14 @@ import CardForm from '../components/CardForm'
 import CategoryForm from '../components/CategoryForm'
 import TransactionForm from '../components/TransactionForm'
 
-const CreateScreen = ({route}) => {
-    const {type} = route.params;
+const UpdateScreen = ({route}) => {
+    const {type,id} = route.params;
     
     return (
         <>
             {
                 type === "card" ?
-                <CardForm /> 
+                <CardForm id={id}/> 
                 : type === "category" ?
                 <CategoryForm />
                 : <TransactionForm />
@@ -24,4 +24,4 @@ const style = StyleSheet.create({
 
 })
 
-export default CreateScreen;
+export default UpdateScreen;

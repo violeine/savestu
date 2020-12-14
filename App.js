@@ -9,6 +9,7 @@ import HomeScreen from "./src/screens/HomeScreen";
 import HistoryScreen from "./src/screens/HistoryScreen";
 import CardScreen from "./src/screens/CardScreen";
 import AccountScreen from "./src/screens/AccountScreen";
+import UpdateScreen from "./src/screens/UpdateScreen"
 import { useInitDbHook, CardProvider } from "./src/db";
 
 
@@ -43,6 +44,10 @@ function CardStackScreen() {
           },
           headerTintColor: '#fff',
         }}
+      />
+      <Stack.Screen
+        name="Update"
+        component={UpdateScreen}
       />
     </Stack.Navigator>
   );
