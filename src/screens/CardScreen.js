@@ -23,13 +23,9 @@ export default function CardScreen() {
 
   return (
     <ScrollView style={styles.centerItem} >
-      {// Get all element in loop
+      {// Get each of element 
         card
-          ? (
-            card.map(el => 
-              <CardItem el={el} />
-            )
-          )
+          ? card.map(el => <CardItem el={el} />)
           : null
       }
       <Button title='Get card' onPress={fetchData} />
@@ -41,7 +37,7 @@ export default function CardScreen() {
 const styles = StyleSheet.create({
   centerItem: {
     flex: 1,
-    
+
   },
 });
 
