@@ -4,7 +4,7 @@ import Pie from 'react-native-pie-chart';
 
 
 export default function DonutChart() {
-  const chart_wh = 100;
+  const chart_wh = 150;
   const series = [20, 80];
   const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800'];
 
