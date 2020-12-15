@@ -3,10 +3,11 @@ import {StyleSheet,
   TouchableOpacity, 
   Text, Button,
   View, Modal,
-  SectionList} from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
+  SectionList,
+  Pressable} from 'react-native';
 import {useCardDispatch, useCardState} from '../db'
 import {getCard} from "../db/card"
+import CardItem from "./CardItem"
 
 const CardModal = ({visible, hideCardModal, showCardModal}) => {
   const [listCards, setListCards] = useState([]);
@@ -14,14 +15,15 @@ const CardModal = ({visible, hideCardModal, showCardModal}) => {
   const {id} = useCardState();
 
   const getAllCards = async () => {
-    data = await getCard()
+    const data = await getCard()
     setListCards(data);
   }
-   useEffect(()=>{
+
+  useEffect(()=>{
     getAllCards()
   },[visible])
 
-  const transferData = (data) => {
+  const transferData = (cards) => {
     let result = [
       {
         title: 'Using',
@@ -32,7 +34,7 @@ const CardModal = ({visible, hideCardModal, showCardModal}) => {
         data: []
       }
     ]
-    data.map((card,index) => {
+    cards.map((card,index) => {
       card.type == 'using' ? result[0].data.push(card) : result[1].data.push(card)
     })
     return result;
@@ -41,19 +43,12 @@ const CardModal = ({visible, hideCardModal, showCardModal}) => {
   const renderItem = ({item}) => {
     const backgroundColor = item.id == id ? "#6e3b6e" : "#f9c2ff";
     return (
-        <TouchableOpacity
-        onPress={() => {
-          dispatch(item);
-          hideCardModal();
-        }}
-        style= {{backgroundColor: backgroundColor}}
-      >
-        <FontAwesome5 name='wallet'/>
-        <View>
-          <Text>{item.type}</Text>
-          <Text>{item.money}</Text>
-        </View>
-      </TouchableOpacity>
+        <CardItem el={item}         
+          onPress={() => {
+            dispatch(item);
+            hideCardModal();
+          }}
+        />
     );
 
   }
@@ -67,15 +62,18 @@ const CardModal = ({visible, hideCardModal, showCardModal}) => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          {listCards ?
-            <SectionList
-              sections={transferData(listCards)}
-              keyExtractor={(item, index) => item+index}
-              renderItem={renderItem}
-              renderSectionHeader={({section}) => (
-                <Text style={styles.header}>{section.title}</Text>)
-              }
-            />:null}
+          {
+            listCards ?
+              <SectionList
+                sections={transferData(listCards)}
+                keyExtractor={(item, index) => item + index}
+                renderItem={renderItem}
+                renderSectionHeader={({section}) => (
+                  <Text style={styles.header}>{section.title}</Text>)
+                }
+              />
+              :null
+          }
         </View>
       </View>
     </Modal>
@@ -108,7 +106,8 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   header : {
-    fontSize: 23,
+    fontSize: 20,
+    fontStyle: "italic",
     marginTop: 5
   }
 });

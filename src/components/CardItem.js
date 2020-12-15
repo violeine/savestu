@@ -4,11 +4,12 @@ import { Pressable, View, Text, StyleSheet, Image } from 'react-native';
 import TextMoney from './TextMoney';
 
 
-export default function CardItem({ el }) {
+export default function CardItem({ el, onPress, onLongPress}) {
   return (
     <View key={el.id}>
       <Pressable
-        onLongPress={() => console.log(`Update card ${el.name}`)}
+        onPress={onPress}
+        onLongPress={(item) => {onLongPress(el)}}
         style={({ pressed }) =>
           [
             {

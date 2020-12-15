@@ -1,5 +1,5 @@
-import React from 'react'
-import {View, Stylesheet, TextInput} from 'react-native'
+import React, {useState} from 'react'
+import {View, StyleSheet, TextInput, Text, Button} from 'react-native'
 import {
     getTransaction,
     createTransaction,
@@ -87,7 +87,7 @@ const TransactionForm = () => {
     );
 }
 
-const styles = Stylesheet.creates({
+const styles = StyleSheet.create({
     inputStyle : {
         borderColor: "gray",
         borderWidth: 1,

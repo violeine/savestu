@@ -1,5 +1,5 @@
-import React from 'react'
-import {View, Stylesheet, TextInput} from 'react-native'
+import React, {useState} from 'react'
+import {View, StyleSheet, TextInput, Text, Button} from 'react-native'
 import {
     getCategory,
     createCategory,
@@ -51,7 +51,7 @@ const CategoryForm = () => {
     );
 }
 
-const styles = Stylesheet.create({
+const styles = StyleSheet.create({
     inputStyle : {
         borderColor: "gray",
         borderWidth: 1,
