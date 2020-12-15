@@ -9,6 +9,9 @@ import CardModal from "../components/CardModal";
 import HeaderBarT from "../components/HeaderBarT";
 import AddButton from "../components/AddButton";
 import DonutChart from "../components/DonutChart";
+import CateItem from "../components/CateItem";
+
+
 
 const HomeScreen = ({ navigation }) => {
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
@@ -29,31 +32,69 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <>
-      <CalendarModal
-        visible={calendarModalVisible}
-        showCalendarModal={() => setCalendarModalVisible(true)}
-        hideCalendarModal={() => setCalendarModalVisible(false)}
-      />
+      <View style={{ position: "relative" }}>
+        <CalendarModal
+          visible={calendarModalVisible}
+          showCalendarModal={() => setCalendarModalVisible(true)}
+          hideCalendarModal={() => setCalendarModalVisible(false)}
+        />
 
-      <CardModal
-        visible={cardModalVisible}
-        showCardModal={() => setCardModalVisible(true)}
-        hideCardModal={() => setCardModalVisible(false)}
-      />
-
-
-      {/* donut chart */}
-      <DonutChart style={styles.chart} />
+        <CardModal
+          visible={cardModalVisible}
+          showCardModal={() => setCardModalVisible(true)}
+          hideCardModal={() => setCardModalVisible(false)}
+        />
+      </View>
 
 
+      <View style={styles.container}>
+
+        {/* first row */}
+        <View style={styles.flexBetween}>
+          <CateItem color='#FF8000' cate='eat' />
+          <CateItem color='#13D405' cate='transport' />
+          <CateItem color='#B97E2F' cate='parking' />
+          <CateItem color='#278CD9' cate='drink' />
+        </View>
+
+        {/* second row */}
+        <View style={styles.flexBetween}>
+          <View style={styles.aside}>
+            <CateItem color='#03E8AA' cate='transfer' />
+            <CateItem color='#ecd500' cate='movie' />
+          </View>
+
+          <View>
+            <DonutChart />
+          </View>
+
+          <View style={styles.aside}>
+            <CateItem color='#FF3E3E' cate='shopping' />
+            <CateItem color='#FF00D5' cate='groceries' />
+          </View>
+        </View>
+
+        {/* third round */}
+        <View style={styles.flexBetween}>
+          <CateItem color='#FF6594' cate='phone' />
+          <CateItem color='#B506FF' cate='house' />
+          <CateItem color='rgba(0,0,0,0)' />
+          <CateItem color='rgba(0,0,0,0)' />
+        </View>
+
+      </View>
+
+      {/*       
       <>
         <Text style={{ alignSelf: "center" }}>Home Screen {cardId} </Text>
+
         <TextInput
           placeholder="id"
           style={styles.input}
           value={cardId}
           onChangeText={(t) => setCardId(t)}
         />
+
         <Button
           title="Update Global Card"
           onPress={async () => {
@@ -61,7 +102,7 @@ const HomeScreen = ({ navigation }) => {
             dispatch(data);
           }}
         />
-      </>
+      </> */}
 
       <AddButton />
     </>
@@ -70,27 +111,20 @@ const HomeScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
+  container: {
+    marginTop: 30,
   },
 
-  input: {
-    borderColor: "gray",
-    borderWidth: 1,
-    width: 300,
-    padding: 5,
-    marginBottom: 2,
-    alignSelf: "center",
+  flexBetween: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginVertical: 10,
+    paddingHorizontal: 20,
   },
 
-  chart: {
-    height: 200,
-    width: 200,
-    backgroundColor: 'blue',
-  }
+  aside: {
+    justifyContent: 'space-between',
+  },
 });
 
 export default HomeScreen;
