@@ -51,8 +51,8 @@ const HomeScreen = ({ navigation }) => {
 
         {/* first row */}
         <View style={styles.flexBetween}>
-          <CateItem color='#FF8000' cate='eat' />
-          <CateItem color='#13D405' cate='transport' />
+          <CateItem color='#FF8000' cate='eat' money={200000} />
+          <CateItem color='#18c20c' cate='transport' money={50}/>
           <CateItem color='#B97E2F' cate='parking' />
           <CateItem color='#278CD9' cate='drink' />
         </View>
@@ -60,8 +60,8 @@ const HomeScreen = ({ navigation }) => {
         {/* second row */}
         <View style={styles.flexBetween}>
           <View style={styles.aside}>
-            <CateItem color='#03E8AA' cate='transfer' />
-            <CateItem color='#ecd500' cate='movie' />
+            <CateItem color='#01dfa3' cate='transfer' />
+            <CateItem color='#ece800' cate='movie' />
           </View>
 
           <View>

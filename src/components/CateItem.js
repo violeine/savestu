@@ -10,12 +10,13 @@ import {
 import TextMoney from './TextMoney';
 
 
-export default function CateItem({ color, cate }) {
-  const money = 500000;
+export default function CateItem({ color, cate, money = 0 }) {
+  //Làm mờ màu nếu không có tiền
+  color = money ? color : color + '80';
 
   return (
     <View style={styles.container}>
-      <Text style={{ color: color, textTransform: "capitalize" }}>
+      <Text style={{ color: color, textTransform: "capitalize", fontSize: 12 }}>
         {cate}
       </Text>
 
@@ -24,7 +25,7 @@ export default function CateItem({ color, cate }) {
         style={({ pressed }) =>
           [
             {
-              backgroundColor: pressed ? LightenDarkenColor(color, 25) : color,
+              backgroundColor: pressed ? LightenDarkenColor(color, -50, money ? true : false) : color
             },
             styles.icon
           ]}
@@ -34,41 +35,72 @@ export default function CateItem({ color, cate }) {
 
       </Pressable>
 
-      <Text style={{ color: color }}>
+      <Text style={{ color: color, fontSize: 13 }}>
         <TextMoney money={money} />
       </Text>
     </View>
   );
 }
 
-// Ham tang giam do sang cua mau. Input: #HEX -> Output: #HEX
-function LightenDarkenColor(color, amt) {
 
+// Ham tang giam do sang cua mau. Input: #HEX -> Output: #HEX
+function LightenDarkenColor(color, amt, hasMoney) {
   var usePound = false;
 
-  if (color[0] == "#") {
-    color = color.slice(1);
-    usePound = true;
-  }
+  hasMoney ? null : color = color.substring(0, 7);
 
-  var num = parseInt(color, 16);
+  let { b, g, r } = hexToRgb(color);
 
-  var r = (num >> 16) + amt;
+  r += amt;
+  g += amt;
+  b += amt;
 
-  if (r > 255) r = 255;
-  else if (r < 0) r = 0;
+  r > 255 ? r = 255
+    : r < 0 ? r = 0
+      : null;
 
-  var b = ((num >> 8) & 0x00FF) + amt;
+  g > 255 ? g = 255
+    : g < 0 ? g = 0
+      : null;
 
-  if (b > 255) b = 255;
-  else if (b < 0) b = 0;
+  b > 255 ? b = 255
+    : b < 0 ? b = 0
+      : null;
 
-  var g = (num & 0x0000FF) + amt;
 
-  if (g > 255) g = 255;
-  else if (g < 0) g = 0;
+  const result = RGBToHex(r, g, b) + (hasMoney ? '' : '80');
+  console.log(result + ' result');
+  return result;
+}
 
-  return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+function hexToRgb(hex) {
+  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+    return r + r + g + g + b + b;
+  });
+
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
+
+function RGBToHex(r, g, b) {
+  r = r.toString(16);
+  g = g.toString(16);
+  b = b.toString(16);
+
+  if (r.length == 1)
+    r = "0" + r;
+  if (g.length == 1)
+    g = "0" + g;
+  if (b.length == 1)
+    b = "0" + b;
+
+  return "#" + r + g + b;
 }
 
 function ChooseIcon(cate) {
@@ -119,6 +151,7 @@ function ChooseIcon(cate) {
     default: return (null)
   }
 }
+
 
 const styles = StyleSheet.create({
   container: {
