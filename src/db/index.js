@@ -144,8 +144,13 @@ const init = async (setFinished) => {
   const { exists } = await fs.getInfoAsync(
     `${fs.documentDirectory}/SQLite/db.db`
   );
+
+
+  // Lỗi DB: cmt if -> bỏ cmt cleanUp() -> chạy -> bỏ cmt if -> cmt cleanUp() 
+
   if (!exists) initDb(setFinished);
   else setFinished(true);
+  // cleanUp();
 };
 
 async function useInitDbHook() {
