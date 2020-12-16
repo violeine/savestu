@@ -13,6 +13,8 @@ import CateItem from "../components/CateItem";
 
 
 
+
+
 const HomeScreen = ({ navigation }) => {
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [cardModalVisible, setCardModalVisible] = useState(false);
@@ -29,6 +31,14 @@ const HomeScreen = ({ navigation }) => {
       ),
     })
   );
+
+  const dataPie = [
+    { value: 100, stroke: "#22594e", strokeWidth: 6 },
+    { value: 60, stroke: "#2f7d6d" },
+    { value: 30, stroke: "#3da18d" },
+    { value: 20, stroke: "#69c2b0" },
+    { value: 10, stroke: "#a1d9ce" },
+  ]
 
   return (
     <>
@@ -52,9 +62,9 @@ const HomeScreen = ({ navigation }) => {
         {/* first row */}
         <View style={styles.flexBetween}>
           <CateItem color='#FF8000' cate='eat' money={200000} />
-          <CateItem color='#18c20c' cate='transport' money={50}/>
-          <CateItem color='#B97E2F' cate='parking' />
-          <CateItem color='#278CD9' cate='drink' />
+          <CateItem color='#18c20c' cate='transport' money={50} />
+          <CateItem color='#278CD9' cate='parking' />
+          <CateItem color='#B97E2F' cate='drink' />
         </View>
 
         {/* second row */}
@@ -103,8 +113,6 @@ const HomeScreen = ({ navigation }) => {
           }}
         />
       </> */}
-
-      <AddButton />
     </>
   );
 
@@ -112,7 +120,9 @@ const HomeScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
+    flex: 1,
+    paddingTop: 30,
+    backgroundColor: '#fafafa',
   },
 
   flexBetween: {
