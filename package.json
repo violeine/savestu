@@ -10,6 +10,7 @@
   "dependencies": {
     "@react-native-community/art": "^1.2.0",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-picker/picker": "^1.9.4",
     "@react-navigation/bottom-tabs": "^5.10.2",
     "@react-navigation/native": "^5.8.2",
     "@react-navigation/stack": "^5.11.1",

@@ -5,13 +5,13 @@ import CategoryForm from '../components/CategoryForm'
 import TransactionForm from '../components/TransactionForm'
 
 const UpdateScreen = ({route}) => {
-    const {type,id} = route.params;
+    const {type,data} = route.params;
     
     return (
         <>
             {
                 type === "card" ?
-                <CardForm id={id}/> 
+                <CardForm data={data} type="update"/> 
                 : type === "category" ?
                 <CategoryForm />
                 : <TransactionForm />

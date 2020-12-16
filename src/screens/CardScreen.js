@@ -16,8 +16,7 @@ export default function CardScreen({navigation}) {
   }
 
   const onLongPressCardItem = (item) => {
-    navigation.navigate('Update',{type:'card', id : item.id})
-    console.log(item)
+    navigation.navigate('Update',{type:'card', data : {...item}})
   }
 
   // Tự động chạy fetchData khi load xong screen

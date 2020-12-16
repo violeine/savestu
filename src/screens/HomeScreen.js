@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
 
 
       {/* donut chart */}
-      <DonutChart style={styles.chart} />
+      {/* <DonutChart style={styles.chart} /> */}
 
 
       <>

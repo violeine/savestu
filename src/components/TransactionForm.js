@@ -1,14 +1,14 @@
 import React, {useState} from 'react'
 import {View, StyleSheet, TextInput, Text, Button} from 'react-native'
+import {Picker} from '@react-native-picker/picker';
 import {
-    getTransaction,
     createTransaction,
     updateTransaction,
-    deleteTransaction,
 } from "../db/transaction";
+import {getCategory} from '../db/category'
+import {getCard} from '../db/card'
 
-const TransactionForm = () => {
-    const [transactions, setTransactions] = useState(null);
+const TransactionForm = ({data, type}) => {
     const [transactionInput, setTransactionInput] = useState({
       category: "",
       card: "",
@@ -16,11 +16,33 @@ const TransactionForm = () => {
       date: "",
       note: "",
     });
+    const [listCategories, setListCategoires] = useState([])
+    const [listCards, setListCards] = useState([])
+
+    const getAllCategory = async () => {
+        const data = await getCategory();
+        setListCategoires(data);
+    }
+
+    const getAllCards = async () => {
+        const data = await getCard()
+        setListCards(data);
+    }
+    
+    useEffect(() => {
+        getAllCategory();
+        getAllCards();
+        if (type == "update") {
+            setCardInput({
+                ...data
+            })
+        }
+    }, [])
 
     return(
         <>
             <View>
-                <Text>createTransaction</Text>
+                <Text>{type + 'Transaction'}</Text>
                 <TextInput
                     placeholder="card id?"
                     value={transactionInput.card}
@@ -77,7 +99,7 @@ const TransactionForm = () => {
                     style={styles.inputStyle}
                 />
                 <Button
-                    title="Create transaction"
+                    title={type + " transaction"}
                     onPress={() => {
                         createTransaction(transactionInput, setTransactions);
                     }}
