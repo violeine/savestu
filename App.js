@@ -31,6 +31,14 @@ function HistoryStackScreen() {
   );
 }
 
+function AccountStackScreen() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Account" component={AccountScreen} />
+    </Stack.Navigator>
+  );
+}
+
 function CardStackScreen() {
   return (
     <Stack.Navigator>
@@ -48,6 +56,13 @@ function CardStackScreen() {
       <Stack.Screen
         name="Update"
         component={UpdateScreen}
+        options={{
+          title: '',
+          headerStyle: {
+            backgroundColor: '#2CC197',
+          },
+          headerTintColor: '#fff',
+        }}
       />
     </Stack.Navigator>
   );
@@ -60,8 +75,8 @@ const Main = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName='Home'
-        
+        initialRouteName='Card'
+
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -107,7 +122,7 @@ const Main = () => {
         <Tab.Screen name="Home" component={HomeStackScreen} />
         <Tab.Screen name="History" component={HistoryStackScreen} />
         <Tab.Screen name="Card" component={CardStackScreen} />
-        <Tab.Screen name="Account" component={AccountScreen} />
+        <Tab.Screen name="Account" component={AccountStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

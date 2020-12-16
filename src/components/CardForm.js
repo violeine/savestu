@@ -1,17 +1,18 @@
-import React, {useEffect, useState} from 'react'
-import {View, TextInput, StyleSheet, Text, Button} from 'react-native'
-import {getCardById, updateCard} from '../db/card'
+import React, { useEffect, useState } from 'react'
+import { View, TextInput, StyleSheet, Text, Button } from 'react-native'
+import { getCardById, updateCard } from '../db/card'
+import BtnAction from './BtnAction';
 
-const CardForm = ({id, type}) => {
+export default CardForm = ({ id, type }) => {
     const [cardsInput, setCardInput] = useState({
-      name: "",
-      type: "",
-      money: "",
-      note: "",
+        name: "",
+        type: "",
+        money: "",
+        note: "",
     });
 
     const updateCardInfor = async () => {
-        const data =await getCardById(id);
+        const data = await getCardById(id);
         setCardInput({
             ...cardsInput,
             ...data,
@@ -24,7 +25,7 @@ const CardForm = ({id, type}) => {
 
     return (
         <>
-           <View>
+            <View>
                 <Text>updateCard</Text>
                 <TextInput
                     placeholder="name card?"
@@ -70,25 +71,49 @@ const CardForm = ({id, type}) => {
                     value={cardsInput.note}
                     style={styles.inputStyle}
                 />
-                <Button
+                {/* <Button
                     title="Update card"
                     onPress={() => {
                         console.log(`update ${cardsInput.id}`)
                     }}
-                />
+                /> */}
+
+                {/* buttons */}
+                <View style={styles.btnGroup}>
+                    <BtnAction
+                        title="Cancel"
+                        onPress={() => {
+                            console.log(`Updated Cancel`)
+                        }}
+                        isPrimary={false}
+                    />
+
+                    <BtnAction
+                        title="Update"
+                        onPress={() => {
+                            console.log(`Updated Success`)
+                        }}
+                        isPrimary={true}
+                    />
+                </View>
+
             </View>
         </>
     );
 }
 
 const styles = StyleSheet.create({
-    inputStyle : {
+    inputStyle: {
         borderColor: "gray",
         borderWidth: 1,
         width: 300,
         padding: 5,
         marginBottom: 2,
+    },
+
+    btnGroup: {
+        flexDirection: "row",
+        justifyContent: 'space-evenly',
+        marginVertical: 20,
     }
 });
-
-export default CardForm;
