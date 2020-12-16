@@ -3,10 +3,11 @@ import { View, ScrollView, Text, Button, StyleSheet } from 'react-native';
 
 import { getCard } from '../db/card';
 import CardItem from '../components/CardItem'
+import BtnAction from '../components/BtnAction'
 
 
 
-export default function CardScreen({navigation}) {
+export default function CardScreen({ navigation }) {
   const [card, setCard] = useState(undefined);
 
   // Lấy dữ liệu db & gán cho biến card
@@ -26,22 +27,22 @@ export default function CardScreen({navigation}) {
 
 
   return (
-    <ScrollView style={styles.centerItem} >
+    <ScrollView style={styles.container} >
       {// Get each of element 
         card
-          ? card.map(el => <CardItem el={el} onLongPress={onLongPressCardItem}/>)
+          ? card.map(el => <CardItem el={el} onLongPress={onLongPressCardItem} />)
           : null
       }
-      <Button title='Get card' onPress={fetchData} />
+      <BtnAction title='Get card' onPress={fetchData} />
     </ScrollView >
   );
 }
 
 
 const styles = StyleSheet.create({
-  centerItem: {
+  container: {
     flex: 1,
-
+    backgroundColor: '#fafafa',
   },
 });
 

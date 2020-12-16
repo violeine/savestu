@@ -4,16 +4,17 @@ import { Pressable, View, Text, StyleSheet, Image } from 'react-native';
 import TextMoney from './TextMoney';
 
 
-export default function CardItem({ el, onPress, onLongPress}) {
+export default function CardItem({ el, onPress, onLongPress }) {
   return (
     <View key={el.id}>
       <Pressable
         onPress={onPress}
-        onLongPress={(item) => {onLongPress(el)}}
+        onLongPress={() => { onLongPress(el) }}
+        delayLongPress={300}
         style={({ pressed }) =>
           [
             {
-              backgroundColor: pressed ? '#cdccce' : '#fff',
+              backgroundColor: pressed ? '#ddd' : '#fafafa',
             },
             styles.container
           ]}
@@ -54,12 +55,16 @@ export default function CardItem({ el, onPress, onLongPress}) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    flex: 1,
+
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
+
+    borderBottomColor: '#ccc',
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
 
   leftSide: {
