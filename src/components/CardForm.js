@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, ScrollView, StyleSheet, Text, Button } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import { getCardById, updateCard } from '../db/card'
+import {Picker} from '@react-native-picker/picker'
 import BtnAction from './BtnAction'
 
 const CardForm = ({data, type}) => {
@@ -73,32 +74,38 @@ const CardForm = ({data, type}) => {
     <ScrollView style={styles.container}>
       <View style={styles.inputGroup}>
 
-        <Text> {type.toUpperCase() + CARD}</Text>
+        <Text> {type.toUpperCase() + ' CARD'}</Text>
         <TextInput
           placeholder="name card?"
-          value={cardsInput.name}
+          value={cardInput.name}
           onChangeText={(t) => {
               setCardInput({
-                ...cardsInput,
+                ...cardInput,
                 name: t,
               })
               checkCardInfor("name", t)
             }
           }
+          label='Test input'
+          mode='outlined'
           style={styles.input}
+          theme={inputTheme}
         />
         {cardError.name == "" ? null : <Text>{cardError.name}</Text>}
 
         <TextInput
           placeholder="type ?"
-          value={cardsInput.type}
+          value={cardInput.type}
           onChangeText={(t) =>
             setCardInput({
-              ...cardsInput,
+              ...cardInput,
               type: t,
             })
           }
+          label='Test input'
+          mode='outlined'
           style={styles.input}
+          theme={inputTheme}
         />
         <Picker
           selectedValue={cardInput.type}
@@ -114,16 +121,20 @@ const CardForm = ({data, type}) => {
 
         <TextInput
           placeholder="input money"
-          value={cardsInput.money.toString()}
+          value={cardInput.money.toString()}
           onChangeText={(t) => {
               setCardInput({
-                ...cardsInput,
+                ...cardInput,
                 money: t,
               })
               checkCardInfor("money", t)
             }
           }
           style={styles.input}
+          label='Test input'
+          mode='outlined'
+          style={styles.input}
+          theme={inputTheme}
         />
         {cardError.money == "" ? null : <Text>{cardError.money}</Text>}
 
@@ -131,14 +142,17 @@ const CardForm = ({data, type}) => {
           placeholder="note"
           onChangeText={(t) => {
               setCardInput({
-                ...cardsInput,
+                ...cardInput,
                 note: t,
               })
               checkCardInfor("note", t)
             }
           }
-          value={cardsInput.note}
+          value={cardInput.note}
+          label='Test input'
+          mode='outlined'
           style={styles.input}
+          theme={inputTheme}
         />
         {cardError.note == "" ? null : <Text>{cardError.note}</Text>}
 
@@ -146,7 +160,7 @@ const CardForm = ({data, type}) => {
         <TextInput
           onChangeText={(t) =>
             setCardInput({
-              ...cardsInput,
+              ...cardInput,
               name: t,
             })}
           label='Test input'
@@ -202,3 +216,5 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
 });
+
+export default CardForm;
