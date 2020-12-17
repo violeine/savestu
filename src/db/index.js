@@ -175,8 +175,8 @@ function initDb(setFinished) {
     null,
     async () => {
       await Promise.all(defaultCategory.map((e) => createCategory(e)));
-      await Promise.all(defaultCards.map((e) => createCard(e)));
-      console.log("run set card");
+      //await Promise.all(defaultCards.map((e) => createCard(e)));
+      //console.log("run set card");
       setFinished(true);
     }
   );

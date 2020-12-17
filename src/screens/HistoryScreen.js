@@ -10,6 +10,7 @@ import {
 import { cleanUp } from "../db/index";
 import {
   getCard,
+  countCard,
   createCard,
   updateCard,
   deleteCard,
@@ -23,6 +24,8 @@ import {
 } from "../db/category";
 import {
   getTransaction,
+  getTransactionByCard,
+  getTransactionByCategory,
   createTransaction,
   updateTransaction,
   deleteTransaction,
@@ -47,11 +50,11 @@ export const HistoryScreen = () => {
   const [categories, setCategories] = useState(null);
   const [categoryInput, setCategoryInput] = useState({
     name: "",
-    type: "",
+    color: "",
   });
   const [categoryUpdate, setCategoryUpdate] = useState({
     name: "dummy",
-    type: "type x",
+    color: "#000000",
     id: "1",
   });
 
@@ -82,6 +85,8 @@ export const HistoryScreen = () => {
   const [deleteId, setDeleteId] = useState("1");
 
   const getAllCards = async () => {
+    console.log(await getTransactionByCard(1));
+    console.log(await getTransactionByCategory(1));
     const data = await getCard();
     setCards(JSON.stringify(data, null, 2));
   };
@@ -425,12 +430,12 @@ export const HistoryScreen = () => {
           }}
         />
         <TextInput
-          placeholder="type ?"
-          value={categoryInput.type}
+          placeholder="color ?"
+          value={categoryInput.color}
           onChangeText={(t) =>
             setCategoryInput({
               ...categoryInput,
-              type: t,
+              color: t,
             })
           }
           style={{
@@ -469,12 +474,12 @@ export const HistoryScreen = () => {
           }}
         />
         <TextInput
-          placeholder="type ?"
-          value={categoryUpdate.type}
+          placeholder="color ?"
+          value={categoryUpdate.color}
           onChangeText={(t) =>
             setCategoryUpdate({
               ...categoryUpdate,
-              type: t,
+              color: t,
             })
           }
           style={{

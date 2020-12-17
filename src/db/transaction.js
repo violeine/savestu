@@ -52,6 +52,20 @@ export const getTransactionByCard = async (card) => {
   }
 };
 
+export const getTransactionByCategory = async (category) => {
+  try {
+    const [
+      ,
+      { rows },
+    ] = await execSql(`select * from transactions where category=?`, [
+      category,
+    ]);
+    return rows._array;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const updateTransaction = async (data) => {
   try {
     const oldData = await getTransactionById(data.id);
