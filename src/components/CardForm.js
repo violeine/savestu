@@ -151,7 +151,7 @@ const CardForm = ({ data, type, navigation }) => {
             prompt='Select card type'
           >
             <Picker.Item label="💳  Using" value="using" />
-            <Picker.Item label="💰  Saving" value="saving" />
+            <Picker.Item label="💰  Saving" value="saving"/>
           </Picker>
         </View>
 
