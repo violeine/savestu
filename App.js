@@ -46,6 +46,7 @@ function CardStackScreen() {
         component={CardScreen}
         options={{
           title: 'My Card',
+          headerShown: false,
           headerStyle: {
             backgroundColor: '#2CC197',
           },
