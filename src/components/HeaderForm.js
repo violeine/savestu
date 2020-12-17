@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Appbar } from 'react-native-paper';
+import { View, StatusBar } from 'react-native';
 
 const HeaderForm = ({ navigation, title, onSubmit }) => {
-
+  const _goBack = () => navigation.goBack();
 
   const theme = {
     colors: {
@@ -13,15 +14,17 @@ const HeaderForm = ({ navigation, title, onSubmit }) => {
   };
 
   return (
-    <Appbar.Header
-      statusBarHeight={35}
-      collapsable={true}
-      theme={theme}
-    >
-      <Appbar.BackAction color={theme.colors.accent} onPress={() => navigation.goBack()} />
-      <Appbar.Content title={title} color={theme.colors.accent} />
-      <Appbar.Action icon="check" color={theme.colors.accent} onPress={onSubmit} />
-    </Appbar.Header>
+    <View>
+      <StatusBar barStyle="light-content" backgroundColor="#229B79" />
+      <Appbar.Header
+        statusBarHeight={0}
+        theme={theme}
+      >
+        <Appbar.BackAction color={theme.colors.accent} onPress={_goBack} />
+        <Appbar.Content title={title} color={theme.colors.accent} />
+        <Appbar.Action icon="check" color={theme.colors.accent} onPress={() => { onSubmit; _goBack() }} />
+      </Appbar.Header>
+    </View>
   );
 };
 

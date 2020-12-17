@@ -15,6 +15,7 @@ const CardForm = ({ data, type, navigation }) => {
     name: "",
     type: "",
     money: "",
+    goal: "",
     note: "",
   });
 
@@ -22,6 +23,7 @@ const CardForm = ({ data, type, navigation }) => {
     name: "",
     type: "",
     money: "",
+    goal: "",
     note: "",
   })
 
@@ -31,19 +33,19 @@ const CardForm = ({ data, type, navigation }) => {
       case "name":
         result = /[\^\\.!\[\]@><;:'"~-]/;
         break;
+
       case "money":
         result = /\D/;
         break;
+
+      case "goal":
+        result = /\D/;
+        break;
+
       default: result = "";
     }
     return result;
   }
-
-  const [isCheck, setIsCheck] = useState({
-    name: true,
-    money: true,
-    note: true,
-  });
 
   const checkCardInfor = (type, value) => {
     let err;
@@ -55,12 +57,14 @@ const CardForm = ({ data, type, navigation }) => {
       switch (type) {
         case 'name':
           setCardError({ ...cardError, "name": err });
-          setIsCheck({ ...isCheck, 'name': false });
           break;
 
         case 'money':
           setCardError({ ...cardError, "money": err });
-          setIsCheck({ ...isCheck, 'money': false });
+          break;
+
+        case 'goal':
+          setCardError({ ...cardError, "goal": err });
           break;
 
         default: break;
@@ -75,7 +79,6 @@ const CardForm = ({ data, type, navigation }) => {
           ? "✘ Name must be <= 30 character and no special character"
           : "✓ Check"
         setCardError({ ...cardError, "name": err })
-        setIsCheck({ ...isCheck, 'name': err == '✓ Check' ? true : false })
         break
 
       case "money":
@@ -83,15 +86,20 @@ const CardForm = ({ data, type, navigation }) => {
           ? "✘ Money must be number"
           : "✓ Check"
         setCardError({ ...cardError, "money": err })
-        setIsCheck({ ...isCheck, 'money': err == '✓ Check' ? true : false })
+        break;
+
+      case "goal":
+        err = strRegex("goal").test(value)
+          ? "✘ Goal must be number"
+          : "✓ Check"
+        setCardError({ ...cardError, "goal": err })
         break;
 
       case "note":
-        err = value.length >= 30
+        err = value.length >= 50
           ? "✘ Must be less than 30 characters"
           : "✓ Check"
         setCardError({ ...cardError, "note": err })
-        setIsCheck({ ...isCheck, 'note': err == '✓ Check' ? true : false })
         break
 
       default: break;
@@ -134,16 +142,19 @@ const CardForm = ({ data, type, navigation }) => {
 
       <ScrollView style={styles.container}>
 
-        <Picker
-          selectedValue={cardInput.type}
-          style={styles.picker}
-          onValueChange={(itemValue, itemIndex) =>
-            setCardInput({ ...cardInput, type: itemValue })
-          }
-        >
-          <Picker.Item label="For Using" value="using" />
-          <Picker.Item label="For Saving" value="saving" />
-        </Picker>
+        <View style={[styles.picker, hidePicker(type)]}>
+          <Picker
+            selectedValue={cardInput.type}
+            onValueChange={(itemValue, itemIndex) =>
+              setCardInput({ ...cardInput, type: itemValue })
+            }
+            prompt='Select card type'
+          >
+            <Picker.Item label="💳  Using" value="using" />
+            <Picker.Item label="💰  Saving" value="saving" />
+          </Picker>
+        </View>
+
 
         <View style={{ alignSelf: "center" }}>
           <TextInput
@@ -159,12 +170,12 @@ const CardForm = ({ data, type, navigation }) => {
             placeholder="Input card name"
             mode='outlined'
             style={styles.input}
-            theme={isCheck.name ? theme : themeErr}
+            theme={cardError.name == '✓ Check' ? theme : themeErr}
           />
           {
             cardError.name == ""
               ? null
-              : <Text style={isCheckChangeColor(isCheck.name)}>{cardError.name}</Text>
+              : <Text style={isCheckChangeColor(cardError.name)}>{cardError.name}</Text>
           }
         </View>
 
@@ -178,16 +189,41 @@ const CardForm = ({ data, type, navigation }) => {
               })
               checkCardInfor("money", t)
             }}
-            label='Money'
+            label='Money (using)'
             placeholder='Input money'
             mode='outlined'
             style={styles.input}
-            theme={isCheck.money ? theme : themeErr}
+            theme={cardError.money == '✓ Check' ? theme : themeErr}
+            disabled={cardInput.type == 'using' ? false : true}
           />
           {
             cardError.money == ""
               ? null
-              : <Text style={isCheckChangeColor(isCheck.money)}>{cardError.money}</Text>
+              : <Text style={isCheckChangeColor(cardError.money)}>{cardError.money}</Text>
+          }
+        </View>
+
+        <View style={{ alignSelf: "center" }}>
+          <TextInput
+            value={cardInput.money.toString()}
+            onChangeText={(t) => {
+              setCardInput({
+                ...cardInput,
+                money: t,
+              })
+              checkCardInfor("money", t)
+            }}
+            label='Goal (saving)'
+            placeholder='Input goal'
+            mode='outlined'
+            style={styles.input}
+            theme={cardError.money == '✓ Check' ? theme : themeErr}
+            disabled={cardInput.type == 'saving' ? false : true}
+          />
+          {
+            cardError.goal == ""
+              ? null
+              : <Text style={isCheckChangeColor(cardError.goal)}>{cardError.goal}</Text>
           }
         </View>
 
@@ -205,12 +241,12 @@ const CardForm = ({ data, type, navigation }) => {
             placeholder='Write some note'
             mode='outlined'
             style={styles.input}
-            theme={isCheck.note ? theme : themeErr}
+            theme={cardError.note == '✓ Check' ? theme : themeErr}
           />
           {
             cardError.note == ""
               ? null
-              : <Text style={isCheckChangeColor(isCheck.note)}>{cardError.note}</Text>
+              : <Text style={isCheckChangeColor(cardError.note)}>{cardError.note}</Text>
           }
         </View>
 
@@ -219,13 +255,18 @@ const CardForm = ({ data, type, navigation }) => {
   );
 }
 
+function hidePicker(type) {
+  if (type == 'update')
+    return { display: 'none' }
+}
+
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function isCheckChangeColor(isCheck) {
-  if (isCheck == true) return { color: '#2cc197' };
-  else return { color: 'red' };
+function isCheckChangeColor(err) {
+  if (err == '✓ Check') return { width: 300, color: '#2cc197' };
+  else return { width: 300, color: 'red' };
 }
 
 const styles = StyleSheet.create({
@@ -236,7 +277,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    width: 290,
+    width: 300,
     height: 45,
     marginTop: 15,
     marginBottom: 5,
@@ -247,6 +288,10 @@ const styles = StyleSheet.create({
     height: 45,
     marginVertical: 5,
     alignSelf: "center",
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: '#888',
+    justifyContent: "center",
   },
 
   btnGroup: {
