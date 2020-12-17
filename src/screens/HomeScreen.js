@@ -95,25 +95,6 @@ const HomeScreen = ({ navigation }) => {
 
       </View>
 
-      {/*       
-      <>
-        <Text style={{ alignSelf: "center" }}>Home Screen {cardId} </Text>
-
-        <TextInput
-          placeholder="id"
-          style={styles.input}
-          value={cardId}
-          onChangeText={(t) => setCardId(t)}
-        />
-
-        <Button
-          title="Update Global Card"
-          onPress={async () => {
-            const data = await getCardById(cardId);
-            dispatch(data);
-          }}
-        />
-      </> */}
     </>
   );
 

@@ -53,11 +53,13 @@ function CardStackScreen() {
           headerTintColor: '#fff',
         }}
       />
+
       <Stack.Screen
         name="Update"
         component={UpdateScreen}
         options={{
           title: '',
+          headerShown: false,
           headerStyle: {
             backgroundColor: '#2CC197',
           },
@@ -83,18 +85,18 @@ const Main = () => {
 
             if (route.name === "Home") {
               iconName = focused ? "home" : "home-outline";
-              size = focused ? 32 : 28;
+              size = focused ? 34 : 30;
             } else if (route.name === "History") {
               iconName = focused ? "history" : "history";
-              size = focused ? 32 : 28;
+              size = focused ? 34 : 30;
             } else if (route.name === "Card") {
               iconName = focused
                 ? "account-card-details"
                 : "account-card-details-outline";
-              size = focused ? 32 : 28;
+              size = focused ? 34 : 30;
             } else if (route.name === "Account") {
               iconName = focused ? "account" : "account-outline";
-              size = focused ? 32 : 28;
+              size = focused ? 34 : 30;
             }
 
             return (
@@ -108,10 +110,11 @@ const Main = () => {
         })}
 
         tabBarOptions={{
+          keyboardHidesTabBar: true,
           activeTintColor: "#2CC197",
           inactiveTintColor: "#CDCCCE",
           style: {
-            height: 55,
+            height: 60,
           },
           labelStyle: {
             marginTop: -5,

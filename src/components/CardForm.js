@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { View, ScrollView, StyleSheet, Text, Button } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import { getCardById, updateCard } from '../db/card'
-import {Picker} from '@react-native-picker/picker'
-import BtnAction from './BtnAction'
+import { Picker } from '@react-native-picker/picker'
 
-const CardForm = ({data, type}) => {
+import { getCardById, updateCard } from '../db/card'
+
+import BtnAction from './BtnAction'
+import HeaderForm from './HeaderForm'
+
+
+const CardForm = ({ data, type, navigation }) => {
+
   const [cardInput, setCardInput] = useState({
     name: "",
     type: "",
@@ -20,40 +25,86 @@ const CardForm = ({data, type}) => {
     note: "",
   })
 
-  const strRegex  = (type) => {
+  const strRegex = (type) => {
     let result;
     switch (type) {
-      case "name" :
+      case "name":
         result = /[\^\\.!\[\]@><;:'"~-]/;
         break;
-      case "money" :
+      case "money":
         result = /\D/;
         break;
-      default : result = "";
+      default: result = "";
     }
     return result;
   }
 
+  const [isCheck, setIsCheck] = useState({
+    name: true,
+    money: true,
+    note: true,
+  });
+
   const checkCardInfor = (type, value) => {
-    let err
-    switch(type) {
+    let err;
+
+    // Kiểm tra input rỗng
+    if (value.length == 0) {
+      err = '✘ This field can not be empty';
+      switch (type) {
+        case 'name':
+          setCardError({ ...cardError, "name": err });
+          setIsCheck({ ...isCheck, 'name': false });
+          break;
+
+        case 'money':
+          setCardError({ ...cardError, "money": err });
+          setIsCheck({ ...isCheck, 'money': false });
+          break;
+
+        default: return;
+      }
+    }
+
+    // Kiểm tra cụ thể từng điều kiện
+    switch (type) {
       case "name":
-        err = strRegex("name").test(value) || value.length >= 30 ? "Name must be <= 30 character and no special character" : "Check"
-        setCardError({...cardError, "name" : err})
-        break;
+        err = strRegex("name").test(value) || value.length >= 30
+          ? "✘ Name must be <= 30 character and no special character"
+          : "✓ Check"
+        setCardError({ ...cardError, "name": err })
+        setIsCheck({ ...isCheck, 'name': err == '✓ Check' ? true : false })
+        break
+
       case "money":
-        err = strRegex("money").test(value) ? "Money must be number" : "Check" 
-        setCardError({...cardError, "money" : err})
+        err = strRegex("money").test(value)
+          ? "✘ Money must be number"
+          : "✓ Check"
+        setCardError({ ...cardError, "money": err })
+        setIsCheck({ ...isCheck, 'money': err == '✓ Check' ? true : false })
         break;
+
       case "note":
-        err = value.length >= 50 ? "Must be <= 50 character" : "Check"
-        setCardError({...cardError, "note" : err})
-        break;
-      default: return
+        err = value.length >= 30
+          ? "✘ Must be less than 30 characters"
+          : "✓ Check"
+        setCardError({ ...cardError, "note": err })
+        setIsCheck({ ...isCheck, 'note': err == '✓ Check' ? true : false })
+        break
+
+      default: return;
     }
   }
 
-  const inputTheme = {
+  useEffect(() => {
+    if (type == "update") {
+      setCardInput({
+        ...data
+      })
+    }
+  }, [])
+
+  const theme = {
     colors: {
       text: '#333',
       primary: '#2cc197',
@@ -61,153 +112,130 @@ const CardForm = ({data, type}) => {
     }
   }
 
-  useEffect(() => {
-    if (type == "update") {
-      setCardInput({
-          ...data
-      })
-    }
-  }, [])
-
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.inputGroup}>
+    <>
+      <HeaderForm
+        navigation={navigation}
+        title={capitalizeFirstLetter(type) + ' Card'}
+        onSubmit={() => console.log('Form Submit')}
+      />
 
-        <Text> {type.toUpperCase() + ' CARD'}</Text>
-        <TextInput
-          placeholder="name card?"
-          value={cardInput.name}
-          onChangeText={(t) => {
+      <ScrollView style={styles.container}>
+
+        <Picker
+          selectedValue={cardInput.type}
+          style={styles.picker}
+          onValueChange={(itemValue, itemIndex) =>
+            setCardInput({ ...cardInput, type: itemValue })
+          }
+        >
+          <Picker.Item label="For Using" value="using" />
+          <Picker.Item label="For Saving" value="saving" />
+        </Picker>
+
+        <View style={{ alignSelf: "center" }}>
+          <TextInput
+            value={cardInput.name}
+            onChangeText={(t) => {
               setCardInput({
                 ...cardInput,
                 name: t,
               })
               checkCardInfor("name", t)
-            }
+            }}
+            label='Name'
+            placeholder="Input card name"
+            mode='outlined'
+            style={styles.input}
+            theme={theme}
+          />
+          {
+            cardError.name == ""
+              ? null
+              : <Text style={isCheckChangeColor(isCheck.name)}>{cardError.name}</Text>
           }
-          label='Test input'
-          mode='outlined'
-          style={styles.input}
-          theme={inputTheme}
-        />
-        {cardError.name == "" ? null : <Text>{cardError.name}</Text>}
+        </View>
 
-        <TextInput
-          placeholder="type ?"
-          value={cardInput.type}
-          onChangeText={(t) =>
-            setCardInput({
-              ...cardInput,
-              type: t,
-            })
-          }
-          label='Test input'
-          mode='outlined'
-          style={styles.input}
-          theme={inputTheme}
-        />
-        <Picker
-          selectedValue={cardInput.type}
-          style={{height: 50, width: 120}}
-          onValueChange={(itemValue, itemIndex) =>
-            setCardInput({...cardInput, type: itemValue})
-          }
-                
-        >
-          <Picker.Item label="Using" value="using" />
-          <Picker.Item label="Saving" value="saving" />
-        </Picker>
-
-        <TextInput
-          placeholder="input money"
-          value={cardInput.money.toString()}
-          onChangeText={(t) => {
+        <View style={{ alignSelf: "center" }}>
+          <TextInput
+            value={cardInput.money.toString()}
+            onChangeText={(t) => {
               setCardInput({
                 ...cardInput,
                 money: t,
               })
               checkCardInfor("money", t)
-            }
+            }}
+            label='Money'
+            placeholder='Input money'
+            mode='outlined'
+            style={styles.input}
+            theme={theme}
+          />
+          {
+            cardError.money == ""
+              ? null
+              : <Text style={isCheckChangeColor(isCheck.money)}>{cardError.money}</Text>
           }
-          style={styles.input}
-          label='Test input'
-          mode='outlined'
-          style={styles.input}
-          theme={inputTheme}
-        />
-        {cardError.money == "" ? null : <Text>{cardError.money}</Text>}
+        </View>
 
-        <TextInput
-          placeholder="note"
-          onChangeText={(t) => {
+        <View style={{ alignSelf: "center" }}>
+          <TextInput
+            onChangeText={(t) => {
               setCardInput({
                 ...cardInput,
                 note: t,
               })
               checkCardInfor("note", t)
-            }
+            }}
+            value={cardInput.note}
+            label='Note'
+            placeholder='Write some note'
+            mode='outlined'
+            style={styles.input}
+            theme={theme}
+          />
+          {
+            cardError.note == ""
+              ? null
+              : <Text style={isCheckChangeColor(isCheck.note)}>{cardError.note}</Text>
           }
-          value={cardInput.note}
-          label='Test input'
-          mode='outlined'
-          style={styles.input}
-          theme={inputTheme}
-        />
-        {cardError.note == "" ? null : <Text>{cardError.note}</Text>}
+        </View>
 
-        {/* TEST INPUT */}
-        <TextInput
-          onChangeText={(t) =>
-            setCardInput({
-              ...cardInput,
-              name: t,
-            })}
-          label='Test input'
-          placeholder='Input something'
-          mode='outlined'
-          style={styles.input}
-          theme={inputTheme}
-        />
-      </View>
-
-      {/* buttons */}
-      <View style={styles.btnGroup}>
-        <BtnAction
-          title="Cancel"
-          onPress={() => {
-            console.log(`Update Cancel`)
-          }}
-          isPrimary={false}
-        />
-
-        <BtnAction
-          title="Update"
-          onPress={() => {
-            console.log(`Update Success`)
-          }}
-          isPrimary={true}
-        />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
+}
+
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function isCheckChangeColor(isCheck) {
+  if (isCheck == true) return { color: '#2cc197' };
+  else return { color: 'red' };
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 20,
     backgroundColor: '#fafafa',
   },
 
   input: {
     width: 290,
-    height: 50,
-    marginVertical: 5,
+    height: 45,
+    marginTop: 15,
+    marginBottom: 5,
   },
 
-  inputGroup:{
-    justifyContent: 'center',
-    alignItems: "center",
+  picker: {
+    width: 150,
+    height: 45,
+    marginVertical: 5,
+    alignSelf: "center",
   },
 
   btnGroup: {
