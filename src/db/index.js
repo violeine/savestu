@@ -23,28 +23,53 @@ const defaultCards = [
 
 const defaultCategory = [
   {
-    name: "Tạo card",
-    type: "card initialize",
+    name: "Card Initializing",
+    color: "#ffffff",
   },
   {
-    name: "Chuyển tiền",
-    type: "money transfer",
+    name: "Transferring",
+    color: "#01dfa3",
   },
   {
-    name: "ăn",
-    type: "eat",
+    name: "Eating",
+    color: "#FF8000",
   },
   {
-    name: "xăng",
-    type: "something",
+    name: "Drinking",
+    color: "#897e2f",
+  },
+  {
+    name: "Parking",
+    color: "#278cd9",
+  },
+  {
+    name: "Transportation",
+    color: "#18c20c",
+  },
+  {
+    name: "Shopping",
+    color: "#ff3e3e",
+  },
+  {
+    name: "House",
+    color: "#8506ff",
+  },
+  {
+    name: "Phone",
+    color: "#ff6594",
+  },
+  {
+    name: "Groceries",
+    color: "#ff00d5",
+  },
+  {
+    name: "Movie",
+    color: "#ece800",
   },
 ];
 
 function initDb(setFinished) {
   console.log("initDb");
-  db.exec([{ sql: "PRAGMA foreign_keys = ON;", args: [] }], false, () =>
-    console.log("Foreign keys turned on")
-  );
   db.transaction(
     (tx) => {
       tx.executeSql(`
@@ -60,7 +85,8 @@ function initDb(setFinished) {
         create table if not exists categories (
           id integer primary key autoincrement,
           name text,
-          type text
+          color text,
+          total integer default 0
         );
       `);
       tx.executeSql(`
@@ -112,6 +138,39 @@ function initDb(setFinished) {
              where id = old.card;
            end;
        `);
+      tx.executeSql(`
+         drop trigger if exists update_category_total_after_insert_transaction;
+       `);
+      tx.executeSql(`
+         drop trigger if exists update_category_total_after_update_transaction;
+       `);
+      tx.executeSql(`
+         drop trigger if exists update_category_total_after_delete_transaction;
+       `);
+      tx.executeSql(`
+         create trigger update_category_total_after_insert_transaction after insert on transactions
+           begin
+             update categories
+             set total = total + new.cash
+             where id = new.category;
+           end;
+       `);
+      tx.executeSql(`
+         create trigger update_category_total_after_update_transaction after update on transactions
+           begin
+             update categories
+             set total = total - old.cash + new.cash
+             where id = new.category;
+           end;
+       `);
+      tx.executeSql(`
+         create trigger update_category_total_after_delete_transaction after delete on transactions
+           begin
+             update categories
+             set total = total - old.cash
+             where id = old.category;
+           end;
+       `);
     },
     null,
     async () => {
@@ -145,8 +204,7 @@ const init = async (setFinished) => {
     `${fs.documentDirectory}/SQLite/db.db`
   );
 
-
-  // Lỗi DB: cmt if -> bỏ cmt cleanUp() -> chạy -> bỏ cmt if -> cmt cleanUp() 
+  // Lỗi DB: cmt if -> bỏ cmt cleanUp() -> chạy -> bỏ cmt if -> cmt cleanUp()
 
   if (!exists) initDb(setFinished);
   else setFinished(true);
