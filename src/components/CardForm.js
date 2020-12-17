@@ -51,6 +51,7 @@ const CardForm = ({ data, type, navigation }) => {
     // Kiểm tra input rỗng
     if (value.length == 0) {
       err = '✘ This field can not be empty';
+
       switch (type) {
         case 'name':
           setCardError({ ...cardError, "name": err });
@@ -62,8 +63,9 @@ const CardForm = ({ data, type, navigation }) => {
           setIsCheck({ ...isCheck, 'money': false });
           break;
 
-        default: return;
+        default: break;
       }
+      return;
     }
 
     // Kiểm tra cụ thể từng điều kiện
@@ -92,8 +94,9 @@ const CardForm = ({ data, type, navigation }) => {
         setIsCheck({ ...isCheck, 'note': err == '✓ Check' ? true : false })
         break
 
-      default: return;
+      default: break;
     }
+    return;
   }
 
   useEffect(() => {
@@ -108,6 +111,14 @@ const CardForm = ({ data, type, navigation }) => {
     colors: {
       text: '#333',
       primary: '#2cc197',
+      placeholder: 'gray',
+    }
+  }
+
+  const themeErr = {
+    colors: {
+      text: '#333',
+      primary: 'red',
       placeholder: 'gray',
     }
   }
@@ -148,7 +159,7 @@ const CardForm = ({ data, type, navigation }) => {
             placeholder="Input card name"
             mode='outlined'
             style={styles.input}
-            theme={theme}
+            theme={isCheck.name ? theme : themeErr}
           />
           {
             cardError.name == ""
@@ -171,7 +182,7 @@ const CardForm = ({ data, type, navigation }) => {
             placeholder='Input money'
             mode='outlined'
             style={styles.input}
-            theme={theme}
+            theme={isCheck.money ? theme : themeErr}
           />
           {
             cardError.money == ""
@@ -194,7 +205,7 @@ const CardForm = ({ data, type, navigation }) => {
             placeholder='Write some note'
             mode='outlined'
             style={styles.input}
-            theme={theme}
+            theme={isCheck.note ? theme : themeErr}
           />
           {
             cardError.note == ""
