@@ -50,13 +50,14 @@ export default function CardScreen({ navigation }) {
           </View>
         </View>
 
-
         {// Get each of element 
           card
             ? card.map(el => <CardItem el={el} onLongPress={onLongPressCardItem} />)
             : null
         }
-        <BtnAction title='Get card' onPress={fetchData} />
+        <View style={{ alignSelf: "center", marginTop: 30 }}>
+          <BtnAction title='Refresh' onPress={fetchData} />
+        </View>
       </ScrollView >
     </>
   );
@@ -73,12 +74,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 15,
+    paddingTop: 20,
+    paddingBottom: 10,
   },
 
   picker: {
     width: 120,
     height: 40,
-    marginVertical: 5,
     marginLeft: 5,
     justifyContent: "center",
   },

@@ -28,8 +28,8 @@ export default function BtnAction({ title, onPress, isPrimary = true }) {
 
 const styles = StyleSheet.create({
   btn: {
-    width: 120,
-    height: 45,
+    width: 300,
+    height: 40,
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
