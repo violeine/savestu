@@ -14,9 +14,9 @@ export default function CardItem({ el, onPress, onLongPress }) {
         style={({ pressed }) =>
           [
             {
-              backgroundColor: pressed ? '#ddd' : '#fafafa',
+              backgroundColor: pressed ? '#ddd' : 'transparent',
             },
-            styles.container
+            styles.container,
           ]}
       >
 

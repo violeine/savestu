@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <>
 
-      <View style={{ position: "relative" }}>
+      <View>
         <CalendarModal
           visible={calendarModalVisible}
           showCalendarModal={() => setCalendarModalVisible(true)}

@@ -4,6 +4,7 @@ import { useCardDispatch, useCardState } from '../db'
 import { getCard } from "../db/card"
 import CardItem from "./CardItem"
 
+
 const CardModal = ({ visible, hideCardModal, showCardModal }) => {
   const [listCards, setListCards] = useState([]);
   const dispatch = useCardDispatch();
@@ -36,13 +37,15 @@ const CardModal = ({ visible, hideCardModal, showCardModal }) => {
   }
 
   const renderItem = ({ item }) => {
-    const backgroundColor = item.id == id ? "#6e3b6e" : "#f9c2ff";
+    const backgroundColor = item.id == id ? "#85ffe1" : "#fff";
     return (
-      <CardItem el={item}
+      <CardItem
+        el={item}
         onPress={() => {
           dispatch(item);
           hideCardModal();
         }}
+        onLongPress={() => null}
       />
     );
 
@@ -52,8 +55,8 @@ const CardModal = ({ visible, hideCardModal, showCardModal }) => {
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
-        transparent={true}
         visible={visible}
+        transparent={true}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -78,15 +81,17 @@ const CardModal = ({ visible, hideCardModal, showCardModal }) => {
 
 const styles = StyleSheet.create({
   centeredView: {
-    position: "absolute",
-    top: 50,
-    right: 30,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
 
   modalView: {
-    height: 400,
-    width: 300,
-    backgroundColor: "white",
+    width: 280,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    paddingBottom: 30,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -105,9 +110,10 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    fontSize: 20,
-    fontStyle: "italic",
-    marginTop: 5
+    fontSize: 17,
+    marginTop: 20,
+    marginLeft: 20,
+    marginBottom: 5,
   }
 });
 
