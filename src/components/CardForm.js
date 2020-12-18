@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, ScrollView, StyleSheet, Text, Button } from 'react-native'
+import { View, ScrollView, StyleSheet, Text, Button, Alert } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import { Picker } from '@react-native-picker/picker'
 
@@ -115,6 +115,26 @@ const CardForm = ({ data, type, navigation }) => {
     }
   }, [])
 
+  // Hiện cảnh báo xác nhận khi muốn xoá
+  const deleteElement = () =>
+    Alert.alert(
+      "Warning",
+      'Do you want to delet this card',
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: 'cancel',
+        },
+
+        {
+          text: "OK",
+          onPress: () => (console.log("OK Pressed"), navigation.goBack()),
+
+        },
+      ]
+    );
+
   const theme = {
     colors: {
       text: '#333',
@@ -142,7 +162,7 @@ const CardForm = ({ data, type, navigation }) => {
 
       <ScrollView style={styles.container}>
 
-        <View style={[styles.picker, hidePicker(type)]}>
+        <View style={[styles.picker, hideOnUpdate(type)]}>
           <Picker
             selectedValue={cardInput.type}
             onValueChange={(itemValue, itemIndex) =>
@@ -151,7 +171,7 @@ const CardForm = ({ data, type, navigation }) => {
             prompt='Select card type'
           >
             <Picker.Item label="💳  Using" value="using" />
-            <Picker.Item label="💰  Saving" value="saving"/>
+            <Picker.Item label="💰  Saving" value="saving" />
           </Picker>
         </View>
 
@@ -250,13 +270,23 @@ const CardForm = ({ data, type, navigation }) => {
           }
         </View>
 
+        <BtnAction title={capitalizeFirstLetter(type) + ' Card'} type='primary' />
+        <View style={hideOnCreate(type)}>
+          <BtnAction title='Delete card' type='delete' onPress={deleteElement} />
+        </View>
+
       </ScrollView>
     </>
   );
 }
 
-function hidePicker(type) {
+function hideOnUpdate(type) {
   if (type == 'update')
+    return { display: 'none' }
+}
+
+function hideOnCreate(type) {
+  if (type == 'create')
     return { display: 'none' }
 }
 

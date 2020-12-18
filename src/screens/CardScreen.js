@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, ScrollView, Text, Button, StyleSheet } from 'react-native';
-import { Picker } from '@react-native-picker/picker'
+import React, { useState, useEffect } from "react";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 
-import { getCard } from '../db/card';
-import CardItem from '../components/CardItem'
-import BtnAction from '../components/BtnAction'
-import HeaderStack from '../components/HeaderStack';
-
-
+import { getCard } from "../db/card";
+import { Picker } from '@react-native-picker/picker'
+import CardItem from "../components/CardItem";
+import BtnAction from "../components/BtnAction";
+import HeaderStack from "../components/HeaderStack";
 
 export default function CardScreen({ navigation }) {
   const [card, setCard] = useState(undefined);
@@ -17,17 +15,16 @@ export default function CardScreen({ navigation }) {
   const fetchData = async () => {
     const data = await getCard();
     setCard(data);
-  }
+  };
 
   const onLongPressCardItem = (item) => {
-    navigation.navigate('Update', { type: 'card', data: { ...item } })
-  }
+    navigation.navigate("Update", { type: "card", data: { ...item } });
+  };
 
   // Tự động chạy fetchData khi load xong screen
   useEffect(() => {
-    fetchData()
-  }, [])
-
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -55,19 +52,18 @@ export default function CardScreen({ navigation }) {
             ? card.map(el => <CardItem el={el} onLongPress={onLongPressCardItem} />)
             : null
         }
-        <View style={{ alignSelf: "center", marginTop: 30 }}>
-          <BtnAction title='Refresh' onPress={fetchData} />
-        </View>
+
+        <BtnAction title='Refresh' type='primary' onPress={fetchData} />
+
       </ScrollView >
     </>
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fafafa',
+    backgroundColor: "#fafafa",
   },
 
   filter: {
@@ -85,4 +81,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-

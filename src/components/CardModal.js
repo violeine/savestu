@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Modal, SectionList, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Modal, SectionList } from 'react-native';
 import { useCardDispatch, useCardState } from '../db'
 import { getCard } from "../db/card"
 import CardItem from "./CardItem"
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
 
   modalView: {

@@ -1,14 +1,14 @@
 import { execSql } from "./utils";
 import { stripObj } from "../services";
 
-export const createCategory = async ({ name, type }) => {
+export const createCategory = async ({ name, color }) => {
   try {
     const [
       ,
       { insertId },
-    ] = await execSql(`insert into categories (name, type) values (?,?)`, [
+    ] = await execSql(`insert into categories (name, color) values (?,?)`, [
       name,
-      type,
+      color,
     ]);
     return await getCategoryById(insertId);
   } catch (err) {
@@ -40,13 +40,13 @@ export const updateCategory = async (data) => {
   if (data.id > 2)
     try {
       const oldData = await getCategoryById(data.id);
-      const { name, type, id } = { ...oldData, ...stripObj(data) };
+      const { name, color, id } = { ...oldData, ...stripObj(data) };
       await execSql(
         `
       update categories
-        set name=?, type=? where id=?
+        set name=?, color=? where id=?
       `,
-        [name, type, id]
+        [name, color, id]
       );
       return await getCategoryById(id);
     } catch (err) {
