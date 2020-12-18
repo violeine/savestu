@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity, Text, View, Modal } from 'react-native'
+import { StyleSheet, Text, View, Modal, Pressable } from 'react-native'
+
+import { LightenDarkenColor } from '../components/ColorFunction';
 
 const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
+
 
   return (
     <View style={styles.centeredView}>
@@ -10,38 +13,74 @@ const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
         transparent={true}
         visible={visible}
       >
-        <View style={styles.centeredView}>
+        <Pressable style={styles.centeredView} onPress={hideCalendarModal}>
+
+
           <View style={styles.modalView}>
+
+            {/* By day, week */}
             <View style={styles.modalChild}>
-              <TouchableOpacity
-                style={{ ...styles.modalChild2, ...styles.borderBottom, ...styles.borderLeft }}
+              <Pressable
                 onPress={hideCalendarModal}
+                style={({ pressed }) =>
+                  [
+                    {
+                      backgroundColor: pressed ? LightenDarkenColor('#ffffff', -20) : '#fff'
+                    },
+                    styles.modalChild2, styles.borderBottom, styles.borderRight,
+                  ]}
               >
-                <Text style={styles.textStyle}>By Day</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{ ...styles.modalChild2, ...styles.borderBottom }}
+                <Text style={{ fontWeight: "bold" }}>By Day</Text>
+              </Pressable>
+
+              <Pressable
                 onPress={hideCalendarModal}
+                style={({ pressed }) =>
+                  [
+                    {
+                      backgroundColor: pressed ? LightenDarkenColor('#ffffff', -20) : '#fff'
+                    },
+                    styles.modalChild2, styles.borderBottom,
+                  ]}
               >
-                <Text style={styles.textStyle}>By Week</Text>
-              </TouchableOpacity>
+                <Text style={{ fontWeight: "bold" }}>By Week</Text>
+              </Pressable>
             </View>
+
+
+            {/* By month, year */}
             <View style={styles.modalChild}>
-              <TouchableOpacity
-                style={{ ...styles.modalChild2, ...styles.borderLeft }}
+              <Pressable
                 onPress={hideCalendarModal}
+                style={({ pressed }) =>
+                  [
+                    {
+                      backgroundColor: pressed ? LightenDarkenColor('#ffffff', -20) : '#fff'
+                    },
+                    styles.modalChild2, styles.borderRight,
+                  ]}
               >
-                <Text style={styles.textStyle}>By Month</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.modalChild2}
+                <Text style={{ fontWeight: "bold" }}>By Month</Text>
+              </Pressable>
+
+              <Pressable
                 onPress={hideCalendarModal}
+                style={({ pressed }) =>
+                  [
+                    {
+                      backgroundColor: pressed ? LightenDarkenColor('#ffffff', -20) : '#fff'
+                    },
+                    styles.modalChild2,
+                  ]}
               >
-                <Text style={styles.textStyle}>By Year</Text>
-              </TouchableOpacity>
+                <Text style={{ fontWeight: "bold" }}>By Year</Text>
+              </Pressable>
             </View>
-          </View>
-        </View>
+
+          </View>{/* modalView */}
+
+
+        </Pressable>
       </Modal>
     </View>
   );
@@ -49,16 +88,18 @@ const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
 
 const styles = StyleSheet.create({
   centeredView: {
-    position: "absolute",
-    top: 50,
-    left: 30,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
 
   modalView: {
     height: 200,
     width: 200,
-    flexDirection: 'column',
-    backgroundColor: "white",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -76,22 +117,21 @@ const styles = StyleSheet.create({
 
   modalChild2: {
     flex: 1,
-    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   borderBottom: {
     borderBottomWidth: 1,
-    borderColor: 'black'
+    borderColor: 'lightgray'
   },
 
-  borderLeft: {
+  borderRight: {
     borderRightWidth: 1,
-    borderColor: 'black'
+    borderColor: 'lightgray'
   },
 
-  textStyle: {
+  txt: {
     color: "black",
     fontWeight: "bold",
     textAlign: "center"

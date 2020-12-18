@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <>
 
-      <View style={{ position: "relative" }}>
+      <View>
         <CalendarModal
           visible={calendarModalVisible}
           showCalendarModal={() => setCalendarModalVisible(true)}
@@ -75,9 +75,9 @@ const HomeScreen = ({ navigation }) => {
             <CateItem color='#ece800' cate='movie' />
           </View>
 
-          {/* <View>
+          <View>
             <DonutChart />
-          </View> */}
+          </View>
 
           <View style={styles.aside}>
             <CateItem color='#FF3E3E' cate='shopping' />

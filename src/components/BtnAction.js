@@ -2,11 +2,11 @@ import React from 'react';
 import { Pressable, View, Text, StyleSheet } from 'react-native';
 
 import { LightenDarkenColor } from '../components/ColorFunction'
-import { ceil } from 'react-native-reanimated';
 
-export default function BtnAction({ title, onPress, isPrimary = true }) {
 
-  const color = isPrimary ? '#2cc197' : '#d8d8d8';
+export default function BtnAction({ title, onPress, type = 'primary' }) {
+
+  const color = chooseColor(type);
 
   return (
     <Pressable
@@ -19,18 +19,48 @@ export default function BtnAction({ title, onPress, isPrimary = true }) {
           styles.btn
         ]}
     >
-      <Text style={isPrimary ? styles.textPrimary : styles.textSecondary}>
+      <Text style={chooseStyle(type)}>
         {title}
       </Text>
     </Pressable>
   );
 }
 
+function chooseColor(type) {
+  switch (type) {
+    case 'pirmary': return '#2cc197';
+    case 'secondary': return '#cdccce';
+    case 'delete': return '#ff4e4e';
+    default: return '#2cc197';
+  }
+}
+
+function chooseStyle(type) {
+  if (type == 'primary' || type == 'delete')
+    return ({
+      color: '#fff',
+      fontSize: 15,
+      fontWeight: "bold",
+      textTransform: "capitalize",
+    })
+
+  else return ({
+    color: '#333',
+    fontSize: 15,
+    fontWeight: "bold",
+    textTransform: "capitalize",
+  })
+
+
+}
+
 const styles = StyleSheet.create({
   btn: {
-    width: 120,
-    height: 45,
+    width: 300,
+    height: 40,
+    marginTop: 20,
     borderRadius: 5,
+    alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
@@ -45,16 +75,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
 
-  textPrimary: {
-    color: '#fff',
-    textTransform: "capitalize",
-    fontSize: 15,
-    fontWeight: "bold",
-  },
 
-  textSecondary: {
-    color: '#333',
-    textTransform: "capitalize",
-    fontSize: 15,
-  },
+
+
 });

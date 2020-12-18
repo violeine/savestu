@@ -46,6 +46,7 @@ function CardStackScreen() {
         component={CardScreen}
         options={{
           title: 'My Card',
+          headerShown: false,
           headerStyle: {
             backgroundColor: '#2CC197',
           },
@@ -76,7 +77,7 @@ const Main = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName='Card'
+        initialRouteName='Home'
 
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
