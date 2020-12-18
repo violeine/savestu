@@ -116,7 +116,7 @@ const CardForm = ({ data, type, navigation }) => {
   }, [])
 
   // Hiện cảnh báo xác nhận khi muốn xoá
-  const deleteElement = () =>
+  const deleteAlert = () =>
     Alert.alert(
       "Warning",
       'Do you want to delet this card',
@@ -130,7 +130,6 @@ const CardForm = ({ data, type, navigation }) => {
         {
           text: "OK",
           onPress: () => (console.log("OK Pressed"), navigation.goBack()),
-
         },
       ]
     );
@@ -272,7 +271,7 @@ const CardForm = ({ data, type, navigation }) => {
 
         <BtnAction title={capitalizeFirstLetter(type) + ' Card'} type='primary' />
         <View style={hideOnCreate(type)}>
-          <BtnAction title='Delete card' type='delete' onPress={deleteElement} />
+          <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
         </View>
 
       </ScrollView>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Modal, SectionList } from 'react-native';
+import { StyleSheet, Text, View, Modal, SectionList, Pressable } from 'react-native';
 import { useCardDispatch, useCardState } from '../db'
 import { getCard } from "../db/card"
 import CardItem from "./CardItem"
@@ -52,13 +52,13 @@ const CardModal = ({ visible, hideCardModal, showCardModal }) => {
   }
 
   return (
-    <View style={styles.centeredView}>
+    <View style={styles.centeredView} >
       <Modal
         animationType="slide"
         visible={visible}
         transparent={true}
       >
-        <View style={styles.centeredView}>
+        <Pressable style={styles.centeredView} onPress={hideCardModal}>
           <View style={styles.modalView}>
             {
               listCards ?
@@ -73,9 +73,9 @@ const CardModal = ({ visible, hideCardModal, showCardModal }) => {
                 : null
             }
           </View>
-        </View>
+        </Pressable>
       </Modal>
-    </View>
+    </View >
   );
 };
 
@@ -92,12 +92,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 10,
     paddingBottom: 30,
+
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2
     },
-
     shadowOpacity: 0.3,
     shadowRadius: 3.8,
     elevation: 5
