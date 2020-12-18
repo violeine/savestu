@@ -9,16 +9,26 @@ import {
 } from "react-native";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useCardState } from "../db";
+import { TextMoney } from "./TextMoney";
 
 const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
   const { money, name, id } = useCardState();
 
   return (
     <View style={{ ...styles.headerContainer, backgroundColor: "#2CC197" }}>
+
       <StatusBar barStyle="light-content" backgroundColor="#229B79" />
 
       <View style={styles.funcContainer}>
-        <Pressable style={styles.headerCalendar} onPress={showCalendarModal}>
+        <Pressable style={({ pressed }) =>
+          [
+            {
+              backgroundColor: pressed ? '#fbfbfb31' : 'transparent',
+            },
+            styles.headerCalendar,
+          ]
+        }
+          onPress={showCalendarModal}>
           <MaterialCommunityIcons
             name="calendar-today"
             size={24}
@@ -27,9 +37,19 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
           <Text style={styles.text}>By day</Text>
         </Pressable>
 
-        <Pressable style={styles.headerCard} onPress={showCardModal}>
-          <Text style={styles.text}>{name}</Text>
-          <Text style={styles.textBig}>{money}</Text>
+        <Pressable
+          style={({ pressed }) =>
+            [
+              {
+                backgroundColor: pressed ? '#fbfbfb31' : 'transparent',
+              },
+              styles.headerCard,
+            ]
+          }
+          onPress={showCardModal}
+        >
+          <Text style={styles.text}>{name}:  </Text>
+          <Text style={styles.textBig}>{TextMoney(money)}  </Text>
           <FontAwesome5 name="caret-down" color="#fff" size={20} />
         </Pressable>
       </View>
@@ -39,7 +59,8 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
         <Text style={styles.textBig}>Wed, 28 Oct</Text>
         <Text style={{ color: "rgba(255,255,255,0.3)" }}>Thu, 29 Oct</Text>
       </View>
-    </View>
+
+    </View >
   );
 };
 
@@ -61,17 +82,21 @@ const styles = StyleSheet.create({
   },
 
   headerCalendar: {
-    flex: 1,
+    height: 30,
+    padding: 10,
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
+    borderRadius: 5,
   },
 
   headerCard: {
-    flex: 1,
+    height: 30,
+    padding: 10,
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "flex-end",
     alignItems: "center",
+    borderRadius: 5,
   },
 
   dateContainer: {
