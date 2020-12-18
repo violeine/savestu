@@ -19,6 +19,7 @@ const HeaderStack = ({ title, onAction }) => {
       <Appbar.Header
         statusBarHeight={0}
         theme={theme}
+        style={{ elevation: 5 }}
       >
         <Appbar.Content title={title} color={theme.colors.accent} />
         <Appbar.Action icon="plus-circle-outline" color={theme.colors.accent} onPress={onAction} />

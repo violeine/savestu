@@ -12,6 +12,7 @@ import { useCardState } from "../db";
 
 const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
   const { money, name, id } = useCardState();
+
   return (
     <View style={{ ...styles.headerContainer, backgroundColor: "#2CC197" }}>
       <StatusBar barStyle="light-content" backgroundColor="#229B79" />
@@ -47,6 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     height: 90,
+    elevation: 5,
   },
 
   funcContainer: {
