@@ -50,7 +50,7 @@ export default function CardScreen({ navigation }) {
         {// Get each of element 
           card
             ? card.map(el => <CardItem el={el} onLongPress={onLongPressCardItem} />)
-            : null
+            : <Text>You have no card :'(. Let at some cards for using or saving</Text>
         }
 
         <BtnAction title='Refresh' type='primary' onPress={fetchData} />

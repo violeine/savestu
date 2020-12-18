@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet, Text, Button, Alert } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import { Picker } from '@react-native-picker/picker'
 
-import { getCardById, updateCard } from '../db/card'
+import { getCardById, updateCard, deleteCard } from '../db/card'
 
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
@@ -123,13 +123,13 @@ const CardForm = ({ data, type, navigation }) => {
       [
         {
           text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
+          onPress: () => null,
           style: 'cancel',
         },
 
         {
           text: "OK",
-          onPress: () => (console.log("OK Pressed"), navigation.goBack()),
+          onPress: () => (deleteCard(data.id), navigation.goBack()),
         },
       ]
     );
