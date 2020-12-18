@@ -2,16 +2,17 @@ import { execSql } from "./utils";
 import { stripObj } from "../services";
 import { createTransaction, updateInitTransactionCash } from "./transaction";
 
-export async function createCard({ name, type, money, note }) {
+export async function createCard(param) {
+  let { name, type, money, goal, note } = stripObj(param);
+  if (goal == null) goal = -1;
   try {
     const [
       ,
       { insertId },
-    ] = await execSql(`insert into cards (name, type, note) values (?,?,?)`, [
-      name,
-      type,
-      note,
-    ]);
+    ] = await execSql(
+      `insert into cards (name, type, goal, note) values (?,?,?,?)`,
+      [name, type, goal, note]
+    );
     return await createTransaction({
       category: 1,
       card: insertId,
@@ -58,16 +59,14 @@ export async function updateCard(data) {
   if (data.id)
     try {
       const beforeUpdated = await getCardById(data.id);
-      const { name, type, note, id, money } = {
+      const { name, type, goal, note, id, money } = {
         ...beforeUpdated,
         ...stripObj(data),
       };
-      await execSql(`update cards set name=?, type=?, note=?  where id=?`, [
-        name,
-        type,
-        note,
-        id,
-      ]);
+      await execSql(
+        `update cards set name=?, goal=?, type=?, note=?  where id=?`,
+        [name, goal, type, note, id]
+      );
       return await updateInitTransactionCash({
         card: id,
         cash: money,
@@ -78,14 +77,15 @@ export async function updateCard(data) {
 }
 
 export async function deleteCard(id) {
-  //if ((await countCard()) > 1)
-  try {
-    const beforeDeleted = await getCardById(id);
-    await execSql(`delete from cards where id=?  `, [id]);
-    return beforeDeleted;
-  } catch (err) {
-    console.log(err);
-  }
+  if ((await countCard()) > 1)
+    try {
+      const beforeDeleted = await getCardById(id);
+      await execSql(`delete from cards where id=?  `, [id]);
+      return beforeDeleted;
+    } catch (err) {
+      console.log(err);
+    }
+  else console.log("can't delete all cards");
 }
 
 export const transferMoney = async ({ sendId, receiveId, money, note }) => {

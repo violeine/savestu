@@ -10,13 +10,14 @@ const defaultCards = [
   {
     name: "Xài Chính",
     type: "using",
-    money: 10,
+    money: 10000000,
     note: "Xài Chính",
   },
   {
     name: "Mua lap mới",
     type: "saving",
-    money: 90,
+    money: 20000,
+    goal: 40000000,
     note: "Dành tiền mua lap mới",
   },
 ];
@@ -78,6 +79,7 @@ function initDb(setFinished) {
           name text,
           type text,
           money integer default 0,
+          goal integer default -1,
           note text
         );
       `);
@@ -175,8 +177,8 @@ function initDb(setFinished) {
     null,
     async () => {
       await Promise.all(defaultCategory.map((e) => createCategory(e)));
-      //await Promise.all(defaultCards.map((e) => createCard(e)));
-      //console.log("run set card");
+      await Promise.all(defaultCards.map((e) => createCard(e)));
+      console.log("run set card");
       setFinished(true);
     }
   );
