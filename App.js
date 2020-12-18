@@ -33,7 +33,17 @@ function HistoryStackScreen() {
 function AccountStackScreen() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Account" component={AccountScreen} />
+      <Stack.Screen
+        name="Account"
+        component={AccountScreen}
+        options={{
+          title: 'My Account',
+          headerStyle: {
+            backgroundColor: '#2CC197',
+          },
+          headerTintColor: '#fff',
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -77,7 +87,7 @@ const Main = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName='Home'
+        initialRouteName='Account'
 
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {

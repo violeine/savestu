@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 
 import { getCard } from "../db/card";
+
 import { Picker } from '@react-native-picker/picker'
 import CardItem from "../components/CardItem";
 import BtnAction from "../components/BtnAction";
@@ -50,7 +51,7 @@ export default function CardScreen({ navigation }) {
         {// Get each of element 
           card
             ? card.map(el => <CardItem el={el} onLongPress={onLongPressCardItem} />)
-            : <Text>You have no card :'(. Let at some cards for using or saving</Text>
+            : <Text>You have no card :'(. Let at some card for using or saving</Text>
         }
 
         <BtnAction title='Refresh' type='primary' onPress={fetchData} />
