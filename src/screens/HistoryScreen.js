@@ -26,6 +26,9 @@ import {
   getTransaction,
   getTransactionByCard,
   getTransactionByCategory,
+  getTransactionByDate,
+  getTransactionByMonth,
+  getTransactionByYear,
   createTransaction,
   updateTransaction,
   deleteTransaction,
@@ -85,8 +88,9 @@ export const HistoryScreen = () => {
   const [deleteId, setDeleteId] = useState("1");
 
   const getAllCards = async () => {
-    console.log(await getTransactionByCard(1));
-    console.log(await getTransactionByCategory(1));
+    console.log(await getTransactionByMonth({ month: 12, year: 20 }));
+    console.log(await getTransactionByYear("20"));
+    console.log(await getTransactionByDate("12/18/20"));
     const data = await getCard();
     setCards(JSON.stringify(data, null, 2));
   };

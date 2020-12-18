@@ -66,6 +66,51 @@ export const getTransactionByCategory = async (category) => {
   }
 };
 
+export const getTransactionByYear = async (year) => {
+  try {
+    const [, { rows }] = await execSql(
+      `
+       SELECT * FROM transactions
+       WHERE date LIKE (SELECT '%/'||?)
+      `,
+      [year.toString()]
+    );
+    return rows._array;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getTransactionByMonth = async ({ month, year }) => {
+  try {
+    const [, { rows }] = await execSql(
+      `
+    SELECT * FROM transactions
+    WHERE date LIKE (select ?||'/%/'||?)
+  `,
+      [month.toString(), year.toString()]
+    );
+    return rows._array;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getTransactionByDate = async (date) => {
+  try {
+    const [, { rows }] = await execSql(
+      `
+    SELECT * FROM transactions
+    WHERE date = ?
+  `,
+      [date]
+    );
+    return rows._array;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const updateTransaction = async (data) => {
   try {
     const oldData = await getTransactionById(data.id);
