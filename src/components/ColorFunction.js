@@ -24,9 +24,10 @@ function LightenDarkenColor(color, amt, hasMoney = true) {
       : null;
 
 
-  const result = RGBToHex(r, g, b) + (hasMoney ? '' : '80');
+  const result = RGBToHex(r, g, b) + (hasMoney ? '' : '60');
   return result;
 }
+
 
 function hexToRgb(hex) {
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
@@ -43,6 +44,7 @@ function hexToRgb(hex) {
   } : null;
 }
 
+
 function RGBToHex(r, g, b) {
   r = r.toString(16);
   g = g.toString(16);
@@ -58,4 +60,19 @@ function RGBToHex(r, g, b) {
   return "#" + r + g + b;
 }
 
-export { LightenDarkenColor, hexToRgb, RGBToHex }
+
+function changMoneyColor(money) {
+  if (money >= 0) return (
+    {
+      color: '#2cc197'
+    }
+  )
+  
+  else return (
+    {
+      color: '#ff4e4e'
+    }
+  )
+}
+
+export { LightenDarkenColor, hexToRgb, RGBToHex, changMoneyColor }

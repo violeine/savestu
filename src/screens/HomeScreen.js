@@ -62,17 +62,17 @@ const HomeScreen = ({ navigation }) => {
 
         {/* first row */}
         <View style={styles.flexBetween}>
-          <CateItem color='#FF8000' cate='eat' money={200000} />
-          <CateItem color='#18c20c' cate='transport' money={50} />
-          <CateItem color='#278CD9' cate='parking' />
-          <CateItem color='#B97E2F' cate='drink' />
+          <CateItem color='#FF8000' cate='Eating' money={200000} />
+          <CateItem color='#18c20c' cate='Transportation' money={50} />
+          <CateItem color='#278CD9' cate='Parking' />
+          <CateItem color='#B97E2F' cate='Drinking' />
         </View>
 
         {/* second row */}
         <View style={styles.flexBetween}>
           <View style={styles.aside}>
-            <CateItem color='#01dfa3' cate='transfer' />
-            <CateItem color='#ece800' cate='movie' />
+            <CateItem color='#01dfa3' cate='Transferring' />
+            <CateItem color='#ece800' cate='Movie' />
           </View>
 
           <View>
@@ -80,18 +80,20 @@ const HomeScreen = ({ navigation }) => {
           </View>
 
           <View style={styles.aside}>
-            <CateItem color='#FF3E3E' cate='shopping' />
-            <CateItem color='#FF00D5' cate='groceries' />
+            <CateItem color='#FF3E3E' cate='Shopping' />
+            <CateItem color='#FF00D5' cate='Groceries' />
           </View>
         </View>
 
         {/* third round */}
         <View style={styles.flexBetween}>
-          <CateItem color='#FF6594' cate='phone' />
-          <CateItem color='#B506FF' cate='house' />
+          <CateItem color='#FF6594' cate='Phone' />
+          <CateItem color='#B506FF' cate='House' />
           <CateItem color='rgba(0,0,0,0)' />
           <CateItem color='rgba(0,0,0,0)' />
         </View>
+
+        <AddButton/>
 
       </View>
 

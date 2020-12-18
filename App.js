@@ -87,7 +87,7 @@ const Main = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName='Account'
+        initialRouteName='Card'
 
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {

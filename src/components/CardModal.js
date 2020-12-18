@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Modal, SectionList, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Modal, SectionList, Pressable, ScrollView } from 'react-native';
 import { useCardDispatch, useCardState } from '../db'
 import { getCard } from "../db/card"
 import CardItem from "./CardItem"
@@ -53,29 +53,31 @@ const CardModal = ({ visible, hideCardModal, showCardModal }) => {
 
   return (
     <View style={styles.centeredView} >
-      <Modal
-        animationType="slide"
-        visible={visible}
-        transparent={true}
-      >
-        <Pressable style={styles.centeredView} onPress={hideCardModal}>
-          <View style={styles.modalView}>
-            {
-              listCards ?
-                <SectionList
-                  sections={transferData(listCards)}
-                  keyExtractor={(item, index) => item + index}
-                  renderItem={renderItem}
-                  renderSectionHeader={({ section }) => (
-                    <Text style={styles.header}>{section.title}</Text>)
-                  }
-                />
-                : null
-            }
-          </View>
-        </Pressable>
-      </Modal>
-    </View >
+      <ScrollView style={{ flex: 1 }}>
+        <Modal
+          animationType="slide"
+          visible={visible}
+          transparent={true}
+        >
+          <Pressable style={styles.centeredView} onPress={hideCardModal}>
+            <View style={styles.modalView}>
+              {
+                listCards ?
+                  <SectionList
+                    sections={transferData(listCards)}
+                    keyExtractor={(item, index) => item + index}
+                    renderItem={renderItem}
+                    renderSectionHeader={({ section }) => (
+                      <Text style={styles.header}>{section.title}</Text>)
+                    }
+                  />
+                  : null
+              }
+            </View>
+          </Pressable>
+        </Modal>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -88,10 +90,11 @@ const styles = StyleSheet.create({
   },
 
   modalView: {
-    width: 280,
+    width: 300,
+    maxHeight: 300,
     backgroundColor: "#fff",
     borderRadius: 10,
-    paddingBottom: 30,
+    paddingVertical: 10,
 
     shadowColor: "#000",
     shadowOffset: {

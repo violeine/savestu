@@ -7,13 +7,13 @@ import {
   FontAwesome5,
 } from '@expo/vector-icons';
 
-import {LightenDarkenColor} from '../components/ColorFunction';
-import TextMoney from './TextMoney';
+import { LightenDarkenColor } from '../components/ColorFunction';
+import { TextMoney } from './TextMoney';
 
 
 export default function CateItem({ color, cate, money = 0 }) {
   //Làm mờ màu nếu không có tiền
-  color = money ? color : color + '80';
+  color = money ? color : color + '40';
 
   return (
     <View style={styles.container}>
@@ -37,7 +37,7 @@ export default function CateItem({ color, cate, money = 0 }) {
       </Pressable>
 
       <Text style={{ color: color, fontSize: 13 }}>
-        <TextMoney money={money} />
+        {TextMoney(money)}
       </Text>
     </View>
   );
@@ -49,43 +49,43 @@ function ChooseIcon(cate) {
   const iconColor = '#fff';
 
   switch (cate) {
-    case 'eat': return (
+    case 'Eating': return (
       <MaterialCommunityIcons name="silverware-fork-knife" size={iconSize} color={iconColor} />
     )
 
-    case 'transport': return (
+    case 'Transportation': return (
       <FontAwesome5 name="bus" size={iconSize} color={iconColor} />
     )
 
-    case 'parking': return (
+    case 'Parking': return (
       <FontAwesome5 name="parking" size={iconSize} color={iconColor} />
     )
 
-    case 'drink': return (
+    case 'Drinking': return (
       <MaterialIcons name="local-cafe" size={iconSize} color={iconColor} />
     )
 
-    case 'transfer': return (
+    case 'Transferring': return (
       <MaterialIcons name="compare-arrows" size={iconSize} color={iconColor} />
     )
 
-    case 'movie': return (
+    case 'Movie': return (
       <MaterialIcons name="local-movies" size={iconSize} color={iconColor} />
     )
 
-    case 'shopping': return (
+    case 'Shopping': return (
       <FontAwesome name="shopping-bag" size={iconSize} color={iconColor} />
     )
 
-    case 'groceries': return (
+    case 'Groceries': return (
       <FontAwesome5 name="shopping-basket" size={iconSize} color={iconColor} />
     )
 
-    case 'phone': return (
+    case 'Phone': return (
       <FontAwesome name="phone" size={iconSize} color={iconColor} />
     )
 
-    case 'house': return (
+    case 'House': return (
       <MaterialCommunityIcons name="home-currency-usd" size={iconSize} color={iconColor} />
     )
 

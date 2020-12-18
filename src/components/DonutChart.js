@@ -5,8 +5,12 @@ import Pie from 'react-native-pie-chart';
 
 export default function DonutChart() {
   const chart_wh = 180;
-  const series = [20, 80];
-  const sliceColor = ['#B97E2F', '#278CD9', '#03E8AA', '#FCE300', '#FF9800'];
+  var series = [20000];
+  var sliceColor = ['#2cc197','#ccc'];
+
+  var goal = 100000;
+  series.push(goal - series[0]);
+  console.log('\n----- Series ----\n', series);
 
   return (
     <View style={styles.container}>

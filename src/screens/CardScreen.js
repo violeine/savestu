@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
 
 import { getCard } from "../db/card";
 
@@ -8,6 +8,7 @@ import { Picker } from '@react-native-picker/picker'
 import CardItem from "../components/CardItem";
 import BtnAction from "../components/BtnAction";
 import HeaderStack from "../components/HeaderStack";
+
 
 export default function CardScreen({ navigation }) {
   const [card, setCard] = useState(undefined);
@@ -27,20 +28,24 @@ export default function CardScreen({ navigation }) {
     fetchData();
   }, []);
 
+  // Debug
+  console.log('\n===== CARD SCREEN =====');
+  console.log('\n------ All Card -----\n', card);
+
+
   return (
     <>
-      <HeaderStack title='My Card' onAction={() => console.log('Action Pressed')} />
+      <HeaderStack
+        title="My Card"
+        onAction={() => console.log("Action Pressed")}
+      />
 
-      <ScrollView style={styles.container} >
-
-        <View style={styles.filter} >
+      <ScrollView style={styles.container}>
+        <View style={styles.filter}>
           <FontAwesome name="filter" size={20} color="black" />
 
           <View style={styles.picker}>
-            <Picker
-              mode='dropdown'
-              prompt='Filter card'
-            >
+            <Picker mode="dropdown" prompt="Filter card">
               <Picker.Item label="All Card" value="all" />
               <Picker.Item label="By type" value="type" />
               <Picker.Item label="By money" value="money" />
@@ -48,15 +53,17 @@ export default function CardScreen({ navigation }) {
           </View>
         </View>
 
-        {// Get each of element 
+        {
+          // Get each of element
           card
-            ? card.map(el => <CardItem el={el} onLongPress={onLongPressCardItem} />)
-            : <Text>You have no card :'(. Let at some card for using or saving</Text>
+            ? card.map((el, i) => (
+              <CardItem key={i} el={el} onLongPress={onLongPressCardItem} />
+            ))
+            : <Text style={styles.centerItem}>You have no card</Text>
         }
 
-        <BtnAction title='Refresh' type='primary' onPress={fetchData} />
-
-      </ScrollView >
+        <BtnAction title="Refresh" type="primary" onPress={fetchData} />
+      </ScrollView>
     </>
   );
 }
@@ -65,6 +72,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fafafa",
+  },
+
+  centerItem: {
+    flex: 1,
+    alignSelf: "center",
   },
 
   filter: {

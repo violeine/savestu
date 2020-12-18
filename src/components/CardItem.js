@@ -1,10 +1,12 @@
 import React from 'react';
 import { Pressable, View, Text, StyleSheet, Image } from 'react-native';
 
-import TextMoney from './TextMoney';
+import { TextMoney } from './TextMoney';
+import { changMoneyColor } from './ColorFunction';
 
 
 export default function CardItem({ el, onPress, onLongPress }) {
+
   return (
     <View key={el.id}>
       <Pressable
@@ -34,14 +36,14 @@ export default function CardItem({ el, onPress, onLongPress }) {
         </View>
 
         <View style={styles.rightSide}>
-          <Text style={styles.money}>
-            <TextMoney money={el.money} />
+          <Text style={[changMoneyColor(el.money), styles.money]}>
+            {TextMoney(el.money)}
           </Text>
 
           {
             el.type == 'saving' ? (
               <Text style={styles.goal}>
-                Goal: <TextMoney money={el.money} />
+                Goal: {TextMoney(el.goal)}
               </Text>
             )
               : null
@@ -52,6 +54,7 @@ export default function CardItem({ el, onPress, onLongPress }) {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -93,7 +96,6 @@ const styles = StyleSheet.create({
   money: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#2cc197',
   },
 
   goal: {

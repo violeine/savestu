@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, StatusBar, ScrollView } from 'react-native'
-import TransItem from '../components/TransItem'
 
 import { getTransactionByCard } from "../db/transaction"
+
+import TransItem from '../components/TransItem'
+import BtnAction from '../components/BtnAction';
 
 
 export default function AccountScreen() {
@@ -20,6 +22,9 @@ export default function AccountScreen() {
     fetchDataAll();
   }, [])
 
+  console.log('\n\n===== TRANSACTION SCREEN =====\n');
+  console.log('\n------- transAll -------\n', transAll);
+
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor='#238f70' />
@@ -31,6 +36,8 @@ export default function AccountScreen() {
             ? transAll.map(el => <TransItem el={el} key={el.id} />)
             : <Text style={[styles.centerItem, styles.txtNotify]}>You have no transaction</Text>
         }
+
+        <BtnAction title='Fetch Data All' type='primary' onPress={fetchDataAll} />
 
       </ScrollView>
     </>
