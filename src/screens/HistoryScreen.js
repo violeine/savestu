@@ -383,6 +383,7 @@ export const HistoryScreen = () => {
         <Button
           title="Update Card"
           onPress={async () => {
+            console.log(cardUpdate)
             console.log(await updateCard(cardUpdate));
             getAllCards();
           }}
