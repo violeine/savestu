@@ -147,7 +147,10 @@ const CardUpdateForm = ({ data, navigation }) => {
 
       {
         text: "OK",
-        onPress: () => (console.log("OK Pressed"), navigation.goBack()),
+        onPress: async () =>  {
+          console.log(await deleteCard(data.id))
+          console.log("OK Pressed"), navigation.goBack()
+        },
       },
     ]
   );
