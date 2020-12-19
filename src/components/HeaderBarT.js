@@ -34,7 +34,7 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
             size={24}
             color="#fff"
           />
-          <Text style={styles.text}>By day</Text>
+          <Text style={styles.text}> By day</Text>
         </Pressable>
 
         <Pressable

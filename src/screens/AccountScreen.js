@@ -22,8 +22,9 @@ export default function AccountScreen() {
     fetchDataAll();
   }, [])
 
-  console.log('\n\n===== TRANSACTION SCREEN =====\n');
+  console.log('\n\n===== TRANSACTION SCREEN =====');
   console.log('\n------- transAll -------\n', transAll);
+
 
   return (
     <>
@@ -33,7 +34,11 @@ export default function AccountScreen() {
 
         {
           transAll
-            ? transAll.map(el => <TransItem el={el} key={el.id} />)
+            ? transAll.map(el =>
+              el.category == 1
+                ? null
+                : <TransItem el={el} key={el.id} />
+            )
             : <Text style={[styles.centerItem, styles.txtNotify]}>You have no transaction</Text>
         }
 

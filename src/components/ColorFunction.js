@@ -1,3 +1,5 @@
+import React from 'react';
+import { MaterialIcons, MaterialCommunityIcons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 
 
 // Ham tang giam do sang cua mau. Input: #HEX -> Output: #HEX
@@ -61,13 +63,13 @@ function RGBToHex(r, g, b) {
 }
 
 
-function changMoneyColor(money) {
+function changMoneyColor(money = 0) {
   if (money >= 0) return (
     {
       color: '#2cc197'
     }
   )
-  
+
   else return (
     {
       color: '#ff4e4e'
@@ -75,4 +77,50 @@ function changMoneyColor(money) {
   )
 }
 
-export { LightenDarkenColor, hexToRgb, RGBToHex, changMoneyColor }
+function chooseIcon(cate, size = 20, color = '#000') {
+  switch (cate) {
+    case 'Eating': return (
+      <MaterialCommunityIcons name="silverware-fork-knife" size={size} color={color} />
+    )
+
+    case 'Transportation': return (
+      <FontAwesome5 name="bus" size={size} color={color} />
+    )
+
+    case 'Parking': return (
+      <FontAwesome5 name="parking" size={size} color={color} />
+    )
+
+    case 'Drinking': return (
+      <MaterialIcons name="local-cafe" size={size} color={color} />
+    )
+
+    case 'Transferring': return (
+      <MaterialIcons name="compare-arrows" size={size} color={color} />
+    )
+
+    case 'Movie': return (
+      <MaterialIcons name="local-movies" size={size} color={color} />
+    )
+
+    case 'Shopping': return (
+      <FontAwesome name="shopping-bag" size={size} color={color} />
+    )
+
+    case 'Groceries': return (
+      <FontAwesome5 name="shopping-basket" size={size} color={color} />
+    )
+
+    case 'Phone': return (
+      <FontAwesome name="phone" size={size} color={color} />
+    )
+
+    case 'House': return (
+      <MaterialCommunityIcons name="home-currency-usd" size={size} color={color} />
+    )
+
+    default: return (null)
+  }
+}
+
+export { LightenDarkenColor, hexToRgb, RGBToHex, changMoneyColor, chooseIcon }

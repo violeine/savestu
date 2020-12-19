@@ -87,7 +87,9 @@ const Main = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName='Card'
+
+      // ----- CHỌN MÀN HÌNH MẶC ĐỊNH -------
+        initialRouteName='Account'
 
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
