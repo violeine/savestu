@@ -88,9 +88,6 @@ export const HistoryScreen = () => {
   const [deleteId, setDeleteId] = useState("1");
 
   const getAllCards = async () => {
-    console.log(await getTransactionByMonth({ month: 12, year: 20 }));
-    console.log(await getTransactionByYear("20"));
-    console.log(await getTransactionByDate("12/18/20"));
     const data = await getCard();
     setCards(JSON.stringify(data, null, 2));
   };
@@ -209,8 +206,6 @@ export const HistoryScreen = () => {
           title="Transfer"
           onPress={async () => {
             console.log(await transferMoney(transferMoneyInput));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
@@ -288,8 +283,6 @@ export const HistoryScreen = () => {
           title="Create card"
           onPress={async () => {
             console.log(await createCard(cardsInput));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
@@ -385,7 +378,6 @@ export const HistoryScreen = () => {
           onPress={async () => {
             console.log(cardUpdate)
             console.log(await updateCard(cardUpdate));
-            getAllCards();
           }}
         />
       </View>
@@ -407,8 +399,6 @@ export const HistoryScreen = () => {
           title="delete card"
           onPress={async () => {
             console.log(await deleteCard(deleteId));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
@@ -455,7 +445,6 @@ export const HistoryScreen = () => {
           title="Create category"
           onPress={async () => {
             console.log(await createCategory(categoryInput));
-            getAllCategories();
           }}
         />
       </View>
@@ -516,7 +505,6 @@ export const HistoryScreen = () => {
           title="Update Category"
           onPress={async () => {
             console.log(await updateCategory(categoryUpdate));
-            getAllCategories();
           }}
         />
       </View>
@@ -538,7 +526,6 @@ export const HistoryScreen = () => {
           title="delete category"
           onPress={async () => {
             console.log(await deleteCategory(deleteId));
-            getAllCategories();
           }}
         />
       </View>
@@ -636,8 +623,6 @@ export const HistoryScreen = () => {
           title="Create transaction"
           onPress={async () => {
             console.log(await createTransaction(transactionInput));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
@@ -749,8 +734,6 @@ export const HistoryScreen = () => {
           title="Update Transaction"
           onPress={async () => {
             console.log(await updateTransaction(transactionUpdate));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
@@ -772,8 +755,6 @@ export const HistoryScreen = () => {
           title="delete transaction"
           onPress={async () => {
             console.log(await deleteTransaction(deleteId));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
