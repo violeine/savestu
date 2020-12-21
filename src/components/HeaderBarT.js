@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useCardState } from "../db";
-import { TextMoney } from "./TextMoney";
+import { TextMoney } from '../services/TextMoney';
 
 const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
   const { money, name, id } = useCardState();

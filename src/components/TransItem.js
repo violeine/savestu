@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Pressable } from 'react-native';
-import { MaterialIcons, MaterialCommunityIcons, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
+
 
 import { getCategoryById } from '../db/category'
 
-import { TextMoney } from './TextMoney';
-import { changMoneyColor, chooseIcon } from './ColorFunction';
+import { TextMoney } from '../services/TextMoney';
+import { changMoneyColor, chooseIcon } from '../services/ColorFunction';
 
 
 export default function TransItem({ el, onLongPress, isGroup = false }) {

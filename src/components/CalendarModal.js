@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Modal, Pressable } from 'react-native'
 
-import { LightenDarkenColor } from '../components/ColorFunction';
+import { LightenDarkenColor } from '../services/ColorFunction';
 
 const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
 

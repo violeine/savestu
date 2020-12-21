@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Modal, SectionList, Pressable, ScrollView } from 'react-native';
+
 import { useCardDispatch, useCardState } from '../db'
 import { getCard } from "../db/card"
+
 import CardItem from "./CardItem"
 
 

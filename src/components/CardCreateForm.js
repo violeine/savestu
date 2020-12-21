@@ -4,13 +4,7 @@ import { TextInput } from 'react-native-paper'
 import { Picker } from '@react-native-picker/picker'
 
 import { getCardById, createCard } from '../db/card'
-import {	
-  strRegex,
-  hideOnUpdate,
-  capitalizeFirstLetter,
-  isCheckChangeColor,
-  isCheck,
-  objectForUpdate} from '../services/formHelperFunction'
+import { strRegex, hideOnUpdate, capitalizeFirstLetter, isCheckChangeColor, isCheck, objectForUpdate } from '../services/formHelperFunction'
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 
@@ -95,15 +89,15 @@ const CardCreateForm = ({ navigation }) => {
 
   const handleCreateBtn = async () => {
     if (isCheck(cardError)) {
-			if (typeof objectForUpdate(cardInput, data) === "object") {
-				console.log(cardInput);
-				console.log(await createCard(cardInput))
-			}
-			else {
-				//alert Something Error -> Check Error
-				console.log("Something Error -> Check Error")
-			}
-		
+      if (typeof objectForUpdate(cardInput, data) === "object") {
+        console.log(cardInput);
+        console.log(await createCard(cardInput))
+      }
+      else {
+        //alert Something Error -> Check Error
+        console.log("Something Error -> Check Error")
+      }
+
     }
   }
 
@@ -241,7 +235,7 @@ const CardCreateForm = ({ navigation }) => {
           }
         </View>
 
-        <BtnAction title={capitalizeFirstLetter('create') + ' Card'} type='primary' onPress={handleCreateBtn}/>
+        <BtnAction title={capitalizeFirstLetter('create') + ' Card'} type='primary' onPress={handleCreateBtn} />
 
       </ScrollView>
     </>

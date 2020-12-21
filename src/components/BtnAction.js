@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, View, Text, StyleSheet } from 'react-native';
 
-import { LightenDarkenColor } from '../components/ColorFunction'
+import { LightenDarkenColor } from '../services/ColorFunction'
 
 
 export default function BtnAction({ title, onPress, type = 'primary' }) {

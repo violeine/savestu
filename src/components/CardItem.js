@@ -1,8 +1,8 @@
 import React from 'react';
 import { Pressable, View, Text, StyleSheet, Image } from 'react-native';
 
-import { TextMoney } from './TextMoney';
-import { changMoneyColor } from './ColorFunction';
+import { TextMoney } from '../services/TextMoney';
+import { changMoneyColor } from '../services/ColorFunction';
 
 
 export default function CardItem({ el, onPress, onLongPress }) {

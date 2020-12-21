@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 
-import { LightenDarkenColor, chooseIcon } from '../components/ColorFunction';
-import { TextMoney } from './TextMoney';
+import { LightenDarkenColor, chooseIcon } from '../services/ColorFunction';
+import { TextMoney } from '../services/TextMoney';
 
 
 export default function CateItem({ color, cate, money = 0 }) {

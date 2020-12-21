@@ -7,6 +7,7 @@ import {
     deleteCategory,
   } from "../db/category";
 
+  
 const CategoryForm = () => {
     const [categories, setCategories] = useState(null);
     const [categoryInput, setCategoryInput] = useState({
