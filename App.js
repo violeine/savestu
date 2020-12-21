@@ -9,6 +9,7 @@ import HistoryScreen from "./src/screens/HistoryScreen";
 import CardScreen from "./src/screens/CardScreen";
 import AccountScreen from "./src/screens/AccountScreen";
 import UpdateScreen from "./src/screens/UpdateScreen"
+import CreateScreen from "./src/screens/CreateScreen"
 import { useInitDbHook, CardProvider } from "./src/db";
 
 
@@ -57,10 +58,14 @@ function CardStackScreen() {
         options={{
           title: 'My Card',
           headerShown: false,
-          headerStyle: {
-            backgroundColor: '#2CC197',
-          },
-          headerTintColor: '#fff',
+        }}
+      />
+
+      <Stack.Screen
+        name="Create"
+        component={CreateScreen}
+        options={{
+          headerShown: false,
         }}
       />
 
@@ -68,12 +73,7 @@ function CardStackScreen() {
         name="Update"
         component={UpdateScreen}
         options={{
-          title: '',
           headerShown: false,
-          headerStyle: {
-            backgroundColor: '#2CC197',
-          },
-          headerTintColor: '#fff',
         }}
       />
     </Stack.Navigator>
@@ -88,8 +88,9 @@ const Main = () => {
     <NavigationContainer>
       <Tab.Navigator
 
-      // ----- CHỌN MÀN HÌNH MẶC ĐỊNH -------
+        // ----- CHỌN MÀN HÌNH MẶC ĐỊNH -------
         initialRouteName='Account'
+        // -------------------------------------
 
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {

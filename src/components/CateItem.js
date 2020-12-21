@@ -8,7 +8,7 @@ import { TextMoney } from '../services/TextMoney';
 
 export default function CateItem({ color, cate, money = 0 }) {
 
-  //Làm mờ màu nếu không có tiền
+  //Làm mờ màu nếu money=0
   color = money ? color : color + '40';
   const iconSize = 24;
   const iconColor = '#ffffff';

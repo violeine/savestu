@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Pressable } from 'react-native';
-
+import { format } from 'date-fns';
 
 import { getCategoryById } from '../db/category'
 
@@ -24,7 +24,7 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
   }, [])
 
 
-  console.log('\n======= TRANS ITEM =======\n', dataCate);
+  // console.log('\n----- TRANS ITEM -------\n');
 
   return (
     <Pressable
@@ -42,7 +42,9 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
 
         {dataCate ? chooseIcon(dataCate.name, 24, dataCate.color) : null}
 
-        <Text style={styles.date}>{el.date}</Text>
+        <Text style={styles.date}>
+          {format(new Date(el.date), 'eee, dd/M')}
+        </Text>
 
         <Text style={styles.note}>{el.note}</Text>
       </View>

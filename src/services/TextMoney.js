@@ -1,6 +1,6 @@
 
 
-function TextMoney(money) {
+function TextMoney(money=0) {
 
   return NumberWithSpace(money) + 'đ';
 }

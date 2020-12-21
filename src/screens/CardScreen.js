@@ -19,14 +19,14 @@ export default function CardScreen({ navigation }) {
     setCard(data);
   };
 
-  const onLongPressCardItem = (item) => {
-    navigation.navigate("Update", { type: "card", data: { ...item } });
-  };
-
   // Tự động chạy fetchData khi load xong screen
   useEffect(() => {
     fetchData();
   }, []);
+
+  const onLongPressCardItem = (item) => {
+    navigation.navigate("Update", { type: "card", data: { ...item } });
+  };
 
   // Debug
   console.log('\n===== CARD SCREEN =====');
@@ -40,18 +40,23 @@ export default function CardScreen({ navigation }) {
         onAction={() => console.log("Action Pressed")}
       />
 
-      <ScrollView style={styles.container}>
-        <View style={styles.filter}>
-          <FontAwesome name="filter" size={20} color="black" />
+      <View style={styles.filter}>
+        <FontAwesome name="filter" size={20} color="black" />
 
-          <View style={styles.picker}>
-            <Picker mode="dropdown" prompt="Filter card">
-              <Picker.Item label="All Card" value="all" />
-              <Picker.Item label="By type" value="type" />
-              <Picker.Item label="By money" value="money" />
-            </Picker>
-          </View>
+        <View style={styles.picker}>
+          <Picker
+            mode="dropdown"
+            prompt="Filter card"
+          >
+            <Picker.Item label="All Card" value="all" />
+            <Picker.Item label="By type" value="type" />
+            <Picker.Item label="By money" value="money" />
+          </Picker>
         </View>
+      </View>
+
+      <ScrollView style={styles.container}>
+
 
         {
           // Get each of element
@@ -85,6 +90,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingTop: 20,
     paddingBottom: 10,
+    backgroundColor: "#fafafa",
   },
 
   picker: {

@@ -1,8 +1,9 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import { View, StyleSheet, Text, TextInput, Button } from "react-native";
 
 import { useCardDispatch } from "../db";
 import { getCardById } from "../db/card";
+import { getTransactionByDate } from "../db/transaction";
 
 import CalendarModal from "../components/CalendarModal";
 import CardModal from "../components/CardModal";
@@ -10,6 +11,7 @@ import HeaderBarT from "../components/HeaderBarT";
 import AddButton from "../components/AddButton";
 import DonutChart from "../components/DonutChart";
 import CateItem from "../components/CateItem";
+import BtnAction from "../components/BtnAction";
 
 
 
@@ -18,8 +20,7 @@ import CateItem from "../components/CateItem";
 const HomeScreen = ({ navigation }) => {
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [cardModalVisible, setCardModalVisible] = useState(false);
-  const [cardId, setCardId] = useState("1");
-  const dispatch = useCardDispatch();
+
 
   useLayoutEffect(() =>
     navigation.setOptions({
@@ -32,13 +33,28 @@ const HomeScreen = ({ navigation }) => {
     })
   );
 
-  const dataPie = [
-    { value: 100, stroke: "#22594e", strokeWidth: 6 },
-    { value: 60, stroke: "#2f7d6d" },
-    { value: 30, stroke: "#3da18d" },
-    { value: 20, stroke: "#69c2b0" },
-    { value: 10, stroke: "#a1d9ce" },
-  ]
+
+  // STATE
+  const [cardId, setCardId] = useState("1");
+  const dispatch = useCardDispatch();
+  const [transDate, setTransDate] = useState(undefined);
+
+
+  // FETCH
+  const fetchTransDate = async () => {
+    const data = await getTransactionByDate('1/1/2020');
+    setTransDate(data);
+  }
+
+
+  useEffect(() => {
+    fetchTransDate();
+  }, []);
+
+  // DEBUG
+  console.log('\n==== HOME SCREEN ====\n');
+  console.log('----- transByDate -----\n', transDate);
+
 
   return (
     <>
@@ -62,7 +78,7 @@ const HomeScreen = ({ navigation }) => {
 
         {/* first row */}
         <View style={styles.flexBetween}>
-          <CateItem color='#FF8000' cate='Eating' money={200000} />
+          <CateItem color='#ff8000' cate='Eating' money={20} />
           <CateItem color='#18c20c' cate='Transportation' money={50} />
           <CateItem color='#278CD9' cate='Parking' />
           <CateItem color='#B97E2F' cate='Drinking' />
@@ -93,7 +109,9 @@ const HomeScreen = ({ navigation }) => {
           <CateItem color='rgba(0,0,0,0)' />
         </View>
 
-        <AddButton/>
+        
+
+        <AddButton />
 
       </View>
 

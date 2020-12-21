@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, StatusBar, ScrollView } from 'react-native'
+import { FontAwesome } from "@expo/vector-icons";
 
 import { getTransactionByCard } from "../db/transaction"
 
+import { Picker } from '@react-native-picker/picker'
 import TransItem from '../components/TransItem'
 import BtnAction from '../components/BtnAction';
 
@@ -13,8 +15,8 @@ export default function AccountScreen() {
 
   // Lấy dữ liệu db gán cho biến dataAll
   const fetchDataAll = async () => {
-    const dataAll = await getTransactionByCard(1);
-    setTransAll(dataAll);
+    const data = await getTransactionByCard(1);
+    setTransAll(data);
   };
 
   // Tự động chạy fetchDataAll khi load xong screen
@@ -22,13 +24,28 @@ export default function AccountScreen() {
     fetchDataAll();
   }, [])
 
-  console.log('\n\n===== TRANSACTION SCREEN =====');
-  console.log('\n------- transAll -------\n', transAll);
+  console.log('\n===== ACCOUNT SCREEN =====\n');
+  console.log('---- data All -----\n', transAll);
 
 
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor='#238f70' />
+
+      <View style={styles.filter}>
+        <FontAwesome name="filter" size={20} color="black" />
+
+        <View style={styles.picker}>
+          <Picker
+            mode="dropdown"
+            prompt="Filter card"
+          >
+            <Picker.Item label="All Transaction" value="all" />
+            <Picker.Item label="By category" value="type" />
+            <Picker.Item label="By money" value="money" />
+          </Picker>
+        </View>
+      </View>
 
       <ScrollView style={styles.container}>
 
@@ -53,12 +70,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fafafa',
-    paddingTop: 20,
   },
 
   centerItem: {
     flex: 1,
     alignSelf: "center",
+  },
+
+  filter: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 15,
+    paddingTop: 20,
+    paddingBottom: 10,
+    backgroundColor: "#fafafa",
+  },
+
+  picker: {
+    width: 170,
+    height: 40,
+    marginLeft: 5,
+    justifyContent: "center",
   },
 
   txtNotify: {

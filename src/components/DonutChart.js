@@ -20,7 +20,7 @@ export default function DonutChart() {
         sliceColor={sliceColor}
         doughnut={true}
         coverRadius={0.85}
-        coverFill={'#fff'}
+        coverFill={'#fafafa'}
       />
     </View>
   );
