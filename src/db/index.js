@@ -16,7 +16,7 @@ const defaultCards = [
   {
     name: "Mua lap mới",
     type: "saving",
-    money: 20000,
+    money: 200000,
     goal: 20000000,
     note: "Dành tiền mua lap mới",
   },
@@ -66,6 +66,10 @@ const defaultCategory = [
   {
     name: "Movie",
     color: "#ece800",
+  },
+  {
+    name: "Others",
+    color: "#888888",
   },
 ];
 

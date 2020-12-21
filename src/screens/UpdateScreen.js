@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
-import CardForm from '../components/CardForm'
+import CardUpdateForm from '../components/CardUpdateForm'
 import CategoryForm from '../components/CategoryForm'
 import TransactionForm from '../components/TransactionForm'
 
@@ -11,11 +11,12 @@ const UpdateScreen = ({ route, navigation }) => {
     return (
         <>
             {
-                type === "card" ?
-                    <CardForm data={data} type="update" navigation={navigation} />
-                    : type === "category" ?
-                        <CategoryForm />
-                        : <TransactionForm />
+                type === "card" 
+                ?
+                    <CardUpdateForm data={data} navigation={navigation} />
+                : type === "category" ?
+                    <CategoryForm />
+                : <TransactionForm />
             }
         </>
     );

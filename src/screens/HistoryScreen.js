@@ -18,6 +18,7 @@ import {
 } from "../db/card";
 import {
   getCategory,
+  getCategoryById,
   createCategory,
   updateCategory,
   deleteCategory,
@@ -88,10 +89,8 @@ export const HistoryScreen = () => {
   const [deleteId, setDeleteId] = useState("1");
 
   const getAllCards = async () => {
-    console.log(await getTransactionByMonth({ month: 12, year: 20 }));
-    console.log(await getTransactionByYear("20"));
-    console.log(await getTransactionByDate("12/18/20"));
     const data = await getCard();
+    console.log((await getCategoryById(3)).name);
     setCards(JSON.stringify(data, null, 2));
   };
 
@@ -111,6 +110,54 @@ export const HistoryScreen = () => {
     setTransactions(null);
   };
 
+  const initTrans = async () => {
+    const trans = [
+      {
+        category: 3,
+        card: 1,
+        cash: -500000,
+        date: "02/28/19",
+        note: "Gogi",
+      },
+      {
+        category: 4,
+        card: 1,
+        cash: -200000,
+        date: "02/28/19",
+        note: "Starbucks",
+      },
+      {
+        category: 12,
+        card: 2,
+        cash: 3000000,
+        date: "03/01/19",
+        note: "Mẹ gửi lương",
+      },
+      {
+        category: 2,
+        card: 2,
+        cash: -3200000,
+        date: "03/01/19",
+        note: "Chuyển tiền vào card 1",
+      },
+      {
+        category: 2,
+        card: 1,
+        cash: 3200000,
+        date: "03/01/19",
+        note: "Nhận từ card 1",
+      },
+      {
+        category: 12,
+        card: 1,
+        cash: -3500000,
+        date: "03/01/09",
+        note: "Sinh nhật crush",
+      },
+    ];
+    console.log(await Promise.all(trans.map((e) => createTransaction(e))));
+  };
+
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [cardModalVisible, setCardModalVisible] = useState(false);
 
@@ -125,6 +172,7 @@ export const HistoryScreen = () => {
       <StatusBar barStyle="light-content" backgroundColor="#238f70" />
       <Text onPress={cleanUp}>delete physical db</Text>
       <Text onPress={clearOutput}> clear output</Text>
+      <Text onPress={initTrans}> some mock transaction </Text>
       <Text>Db screen</Text>
       <Text onPress={getAllCards}> get all cards</Text>
       <Text> {cards} </Text>
@@ -209,8 +257,6 @@ export const HistoryScreen = () => {
           title="Transfer"
           onPress={async () => {
             console.log(await transferMoney(transferMoneyInput));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
@@ -288,8 +334,6 @@ export const HistoryScreen = () => {
           title="Create card"
           onPress={async () => {
             console.log(await createCard(cardsInput));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
@@ -383,8 +427,8 @@ export const HistoryScreen = () => {
         <Button
           title="Update Card"
           onPress={async () => {
+            console.log(cardUpdate)
             console.log(await updateCard(cardUpdate));
-            getAllCards();
           }}
         />
       </View>
@@ -406,8 +450,6 @@ export const HistoryScreen = () => {
           title="delete card"
           onPress={async () => {
             console.log(await deleteCard(deleteId));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
@@ -454,7 +496,6 @@ export const HistoryScreen = () => {
           title="Create category"
           onPress={async () => {
             console.log(await createCategory(categoryInput));
-            getAllCategories();
           }}
         />
       </View>
@@ -515,7 +556,6 @@ export const HistoryScreen = () => {
           title="Update Category"
           onPress={async () => {
             console.log(await updateCategory(categoryUpdate));
-            getAllCategories();
           }}
         />
       </View>
@@ -537,7 +577,6 @@ export const HistoryScreen = () => {
           title="delete category"
           onPress={async () => {
             console.log(await deleteCategory(deleteId));
-            getAllCategories();
           }}
         />
       </View>
@@ -635,8 +674,6 @@ export const HistoryScreen = () => {
           title="Create transaction"
           onPress={async () => {
             console.log(await createTransaction(transactionInput));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
@@ -748,8 +785,6 @@ export const HistoryScreen = () => {
           title="Update Transaction"
           onPress={async () => {
             console.log(await updateTransaction(transactionUpdate));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
@@ -771,8 +806,6 @@ export const HistoryScreen = () => {
           title="delete transaction"
           onPress={async () => {
             console.log(await deleteTransaction(deleteId));
-            getAllCards();
-            getAllTransactions();
           }}
         />
       </View>
