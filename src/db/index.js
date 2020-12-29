@@ -24,52 +24,64 @@ const defaultCards = [
 
 const defaultCategory = [
   {
-    name: "Card Initializing",
+    name: "Card Initialization",
     color: "#ffffff",
+    type: "income",
   },
   {
-    name: "Transferring",
+    name: "Transfer (Deposit)",
     color: "#01dfa3",
+    type: "income",
   },
   {
-    name: "Eating",
+    name: "Transfer (Withdrawal)",
+    color: "#fe205c",
+    type: "expense",
+  },
+  {
+    name: "Food",
     color: "#FF8000",
+    type: "expense",
   },
   {
-    name: "Drinking",
+    name: "Drinks",
     color: "#897e2f",
+    type: "expense",
   },
   {
     name: "Parking",
     color: "#278cd9",
+    type: "expense",
   },
   {
     name: "Transportation",
     color: "#18c20c",
+    type: "expense",
   },
   {
     name: "Shopping",
     color: "#ff3e3e",
+    type: "expense",
   },
   {
     name: "House",
     color: "#8506ff",
+    type: "expense",
   },
   {
     name: "Phone",
     color: "#ff6594",
+    type: "expense",
   },
   {
     name: "Groceries",
     color: "#ff00d5",
+    type: "expense",
   },
   {
     name: "Movie",
     color: "#ece800",
-  },
-  {
-    name: "Others",
-    color: "#888888",
+    type: "expense",
   },
 ];
 
@@ -92,7 +104,7 @@ function initDb(setFinished) {
           id integer primary key autoincrement,
           name text,
           color text,
-          total integer default 0
+          type text
         );
       `);
       tx.executeSql(`
@@ -142,39 +154,6 @@ function initDb(setFinished) {
              update cards
              set money = money - old.cash
              where id = old.card;
-           end;
-       `);
-      tx.executeSql(`
-         drop trigger if exists update_category_total_after_insert_transaction;
-       `);
-      tx.executeSql(`
-         drop trigger if exists update_category_total_after_update_transaction;
-       `);
-      tx.executeSql(`
-         drop trigger if exists update_category_total_after_delete_transaction;
-       `);
-      tx.executeSql(`
-         create trigger update_category_total_after_insert_transaction after insert on transactions
-           begin
-             update categories
-             set total = total + new.cash
-             where id = new.category;
-           end;
-       `);
-      tx.executeSql(`
-         create trigger update_category_total_after_update_transaction after update on transactions
-           begin
-             update categories
-             set total = total - old.cash + new.cash
-             where id = new.category;
-           end;
-       `);
-      tx.executeSql(`
-         create trigger update_category_total_after_delete_transaction after delete on transactions
-           begin
-             update categories
-             set total = total - old.cash
-             where id = old.category;
            end;
        `);
     },
