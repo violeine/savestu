@@ -19,6 +19,7 @@ import {
 import {
   getCategory,
   getCategoryById,
+  getCategoryByCard,
   createCategory,
   updateCategory,
   deleteCategory,
@@ -89,8 +90,8 @@ export const HistoryScreen = () => {
   const [deleteId, setDeleteId] = useState("1");
 
   const getAllCards = async () => {
+    console.log(await getCategoryByCard(1));
     const data = await getCard();
-    console.log((await getCategoryById(3)).name);
     setCards(JSON.stringify(data, null, 2));
   };
 
@@ -113,14 +114,14 @@ export const HistoryScreen = () => {
   const initTrans = async () => {
     const trans = [
       {
-        category: 3,
+        category: 4,
         card: 1,
         cash: -500000,
         date: "02/28/19",
         note: "Gogi",
       },
       {
-        category: 4,
+        category: 5,
         card: 1,
         cash: -200000,
         date: "02/28/19",
@@ -131,31 +132,26 @@ export const HistoryScreen = () => {
         card: 2,
         cash: 3000000,
         date: "03/01/19",
-        note: "Mẹ gửi lương",
-      },
-      {
-        category: 2,
-        card: 2,
-        cash: -3200000,
-        date: "03/01/19",
-        note: "Chuyển tiền vào card 1",
-      },
-      {
-        category: 2,
-        card: 1,
-        cash: 3200000,
-        date: "03/01/19",
-        note: "Nhận từ card 1",
+        note: "Đứa nào chuyển nhầm tiền vô thẻ mình",
       },
       {
         category: 12,
         card: 1,
         cash: -3500000,
-        date: "03/01/09",
+        date: "04/01/19",
         note: "Sinh nhật crush",
       },
     ];
     console.log(await Promise.all(trans.map((e) => createTransaction(e))));
+    console.log(
+      await transferMoney({
+        sendId: 2,
+        receiveId: 2,
+        money: 3200000,
+        date: "03/01/19",
+        note: "Rút tiền iđ sinh nhật",
+      })
+    );
   };
 
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
@@ -176,6 +172,7 @@ export const HistoryScreen = () => {
       <Text>Db screen</Text>
       <Text onPress={getAllCards}> get all cards</Text>
       <Text> {cards} </Text>
+
       <Text onPress={getAllCategories}> get all categories </Text>
       <Text> {categories} </Text>
       <Text onPress={getAllTransactions}> get all transactions </Text>
@@ -427,7 +424,7 @@ export const HistoryScreen = () => {
         <Button
           title="Update Card"
           onPress={async () => {
-            console.log(cardUpdate)
+            console.log(cardUpdate);
             console.log(await updateCard(cardUpdate));
           }}
         />

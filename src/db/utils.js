@@ -1,8 +1,7 @@
 import * as SQLite from "expo-sqlite";
-
 const db = SQLite.openDatabase("db.db");
 
-export function execSql(sqlQuery, vector) {
+export const execSql = (sqlQuery, vector) => {
   return new Promise((resolve, reject) => {
     db.transaction(function (tx) {
       db.exec(
@@ -18,4 +17,9 @@ export function execSql(sqlQuery, vector) {
       );
     });
   });
-}
+};
+
+export const stripObj = (obj) => {
+  for (let key in obj) if (obj[key] == null || obj[key] == "") delete obj[key];
+  return obj;
+};
