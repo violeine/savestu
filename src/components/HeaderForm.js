@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Appbar } from 'react-native-paper';
 import { View, StatusBar } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const HeaderForm = ({ navigation, title, onSubmit }) => {
+const HeaderForm = ({ title, onSubmit }) => {
+  const navigation = useNavigation();
   const _goBack = () => navigation.goBack();
 
   const theme = {
@@ -22,7 +24,7 @@ const HeaderForm = ({ navigation, title, onSubmit }) => {
       >
         <Appbar.BackAction color={theme.colors.accent} onPress={_goBack} />
         <Appbar.Content title={title} color={theme.colors.accent} />
-        <Appbar.Action icon="check" color={theme.colors.accent} onPress={() => { onSubmit; _goBack() }} />
+        <Appbar.Action icon="check" color={theme.colors.accent} onPress={onSubmit} />
       </Appbar.Header>
     </View>
   );

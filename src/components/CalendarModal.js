@@ -9,7 +9,7 @@ const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
   return (
     <View style={styles.centeredView}>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={visible}
       >

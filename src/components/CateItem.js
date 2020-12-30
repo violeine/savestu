@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-
+import {useNavigation} from '@react-navigation/native'
 
 import { LightenDarkenColor, chooseIcon } from '../services/ColorFunction';
 import { TextMoney } from '../services/TextMoney';
@@ -13,6 +13,14 @@ export default function CateItem({ color, cate, money = 0 }) {
   const iconSize = 24;
   const iconColor = '#ffffff';
 
+  const navigation = useNavigation();
+
+  const onPressCateItem = () => {
+
+    //navigation.navigate('Create',{type : 'transaction'})
+    navigation.navigate('Create',{type : 'category'})
+  }
+
   return (
     <View style={styles.container}>
       <Text style={{ color: color, textTransform: "capitalize", fontSize: 12 }}>
@@ -20,7 +28,7 @@ export default function CateItem({ color, cate, money = 0 }) {
       </Text>
 
       <Pressable
-        onPress={() => console.log('Cate item Pressed')}
+        onPress={onPressCateItem}
         style={({ pressed }) =>
           [
             {

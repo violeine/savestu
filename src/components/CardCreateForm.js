@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { View, ScrollView, StyleSheet, Text, Button, Alert } from 'react-native'
+import React, { useState,useEffect } from 'react'
+import { View, ScrollView, StyleSheet, Text } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import { Picker } from '@react-native-picker/picker'
-
-import { getCardById, createCard } from '../db/card'
-import { strRegex, hideOnUpdate, capitalizeFirstLetter, isCheckChangeColor, isCheck, objectForUpdate } from '../services/formHelperFunction'
+import {useNavigation} from '@react-navigation/native'
+import { createCard } from '../db/card'
+import { strRegex,
+  capitalizeFirstLetter,
+  isCheckChangeColor,
+  isCheck
+} from '../services/formHelperFunction'
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 
 
-const CardCreateForm = ({ navigation }) => {
-
+const CardCreateForm = () => {
+  const navigation = useNavigation()
   const [cardInput, setCardInput] = useState({
     name: "",
     type: "",
@@ -20,16 +24,15 @@ const CardCreateForm = ({ navigation }) => {
   });
 
   const [cardError, setCardError] = useState({
-    name: "",
+    name: "✘ This field can not be empty",
     type: "",
     money: "",
     goal: "",
-    note: "",
+    note: "✓ Check",
   })
 
   const checkCardInfor = (type, value) => {
     let err;
-
     // Kiểm tra input rỗng
     if (value.length == 0) {
       err = '✘ This field can not be empty';
@@ -38,11 +41,12 @@ const CardCreateForm = ({ navigation }) => {
         case 'name':
           setCardError({ ...cardError, "name": err });
           break;
-
+        case 'type':
+          setCardError({ ...cardError, "type": err });
+          break;
         case 'money':
           setCardError({ ...cardError, "money": err });
           break;
-
         case 'goal':
           setCardError({ ...cardError, "goal": err });
           break;
@@ -60,7 +64,10 @@ const CardCreateForm = ({ navigation }) => {
           : "✓ Check"
         setCardError({ ...cardError, "name": err })
         break
-
+      case "type":
+        err = "✓ Check"
+        setCardError({...cardError, "type": err})
+        break
       case "money":
         err = strRegex("money").test(value)
           ? "✘ Money must be number"
@@ -84,20 +91,33 @@ const CardCreateForm = ({ navigation }) => {
 
       default: break;
     }
-    return;
+  }
+
+  const setCardCreate = async() => {
+    if (cardInput.type == 'using') {
+      await setCardInput({...cardInput, goal: -1})
+    }
+    else await setCardInput({...cardInput, money: 0})
   }
 
   const handleCreateBtn = async () => {
-    if (isCheck(cardError)) {
-      if (typeof objectForUpdate(cardInput, data) === "object") {
-        console.log(cardInput);
+    if (isCheck(cardError,"create", 'card')) {
+      try {
+        setCardCreate()
         console.log(await createCard(cardInput))
+        navigation.goBack()
       }
-      else {
-        //alert Something Error -> Check Error
-        console.log("Something Error -> Check Error")
+      catch {
+        console.error();
       }
 
+    }
+    else {
+      //alert Something Error -> Check Error
+      console.log(cardInput)
+
+      console.log(cardError)
+      console.log("Something Error -> Check Error")
     }
   }
 
@@ -121,24 +141,37 @@ const CardCreateForm = ({ navigation }) => {
   return (
     <>
       <HeaderForm
-        navigation={navigation}
         title={capitalizeFirstLetter('create') + ' Card'}
-        onSubmit={() => console.log('Form Submit')}
+        onSubmit={handleCreateBtn}
       />
 
       <ScrollView style={styles.container}>
 
-        <View style={[styles.picker, hideOnUpdate('create')]}>
-          <Picker
-            selectedValue={cardInput.type}
-            onValueChange={(itemValue, itemIndex) =>
-              setCardInput({ ...cardInput, type: itemValue })
+        <View>
+          <View style={styles.picker}>
+            <Picker
+              selectedValue={cardInput.type}
+              onValueChange={(itemValue) => {
+                  setCardInput({ ...cardInput, type: itemValue })
+                  checkCardInfor('type',itemValue)
+                }
+              }
+              prompt='Select card type'
+            >
+              <Picker.Item label="Pick Type" value=""/>
+              <Picker.Item label="💳  Using" value="using" />
+              <Picker.Item label="💰  Saving" value="saving" />
+            </Picker>
+
+          </View>
+
+          <View style={{ alignSelf: "center" }}>
+            {
+              cardError.type == ""
+              ? null
+              : <Text style={isCheckChangeColor(cardError.type)}>{cardError.type}</Text>
             }
-            prompt='Select card type'
-          >
-            <Picker.Item label="💳  Using" value="using" />
-            <Picker.Item label="💰  Saving" value="saving" />
-          </Picker>
+          </View> 
         </View>
 
         <View style={{ alignSelf: "center" }}>
@@ -182,7 +215,7 @@ const CardCreateForm = ({ navigation }) => {
             disabled={cardInput.type == 'using' ? false : true}
           />
           {
-            cardError.money == ""
+            cardError.money == "" || cardInput.type != "using"
               ? null
               : <Text style={isCheckChangeColor(cardError.money)}>{cardError.money}</Text>
           }
@@ -190,25 +223,25 @@ const CardCreateForm = ({ navigation }) => {
 
         <View style={{ alignSelf: "center" }}>
           <TextInput
-            value={cardInput.money.toString()}
+            value={cardInput.goal.toString()}
             onChangeText={(t) => {
               setCardInput({
                 ...cardInput,
-                money: t,
+                goal: t,
               })
-              checkCardInfor("money", t)
+              checkCardInfor("goal", t)
             }}
             label='Goal (saving)'
             placeholder='Input goal'
             mode='outlined'
             style={styles.input}
-            theme={cardError.money == '✓ Check' ? theme : themeErr}
+            theme={cardError.goal == '✓ Check' ? theme : themeErr}
             disabled={cardInput.type == 'saving' ? false : true}
           />
           {
-            cardError.goal == ""
+            cardError.goal == "" || cardInput.type != "saving"
               ? null
-              : <Text style={isCheckChangeColor(cardError.goal)}>{cardError.goal}</Text>
+              : (<Text style={isCheckChangeColor(cardError.goal)}>{cardError.goal}</Text>)
           }
         </View>
 
@@ -242,6 +275,7 @@ const CardCreateForm = ({ navigation }) => {
   );
 
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

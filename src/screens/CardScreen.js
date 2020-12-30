@@ -37,7 +37,7 @@ export default function CardScreen({ navigation }) {
     <>
       <HeaderStack
         title="My Card"
-        onAction={() => console.log("Action Pressed")}
+        onAction={() => navigation.navigate('Create',{type : 'card'})}
       />
 
       <View style={styles.filter}>
