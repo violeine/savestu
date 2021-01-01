@@ -10,6 +10,7 @@ import CardScreen from "./src/screens/CardScreen";
 import AccountScreen from "./src/screens/AccountScreen";
 import UpdateScreen from "./src/screens/UpdateScreen"
 import CreateScreen from "./src/screens/CreateScreen"
+import DebugScreen from "./src/screens/DebugScreen"
 import { useInitDbHook, CardProvider } from "./src/db";
 
 
@@ -39,6 +40,18 @@ function AccountStackScreen() {
         component={AccountScreen}
         options={{
           title: 'My Account',
+          headerStyle: {
+            backgroundColor: '#2CC197',
+          },
+          headerTintColor: '#fff',
+        }}
+      />
+      
+      <Stack.Screen
+        name="Debug"
+        component={DebugScreen}
+        options={{
+          title: 'Debug Screen',
           headerStyle: {
             backgroundColor: '#2CC197',
           },
@@ -89,7 +102,9 @@ const Main = () => {
       <Tab.Navigator
 
         // ----- CHỌN MÀN HÌNH MẶC ĐỊNH -------
+
         initialRouteName='Account'
+
         // -------------------------------------
 
         screenOptions={({ route }) => ({

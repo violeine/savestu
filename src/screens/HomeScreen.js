@@ -11,7 +11,6 @@ import HeaderBarT from "../components/HeaderBarT";
 import AddButton from "../components/AddButton";
 import DonutChart from "../components/DonutChart";
 import CateItem from "../components/CateItem";
-import BtnAction from "../components/BtnAction";
 
 
 
@@ -37,23 +36,19 @@ const HomeScreen = ({ navigation }) => {
   // STATE
   const [cardId, setCardId] = useState("1");
   const dispatch = useCardDispatch();
-  const [transDate, setTransDate] = useState(undefined);
+
 
 
   // FETCH
-  const fetchTransDate = async () => {
-    const data = await getTransactionByDate('1/1/2020');
-    setTransDate(data);
-  }
+
 
 
   useEffect(() => {
-    fetchTransDate();
+
   }, []);
 
   // DEBUG
-  console.log('\n==== HOME SCREEN ====\n');
-  console.log('----- transByDate -----\n', transDate);
+
 
 
   return (
@@ -105,8 +100,8 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.flexBetween}>
           <CateItem color='#FF6594' cate='Phone' />
           <CateItem color='#B506FF' cate='House' />
-          <CateItem color='rgba(0,0,0,0)' />
-          <CateItem color='rgba(0,0,0,0)' />
+          <CateItem color='#000000' visible={false}/>
+          <CateItem color='#000000' visible={false}/>
         </View>
 
         
