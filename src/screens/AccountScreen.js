@@ -24,8 +24,8 @@ export default function AccountScreen() {
     fetchDataAll();
   }, [])
 
-  console.log('\n===== ACCOUNT SCREEN =====\n');
-  console.log('---- data All -----\n', transAll);
+  // console.log('\n===== ACCOUNT SCREEN =====\n');
+  // console.log('---- data All -----\n', transAll);
 
 
   return (

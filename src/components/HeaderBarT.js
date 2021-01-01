@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -6,13 +6,53 @@ import {
   Pressable,
   Text,
   StatusBar,
+  ToastAndroid,
 } from "react-native";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+
 import { useCardState } from "../db";
 import { TextMoney } from '../services/TextMoney';
+import { formatDateDisplay, formatDateDB, nextDate, nextMonth } from "../services/DateFunctions";
+
+
+
 
 const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
+
+  // STATE
   const { money, name, id } = useCardState();
+  const [curDate, setCurDate] = useState('');
+
+  useEffect(() => {
+    onPressCurDate();
+  }, [])
+
+
+  // FUNC ONPRESS
+  // -- Date --
+  const onPressCurDate = () => {
+    setCurDate(
+      formatDateDB(new Date())
+    )
+  }
+
+  const onPressNextDate = () => {
+    setCurDate(
+      nextDate(curDate, 1)
+    )
+  }
+
+  const onPressPrevDate = () => {
+    setCurDate(
+      nextDate(curDate, -1)
+    )
+  }
+
+  // SHOW TOAST
+  const showToast = () => {
+    ToastAndroid.show("You have returned to current date", ToastAndroid.SHORT);
+  };
+
 
   return (
     <View style={{ ...styles.headerContainer, backgroundColor: "#2CC197" }}>
@@ -20,21 +60,18 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
       <StatusBar barStyle="light-content" backgroundColor="#229B79" />
 
       <View style={styles.funcContainer}>
-        <Pressable style={({ pressed }) =>
-          [
-            {
-              backgroundColor: pressed ? '#fbfbfb31' : 'transparent',
-            },
-            styles.headerCalendar,
-          ]
-        }
-          onPress={showCalendarModal}>
-          <MaterialCommunityIcons
-            name="calendar-today"
-            size={24}
-            color="#fff"
-          />
-          <Text style={styles.text}> By day</Text>
+        <Pressable
+          onPress={showCalendarModal}
+          style={({ pressed }) =>
+            [
+              {
+                backgroundColor: pressed ? '#fbfbfb31' : 'transparent',
+              },
+              styles.headerCalendar,
+            ]}
+        >
+          <MaterialCommunityIcons name="calendar-today" size={24} color="#fff" />
+          <Text style={styles.text}> By date</Text>
         </Pressable>
 
         <Pressable
@@ -54,10 +91,61 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
         </Pressable>
       </View>
 
+
+      {/* Date controller */}
       <View style={styles.dateContainer}>
-        <Text style={{ color: "rgba(255,255,255,0.3)" }}>Tue, 27 Oct</Text>
-        <Text style={styles.textBig}>Wed, 28 Oct</Text>
-        <Text style={{ color: "rgba(255,255,255,0.3)" }}>Thu, 29 Oct</Text>
+
+        <Pressable
+          onPress={onPressPrevDate}
+          style={({ pressed }) =>
+            [
+              {
+                backgroundColor: pressed ? '#fbfbfb31' : 'transparent',
+              },
+              styles.controllerIcon,
+            ]
+          }
+        >
+          <FontAwesome5 name="less-than" size={12} color="#fff" />
+        </Pressable>
+
+
+        <Pressable
+          onLongPress={() => { onPressCurDate(), showToast() }}
+          style={({ pressed }) =>
+            [
+              {
+                backgroundColor: pressed ? '#fbfbfb31' : 'transparent',
+              },
+              styles.textBigContainer,
+            ]
+          }
+        >
+
+          <Text style={styles.textBig}>
+            {
+              curDate
+                ? formatDateDisplay(curDate)
+                : null
+            }
+          </Text>
+        </Pressable>
+
+
+        <Pressable
+          onPress={onPressNextDate}
+          style={({ pressed }) =>
+            [
+              {
+                backgroundColor: pressed ? '#fbfbfb31' : 'transparent',
+              },
+              styles.controllerIcon,
+            ]
+          }
+        >
+          <FontAwesome5 name="greater-than" size={12} color="#fff" />
+        </Pressable>
+
       </View>
 
     </View >
@@ -103,13 +191,33 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingHorizontal: 5,
-    marginBottom: 5,
+    alignItems: "center",
+    paddingHorizontal: 80,
+    paddingBottom: 10,
+  },
+
+  controllerIcon: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 100,
+  },
+
+  dateCenter: {
+    width: 80,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 
   text: {
     color: "#fff",
     fontSize: 14,
+  },
+
+  textBigContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 35,
+    borderRadius: 10,
   },
 
   textBig: {
