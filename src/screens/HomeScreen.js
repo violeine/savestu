@@ -14,9 +14,6 @@ import CateItem from "../components/CateItem";
 
 
 
-
-
-
 const HomeScreen = ({ navigation }) => {
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [cardModalVisible, setCardModalVisible] = useState(false);
