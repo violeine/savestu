@@ -35,18 +35,26 @@ const HomeScreen = ({ navigation }) => {
   const [cardId, setCardId] = useState("1");
   const dispatch = useCardDispatch();
 
+  // TEST DONUT CHART
+  const [cardData, setCardData] = useState(undefined);
+  const [seriesCateExpense, setSeriesCateExpense] = useState([80, 50, 60]);
+  const [sliceCateColor, setSliceCateColor] = useState(['#ff8000', '#18c20c', '#278CD9']);
 
 
-  // FETCH
-
+  // FETCH TEST DONUT CHART
+  const fetchCardData = async () => {
+    let data = await getCardById(2);
+    setCardData(data);
+  }
 
 
   useEffect(() => {
-
+    fetchCardData();
   }, []);
 
-  // DEBUG
 
+  // DEBUG
+  console.log('\n==== HomeScreen ====\n', cardData);
 
 
   return (
@@ -84,15 +92,29 @@ const HomeScreen = ({ navigation }) => {
             <CateItem color='#ece800' cate='Movie' />
           </View>
 
-          <View>
-            <DonutChart />
-          </View>
+
+          {
+            cardData ?
+              <View>
+                <DonutChart
+                  card={cardData}
+                  series={seriesCateExpense}
+                  sliceColor={sliceCateColor}
+                  income={99000}
+                  expense={-65000}
+                />
+              </View>
+
+              : null
+          }
+
 
           <View style={styles.aside}>
             <CateItem color='#FF3E3E' cate='Shopping' />
             <CateItem color='#FF00D5' cate='Groceries' />
           </View>
         </View>
+
 
         {/* third round */}
         <View style={styles.flexBetween}>

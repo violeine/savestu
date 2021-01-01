@@ -109,7 +109,7 @@ const Main = () => {
 
         // ----- CHỌN MÀN HÌNH MẶC ĐỊNH -------
 
-        initialRouteName='Account'
+        initialRouteName='Home'
 
         // -------------------------------------
 

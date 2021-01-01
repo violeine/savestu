@@ -1,59 +1,98 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Pie from 'react-native-pie-chart';
+
+
 import { TextMoney } from '../services/TextMoney';
 import { changMoneyColor } from '../services/ColorFunction';
-import { color } from 'react-native-reanimated';
+import { useScreens } from 'react-native-screens';
 
 
 
+export default function DonutChart({ card, series = [0], sliceColor = ['#ddd'], income = 0, expense = 0 }) {
+
+  const [_series, setSeries] = useState(series);
+  const [_sliceColor, setSliceColor] = useState(sliceColor);
 
 
-export default function DonutChart() {
-  const chart_wh = 180;
-  var series = [];
-  var sliceColor = ['#2cc197', '#ccc'];
+  useEffect(() => {
 
-  var money = 200000;
-  var income = 20000;
-  var expense = -50000;
-  var goal = 10000000;
-  series.push(money);
-  series.push(goal - money);
+    // Chuyển biểu đồ money/goal nếu là card saving
+    if (card.type == 'saving') {
+      setSeries([card.money, card.goal - card.money]);
+      setSliceColor(['#2cc197', '#ddd']);
+    }
+
+    else {
+      setSeries(series);
+      setSliceColor(sliceColor);
+    }
+
+  }, [card]);
 
   // DEBUG
-  // console.log('\n----- Series ----\n', series);
+  // console.log('\n---- Donut Chart ----\n', income, expense);
 
   return (
     <View style={styles.container}>
 
       <Pie
-        chart_wh={chart_wh}
-        series={series}
-        sliceColor={sliceColor}
+        series={_series}
+        sliceColor={_sliceColor}
+        chart_wh={180}
         doughnut={true}
         coverRadius={0.85}
         coverFill={'#fafafa'}
       />
 
-      <View style={styles.centerItem}>
 
-        <Text style={[changMoneyColor(expense), styles.txtMoney]}>
-          {TextMoney(expense)}
-        </Text>
+      {
+        // card using hiển thị income expense, saving hiển thị money, goal
+        card.type == 'using'
+          ? (
+            <View style={styles.centerItem}>
+              <Text style={[changMoneyColor(expense), styles.txtMoney]}>
+                {TextMoney(expense)}
+              </Text>
 
-        <Text style={[changMoneyColor(income), styles.txtMoney]}>
-          {TextMoney(income)}
-        </Text>
+              <Text style={[changMoneyColor(income), styles.txtMoney]}>
+                {TextMoney(income)}
+              </Text>
+            </View >
+          )
 
-        <Text style={[{ color: '#ffd500' }, styles.txtMoney]}>
-          {TextMoney(goal)}
-        </Text>
+          : (
+            <View style={styles.centerItem}>
+              <Text style={styles.txtGoal}>
+                {displayPercent(card.money, card.goal)}
+              </Text>
 
-      </View>
+              <Text style={[changMoneyColor(card.money), styles.txtMoney]}>
+                {TextMoney(card.money)}
+              </Text>
 
-    </View >
+              <Text style={[{ color: '#ffd500' }, styles.txtMoney]}>
+                {TextMoney(card.goal)}
+              </Text>
+            </View >
+          )
+      }
+
+
+    </View>
   );
+}
+
+
+function displayPercent(money, goal) {
+  let result = (money / goal) * 100;
+
+  if (result < 0) result = 0;
+  else if (result > 100) result = 100;
+
+  result = Math.round(result * 100) / 100
+
+  return result + '%';
 }
 
 const styles = StyleSheet.create({
@@ -73,6 +112,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textAlign: "right",
+  },
+
+  txtGoal: {
+    fontSize: 18,
+    color: '#555',
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 15,
   },
 });
 
