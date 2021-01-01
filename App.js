@@ -19,7 +19,10 @@ const Stack = createStackNavigator();
 function HomeStackScreen() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+      />
     </Stack.Navigator>
   );
 }
@@ -27,7 +30,10 @@ function HomeStackScreen() {
 function HistoryStackScreen() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="History" component={HistoryScreen} />
+      <Stack.Screen
+        name="History"
+        component={HistoryScreen}
+      />
     </Stack.Navigator>
   );
 }
@@ -46,7 +52,7 @@ function AccountStackScreen() {
           headerTintColor: '#fff',
         }}
       />
-      
+
       <Stack.Screen
         name="Debug"
         component={DebugScreen}
@@ -107,6 +113,8 @@ const Main = () => {
 
         // -------------------------------------
 
+
+
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -150,10 +158,25 @@ const Main = () => {
           },
         }}
       >
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="History" component={HistoryStackScreen} />
-        <Tab.Screen name="Card" component={CardStackScreen} />
-        <Tab.Screen name="Account" component={AccountStackScreen} />
+        <Tab.Screen
+          name="Home"
+          component={HomeStackScreen}
+        />
+
+        <Tab.Screen
+          name="History"
+          component={HistoryStackScreen}
+        />
+
+        <Tab.Screen
+          name="Card"
+          component={CardStackScreen}
+        />
+
+        <Tab.Screen
+          name="Account"
+          component={AccountStackScreen}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

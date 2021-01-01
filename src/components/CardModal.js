@@ -57,7 +57,7 @@ const CardModal = ({ visible, hideCardModal, showCardModal }) => {
     <View style={styles.centeredView} >
       <ScrollView style={{ flex: 1 }}>
         <Modal
-          animationType="slide"
+          animationType="fade"
           visible={visible}
           transparent={true}
         >

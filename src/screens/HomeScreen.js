@@ -16,6 +16,7 @@ import CateItem from "../components/CateItem";
 
 
 
+
 const HomeScreen = ({ navigation }) => {
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [cardModalVisible, setCardModalVisible] = useState(false);
@@ -100,11 +101,9 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.flexBetween}>
           <CateItem color='#FF6594' cate='Phone' />
           <CateItem color='#B506FF' cate='House' />
-          <CateItem color='#000000' visible={false}/>
-          <CateItem color='#000000' visible={false}/>
+          <CateItem color='#000000' visible={false} />
+          <CateItem color='#000000' visible={false} />
         </View>
-
-        
 
         <AddButton />
 
