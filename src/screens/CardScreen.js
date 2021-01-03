@@ -12,7 +12,6 @@ import HeaderStack from "../components/HeaderStack";
 
 export default function CardScreen({ navigation }) {
   const [card, setCard] = useState(undefined);
-
   // Lấy dữ liệu db & gán cho biến card
   const fetchData = async () => {
     const data = await getCard();
@@ -22,7 +21,7 @@ export default function CardScreen({ navigation }) {
   // Tự động chạy fetchData khi load xong screen
   useEffect(() => {
     fetchData();
-  }, []);
+  },[]);
 
   const onLongPressCardItem = (item) => {
     navigation.navigate("Update", { type: "card", data: { ...item } });

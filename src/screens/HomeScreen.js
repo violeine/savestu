@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, TextInput, Button } from "react-native";
 
 import { useCardDispatch } from "../db";
 import { getCardById } from "../db/card";
-import { getTransactionByDate } from "../db/transaction";
+import {getAllCategory} from '../db/category'
 
 import CalendarModal from "../components/CalendarModal";
 import CardModal from "../components/CardModal";
@@ -11,8 +11,7 @@ import HeaderBarT from "../components/HeaderBarT";
 import AddButton from "../components/AddButton";
 import DonutChart from "../components/DonutChart";
 import CateItem from "../components/CateItem";
-import BtnAction from "../components/BtnAction";
-
+import {getTransactionByCardAndDate} from '../db/transaction'
 
 
 
@@ -41,24 +40,23 @@ const HomeScreen = ({ navigation }) => {
 
 
   // FETCH
-  const fetchTransDate = async () => {
-    const data = await getTransactionByDate('1/1/2020');
-    setTransDate(data);
-  }
+  // const fetchTransDate = async () => {
+  //   const data = await getTransactionByDate('1/1/2020');
+  //   setTransDate(data);
+  // }
 
 
-  useEffect(() => {
-    fetchTransDate();
-  }, []);
+  // useEffect(() => {
+  //   fetchTransDate();
+  // }, [type,date]);
 
   // DEBUG
-  console.log('\n==== HOME SCREEN ====\n');
-  console.log('----- transByDate -----\n', transDate);
+  // console.log('\n==== HOME SCREEN ====\n');
+  // console.log('----- transByDate -----\n', transDate);
 
 
   return (
     <>
-
       <View>
         <CalendarModal
           visible={calendarModalVisible}
@@ -133,10 +131,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingHorizontal: 20,
   },
-
   aside: {
     justifyContent: 'space-between',
-  },
+  }
 });
 
 export default HomeScreen;

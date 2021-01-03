@@ -5,7 +5,7 @@ import CategoryCreateForm from '../components/CategoryCreateForm'
 import TransactionCreateForm from '../components/TransactionCreateForm'
 
 const CreateScreen = ({route}) => {
-    const {type} = route.params;
+    const {type, transactionData} = route.params;
     
     return (
         <>
@@ -15,7 +15,7 @@ const CreateScreen = ({route}) => {
                     <CardCreateForm /> 
                 : type === "category" ?
                     <CategoryCreateForm />
-                : <TransactionCreateForm />
+                : <TransactionCreateForm transactionData={transactionData}/>
             }
         </>
     );

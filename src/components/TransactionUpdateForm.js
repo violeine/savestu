@@ -61,7 +61,7 @@ const TransactionUpdateForm = ({data}) => {
 
       switch (type) {
         case 'cash':
-          setTransactionError({ ...transactionError, "money": err });
+          setTransactionError({ ...transactionError, "cash": err });
           break;
         case 'category':
           setTransactionError({...transactionError, 'category' : err});

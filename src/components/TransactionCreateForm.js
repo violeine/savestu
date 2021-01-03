@@ -6,7 +6,7 @@ import {
   createTransaction,
 } from "../db/transaction";
 import {getCategory} from '../db/category'
-import {getCard} from '../db/card'
+
 import {	
   strRegex,
 	capitalizeFirstLetter,
@@ -17,8 +17,13 @@ import {
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 import CalendarPickerModal from './CalendarPickerModal'
+import CardItem from './CardItem'
+import { useCardState } from '../db';
 
-const TransactionCreateForm = () => {
+const TransactionCreateForm = ({transactionData}) => {
+  const {type, cateId} = transactionData
+  const globalCard = useCardState();
+
   const [visible, setVisible] = useState(false)
   const [transactionInput, setTransactionInput] = useState({
     category: "",
@@ -30,24 +35,23 @@ const TransactionCreateForm = () => {
 
   const [transactionError, setTransactionError] = useState({
     category: "✘ This field can not be empty",
-    card: "✘ This field can not be empty",
     cash: "✘ This field can not be empty",
     date: "✘ This field can not be empty",
     note: "✓ Check",
   })
 
   const [listCategories, setListCategoires] = useState([])
-  const [listCards, setListCards] = useState([])
   const [categoryType, setCategoryType] = useState("")
 
-  const getAllCategory = async () => {
-    const data = await getCategory();
-    setListCategoires(data);
-  }
-
-  const getAllCards = async () => {
-    const data = await getCard()
-    setListCards(data);
+  const getListCategories = async (type) => {
+    let data = await getCategory();
+    if (type == 'income') {
+      data = data.filter((item) => item.type == 'income')
+    }
+    else if (type == 'expense') {
+      data = data.filter((item) => item.type == 'expense')
+    } 
+    setListCategoires(data)
   }
 
   const checkTransactionInfor = (type, value) => {
@@ -59,7 +63,7 @@ const TransactionCreateForm = () => {
 
       switch (type) {
         case 'cash':
-          setTransactionError({ ...transactionError, "money": err });
+          setTransactionError({ ...transactionError, "cash": err });
           break;
         case 'category':
           setTransactionError({...transactionError, 'category' : err});
@@ -104,34 +108,49 @@ const TransactionCreateForm = () => {
     }
   }
 
+  const getTransactionCreate =  () => {
+
+    if (categoryType == 'expense') {
+      let _cash = transactionInput.cash * -1
+      return {...transactionInput, cash : _cash}
+    }
+    else return {...transactionInput}
+  } 
+ 
   const handleCreateBtn = async () => {
     if (isCheck(transactionError, "create", 'transaction')) {
       try {
-        setTransactionCreate();
-        console.log(transactionInput);
-        //console.log(await createTransaction(transactionInput))
+        console.log(await createTransaction(getTransactionCreate()))
         //alert Create transaction success
       }
       catch {
+
         console.error()
       }
 
     }
     else {
       //alert Something Error -> Check Error
+      console.log(transactionError)
       console.log("Something Error -> Check Error")
     }
   }
-  
-  const getCategoryType = (id) => {
-    listCategories.map((item) => {
-      if (item.id == id) setCategoryType(item.type)
-    })
+
+  const beforeRender = () => {
+
+    if (cateId) {
+      console.log('test')
+    }
+    else {
+
+      getListCategories(type)
+      setCategoryType(type)
+    }
+    setTransactionInput({...transactionInput, card : globalCard.id.toString()})
   }
 
   useEffect(() => {
-    getAllCards()
-    getAllCategory()
+    beforeRender()
   },[])
 
   const theme = {
@@ -159,6 +178,7 @@ const TransactionCreateForm = () => {
 
       <ScrollView style={styles.container}>
 
+        {/* Category picker */}
         <View>
           <View style={styles.picker}>
             <Picker
@@ -166,7 +186,6 @@ const TransactionCreateForm = () => {
               onValueChange={(itemValue) => {
                   setTransactionInput({ ...transactionInput, category: itemValue })
                   checkTransactionInfor('category',itemValue)
-                  getCategoryType(itemValue)
                 }
               }
               prompt='Select category'
@@ -194,27 +213,10 @@ const TransactionCreateForm = () => {
           </View>
         </View>
 
+        {/* Card */}
         <View>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={transactionInput.card}
-              onValueChange={(itemValue) => {
-                  setTransactionInput({ ...transactionInput, card: itemValue })
-                  checkTransactionInfor('card',itemValue)
-                }
-              }
-              prompt='Select category'
-            >
-              <Picker.Item label="Pick Card" value=""/>
-              {
-                listCards
-                ? listCards.map( (e, i) => (
-                  <Picker.Item label={e.name} value={e.id} key={e+i}/>
-                ))
-                : null
-              }
-
-            </Picker>
+          <View style={{width : 250, alignSelf: 'center'}}>
+            <CardItem el={globalCard}/>
           </View>
 
           <View style={{alignSelf: "center"}}>
@@ -226,11 +228,12 @@ const TransactionCreateForm = () => {
           </View>
         </View>
         
+        {/* Category type */}
         <View style={{alignItems : 'center'}}>
           <TextInput
             value={categoryType}
-            label='Note'
-            placeholder='Write some note'
+            label='Type'
+            placeholder='Cate type'
             mode='outlined'
             style={styles.input}
             theme={categoryType != '' ? theme : themeErr}
@@ -238,6 +241,7 @@ const TransactionCreateForm = () => {
           />
         </View>
 
+        {/* Cash */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             value={transactionInput.cash.toString()}
@@ -261,6 +265,7 @@ const TransactionCreateForm = () => {
           }
         </View>
 
+        {/* Note    */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             onChangeText={(t) => {
@@ -284,6 +289,7 @@ const TransactionCreateForm = () => {
           }
         </View>
 
+        {/* date */}
         <View style={{ alignSelf: "center" }}>
           <Pressable onPress={() => setVisible(true)} style={{backgroundColor: 'cyan', height: 30}}>
             <Text>{transactionInput.date}</Text>

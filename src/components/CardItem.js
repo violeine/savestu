@@ -10,8 +10,8 @@ export default function CardItem({ el, onPress, onLongPress }) {
   return (
     <View key={el.id}>
       <Pressable
-        onPress={onPress}
-        onLongPress={() => { onLongPress(el) }}
+        onPress={ onPress ? onPress : null}
+        onLongPress={onLongPress ? () => { onLongPress(el) } : null}
         delayLongPress={300}
         style={({ pressed }) =>
           [

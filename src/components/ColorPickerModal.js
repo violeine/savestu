@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {View, StyleSheet, Text, Modal, Pressable} from 'react-native'
-import {ColorPicker, TriangleColorPicker} from 'react-native-color-picker'
+import {TriangleColorPicker} from 'react-native-color-picker'
 
 const ColorPickerModal = ({visible, hideModal, setCategoryInput, categoryInput,checkCategoryInfor, categoryError }) => {
 

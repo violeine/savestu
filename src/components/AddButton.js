@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { FAB, Portal, Provider } from 'react-native-paper';
-
+import {useNavigation} from '@react-navigation/native'
 
 const AddButton = () => {
   const [state, setState] = useState({ open: false });
   const onStateChange = ({ open }) => setState({ open });
   const { open } = state;
-
+  const navigation = useNavigation();
 
 
   return (
@@ -25,14 +25,14 @@ const AddButton = () => {
               icon: 'plus',
               color: '#FFF',
               style: { backgroundColor: '#29e038' },
-              onPress: () => console.log('Pressed Income'),
+              onPress: () => navigation.navigate('Create', {type: 'transaction', transactionData: {type : 'income'}}),
             },
             {
               label: 'Add Expense',
               icon: 'minus',
               color: '#FFF',
               style: { backgroundColor: '#f62d2d' },
-              onPress: () => console.log('Pressed Expense'),
+              onPress: () => navigation.navigate('Create', {type: 'transaction', transactionData: {type : 'expense'}}),
             },
             {
               label: 'Transfer',

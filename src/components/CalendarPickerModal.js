@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Modal, Pressable } from 'react-native'
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars'
+import { StyleSheet, View, Modal, Pressable } from 'react-native'
+import {Calendar} from 'react-native-calendars'
 
 const CalendarPickerModal = ({visible, hideCalendarPicker,transactionInput, setTransactionInput, transactionError, checkTransactionInfor}) => {
   const [selectedDate, setSelectedDate] = useState("")

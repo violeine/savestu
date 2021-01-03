@@ -17,8 +17,8 @@ export default function CateItem({ color, cate, money = 0 }) {
 
   const onPressCateItem = () => {
 
-    //navigation.navigate('Create',{type : 'transaction'})
-    navigation.navigate('Create',{type : 'category'})
+    navigation.navigate('Create',{type : 'transaction',transactionData:{ cateId: 1}})
+    // navigation.navigate('Create',{type : 'category'})
   }
 
   return (
