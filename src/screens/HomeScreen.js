@@ -36,7 +36,11 @@ const HomeScreen = ({ navigation }) => {
   // STATE
   const [cardId, setCardId] = useState("1");
   const dispatch = useCardDispatch();
-  const [transDate, setTransDate] = useState(undefined);
+
+  // TEST DONUT CHART
+  const [cardData, setCardData] = useState(undefined);
+  const [seriesCateExpense, setSeriesCateExpense] = useState([80, 50, 60]);
+  const [sliceCateColor, setSliceCateColor] = useState(['#ff8000', '#18c20c', '#278CD9']);
 
 
   // FETCH
@@ -49,6 +53,7 @@ const HomeScreen = ({ navigation }) => {
   // useEffect(() => {
   //   fetchTransDate();
   // }, [type,date]);
+
 
   // DEBUG
   // console.log('\n==== HOME SCREEN ====\n');
@@ -89,9 +94,22 @@ const HomeScreen = ({ navigation }) => {
             <CateItem color='#ece800' cate='Movie' />
           </View>
 
-          <View>
-            <DonutChart />
-          </View>
+
+          {
+            cardData ?
+              <View>
+                <DonutChart
+                  card={cardData}
+                  series={seriesCateExpense}
+                  sliceColor={sliceCateColor}
+                  income={99000}
+                  expense={-65000}
+                />
+              </View>
+
+              : null
+          }
+
 
           <View style={styles.aside}>
             <CateItem color='#FF3E3E' cate='Shopping' />
@@ -99,15 +117,14 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
 
+
         {/* third round */}
         <View style={styles.flexBetween}>
           <CateItem color='#FF6594' cate='Phone' />
           <CateItem color='#B506FF' cate='House' />
-          <CateItem color='rgba(0,0,0,0)' />
-          <CateItem color='rgba(0,0,0,0)' />
+          <CateItem color='#000000' visible={false} />
+          <CateItem color='#000000' visible={false} />
         </View>
-
-        
 
         <AddButton />
 

@@ -28,8 +28,8 @@ export default function CardScreen({ navigation }) {
   };
 
   // Debug
-  console.log('\n===== CARD SCREEN =====');
-  console.log('\n------ All Card -----\n', card);
+  // console.log('\n===== CARD SCREEN =====');
+  // console.log('\n------ All Card -----\n', card);
 
 
   return (

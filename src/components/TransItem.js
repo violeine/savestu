@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Pressable } from 'react-native';
-import { format } from 'date-fns';
+
 
 import { getCategoryById } from '../db/category'
 
 import { TextMoney } from '../services/TextMoney';
 import { changMoneyColor, chooseIcon } from '../services/ColorFunction';
+import { formatDateDisplay } from '../services/DateFunctions';
+
+
 
 
 export default function TransItem({ el, onLongPress, isGroup = false }) {
@@ -43,7 +46,7 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
         {dataCate ? chooseIcon(dataCate.name, 24, dataCate.color) : null}
 
         <Text style={styles.date}>
-          {format(new Date(el.date), 'eee, dd/M')}
+          {formatDateDisplay(el.date)}
         </Text>
 
         <Text style={styles.note}>{el.note}</Text>

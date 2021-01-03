@@ -10,6 +10,7 @@ import CardScreen from "./src/screens/CardScreen";
 import AccountScreen from "./src/screens/AccountScreen";
 import UpdateScreen from "./src/screens/UpdateScreen"
 import CreateScreen from "./src/screens/CreateScreen"
+import DebugScreen from "./src/screens/DebugScreen"
 import { useInitDbHook, CardProvider } from "./src/db";
 
 
@@ -33,7 +34,10 @@ function HomeStackScreen() {
 function HistoryStackScreen() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="History" component={HistoryScreen} />
+      <Stack.Screen
+        name="History"
+        component={HistoryScreen}
+      />
     </Stack.Navigator>
   );
 }
@@ -46,6 +50,18 @@ function AccountStackScreen() {
         component={AccountScreen}
         options={{
           title: 'My Account',
+          headerStyle: {
+            backgroundColor: '#2CC197',
+          },
+          headerTintColor: '#fff',
+        }}
+      />
+
+      <Stack.Screen
+        name="Debug"
+        component={DebugScreen}
+        options={{
+          title: 'Debug Screen',
           headerStyle: {
             backgroundColor: '#2CC197',
           },
@@ -96,8 +112,12 @@ const Main = () => {
       <Tab.Navigator
 
         // ----- CHỌN MÀN HÌNH MẶC ĐỊNH -------
-        initialRouteName='Account'
+
+        initialRouteName='Home'
+
         // -------------------------------------
+
+
 
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -142,10 +162,25 @@ const Main = () => {
           },
         }}
       >
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="History" component={HistoryStackScreen} />
-        <Tab.Screen name="Card" component={CardStackScreen} />
-        <Tab.Screen name="Account" component={AccountStackScreen} />
+        <Tab.Screen
+          name="Home"
+          component={HomeStackScreen}
+        />
+
+        <Tab.Screen
+          name="History"
+          component={HistoryStackScreen}
+        />
+
+        <Tab.Screen
+          name="Card"
+          component={CardStackScreen}
+        />
+
+        <Tab.Screen
+          name="Account"
+          component={AccountStackScreen}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

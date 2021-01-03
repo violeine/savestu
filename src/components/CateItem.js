@@ -6,7 +6,7 @@ import { LightenDarkenColor, chooseIcon } from '../services/ColorFunction';
 import { TextMoney } from '../services/TextMoney';
 
 
-export default function CateItem({ color, cate, money = 0 }) {
+export default function CateItem({ color, cate, money = 0, visible = true }) {
 
   //Làm mờ màu nếu money=0
   color = money ? color : color + '40';
@@ -22,13 +22,21 @@ export default function CateItem({ color, cate, money = 0 }) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={
+      [
+        styles.container,
+        visible ? null : { opacity: 0 }
+      ]
+    }>
+
       <Text style={{ color: color, textTransform: "capitalize", fontSize: 12 }}>
         {cate}
       </Text>
 
       <Pressable
         onPress={onPressCateItem}
+        onPress={() => console.log('Cate item Pressed')}
+        disabled={visible ? false : true}
         style={({ pressed }) =>
           [
             {
@@ -45,6 +53,7 @@ export default function CateItem({ color, cate, money = 0 }) {
       <Text style={{ color: color, fontSize: 13 }}>
         {TextMoney(money)}
       </Text>
+      
     </View>
   );
 }
