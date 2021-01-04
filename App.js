@@ -38,6 +38,13 @@ function HistoryStackScreen() {
         name="History"
         component={HistoryScreen}
       />
+      <Stack.Screen
+        name="Update"
+        component={UpdateScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }

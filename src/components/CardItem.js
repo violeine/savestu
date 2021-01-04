@@ -37,7 +37,7 @@ export default function CardItem({ el, onPress, onLongPress }) {
 
         <View style={styles.rightSide}>
           <Text style={[changMoneyColor(el.money), styles.money]}>
-            {TextMoney(el.money)}
+            {el.money ? TextMoney(el.money) : TextMoney(0)}
           </Text>
 
           {

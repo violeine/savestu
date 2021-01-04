@@ -93,14 +93,13 @@ const CardUpdateForm = ({ data }) => {
   }
 
   const handleUpdateBtn = async () => {
+    let res = objectForUpdate(cardInput, data);
+
     if (isCheck(cardError,"update",'card')) {
-      if (typeof objectForUpdate(cardInput, data) === "object") {
+      if (typeof res  === "object") {
         try {
-          console.log(objectForUpdate(cardInput,data))
-          console.log(await updateCard(objectForUpdate(cardInput,data)));
-          // alert success
-          console.log('update success')
-          navigation.goBack()
+          let card =await updateCard(res);
+          navigation.navigate('Card', {cardId: card.id})
         }
         catch {
           console.error()

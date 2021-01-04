@@ -1,19 +1,21 @@
 import React, {useState, useEffect} from 'react'
-import {View, StyleSheet, Text ,ScrollView, Pressable} from 'react-native'
+import {View, StyleSheet, Text ,ScrollView, Pressable, Alert} from 'react-native'
 import { TextInput } from 'react-native-paper'
 import {Picker} from '@react-native-picker/picker';
+import {useNavigation} from '@react-navigation/native'
 import {
   deleteTransaction,
   updateTransaction
 } from "../db/transaction";
-import {getCategory} from '../db/category'
+import {getCategory, getCategoryById} from '../db/category'
 import {getCard} from '../db/card'
 import {	
   strRegex,
 	capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck,
-  objectForUpdate
+  objectForUpdate,
+  hideOnCreate
 } from '../services/formHelperFunction'
 
 import BtnAction from './BtnAction'
@@ -21,6 +23,7 @@ import HeaderForm from './HeaderForm'
 import CalendarPickerModal from './CalendarPickerModal'
 
 const TransactionUpdateForm = ({data}) => {
+  const navigation = useNavigation()
   const [visible, setVisible] = useState(false)
   const [transactionInput, setTransactionInput] = useState({
     category: "",
@@ -42,9 +45,22 @@ const TransactionUpdateForm = ({data}) => {
   const [listCards, setListCards] = useState([])
   const [categoryType, setCategoryType] = useState("")
 
-  const getAllCategory = async () => {
-    const data = await getCategory();
-    setListCategoires(data);
+  const updateListCategories = async (type , listCate) => {
+    let data = listCate.length ? listCategories : (await getCategory())
+    if (type == 'income') {
+      data = data.filter((item) => item.type == 'income')
+    }
+    else if (type == 'expense') {
+      data = data.filter((item) => item.type == 'expense')
+    } 
+    setListCategoires(data)
+
+  }
+
+  const getListCategories = async (cateId) => {
+    let data = await getCategoryById(cateId)
+    await updateListCategories(data.type,listCategories)
+    setCategoryType(data.type)
   }
 
   const getAllCards = async () => {
@@ -109,12 +125,22 @@ const TransactionUpdateForm = ({data}) => {
     }
   }
 
+  const getTransactionCreate =  () => {
+
+    if (categoryType == 'expense') {
+      let _cash = transactionInput.cash * -1
+      return {...transactionInput, cash : _cash}
+    }
+    else return {...transactionInput}
+  } 
+
   const handleUpdateBtn =async () => {
-    if (isCheck(transactionError,"update")) {
-      if (typeof objectForUpdate(transactionInput, data) === "object") {
+    if (isCheck(transactionError,"update","transaction")) {
+      let res = objectForUpdate(getTransactionCreate(), data)
+      console.log(res)
+      if (typeof res === "object") {
         try {
-          console.log(transactionInput);
-          console.log(await updateTransaction(objectForUpdate(transactionInput,data)));
+          console.log(await updateTransaction(res))
           //alert Create transaction success
         }
         catch {
@@ -154,19 +180,15 @@ const TransactionUpdateForm = ({data}) => {
     ]
   );
     
-  const getCategoryType = (id) => {
-    listCategories.map((item) => {
-      if (item.id == id) setCategoryType(item.type)
-    })
+  const beforeRender = async () =>  {
+    getListCategories(data.category)
+    setTransactionInput({...data, cash : Math.abs(data.cash)})
+    getAllCards();
+
   }
 
-
   useEffect(() => {
-    getAllCategory();
-    getAllCards();
-    setTransactionInput({...data})
-    getCategoryType(data.id)
-
+    beforeRender()
   }, [])
 
   const theme = {
@@ -202,7 +224,6 @@ const TransactionUpdateForm = ({data}) => {
               onValueChange={(itemValue) => {
                   setTransactionInput({ ...transactionInput, category: itemValue })
                   checkTransactionInfor('category',itemValue)
-                  getCategoryType(itemValue)
                 }
               }
               prompt='Select category'
@@ -211,7 +232,7 @@ const TransactionUpdateForm = ({data}) => {
               {
                 listCategories
                 ? listCategories.map( (e, i) => (
-                  e.id == "1" ? 
+                  e.id <= 3 ? 
                   null
                   :<Picker.Item label={e.name} value={e.id} key={e+i}/>
                 ))
@@ -262,16 +283,21 @@ const TransactionUpdateForm = ({data}) => {
           </View>
         </View>
 
-        <View style={{alignItems : 'center'}}>
-          <TextInput
-            value={categoryType}
-            label='Note'
-            placeholder='Write some note'
-            mode='outlined'
-            style={styles.input}
-            theme={categoryType != '' ? theme : themeErr}
-            disabled={true}
-          />
+        <View>
+          <View style={styles.picker}>
+            <Picker
+              selectedValue={categoryType}
+              onValueChange={(itemValue, listCategories) => {
+                  updateListCategories(itemValue,listCategories)
+                  setCategoryType(itemValue)
+                }
+              }
+              prompt='Select category'
+            >
+              <Picker.Item label="Income" value="income"/>
+              <Picker.Item label="Expense" value="expense"/>
+            </Picker>
+          </View>
         </View>
 
         <View style={{ alignSelf: "center" }}>

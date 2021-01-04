@@ -38,6 +38,10 @@ export default function HistoryScreen({ navigation }) {
     setTransAll(data);
   };
 
+  const onLongPressTranItem = (item) => {
+    navigation.navigate('Update', {type: "transaction", data: {...item} })
+  }
+
   useEffect(() => {
     fetchDataAll();
   }, [])
@@ -85,7 +89,7 @@ export default function HistoryScreen({ navigation }) {
             ? transAll.map(el =>
               el.category == 1
                 ? null
-                : <TransItem el={el} key={el.id} />
+                : <TransItem el={el} key={el.id} onLongPress={onLongPressTranItem}/>
             )
             : <Text style={[styles.centerItem, styles.txtNotify]}>You have no transaction</Text>
         }

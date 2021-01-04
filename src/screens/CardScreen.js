@@ -10,7 +10,7 @@ import BtnAction from "../components/BtnAction";
 import HeaderStack from "../components/HeaderStack";
 
 
-export default function CardScreen({ navigation }) {
+export default function CardScreen({ navigation, route }) {
   const [card, setCard] = useState(undefined);
   // Lấy dữ liệu db & gán cho biến card
   const fetchData = async () => {
@@ -20,11 +20,14 @@ export default function CardScreen({ navigation }) {
 
   // Tự động chạy fetchData khi load xong screen
   useEffect(() => {
-    fetchData();
-  },[]);
+    if (route.param?.cardId) {
+      fetchData()
+    }
+    fetchData()
+  },[route.params?.cardId]);
 
   const onLongPressCardItem = (item) => {
-    navigation.navigate("Update", { type: "card", data: { ...item } });
+    navigation.navigate("Update", { type: "card", data: { ...item }});
   };
 
   // Debug

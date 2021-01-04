@@ -43,7 +43,7 @@ const TransactionCreateForm = ({transactionData}) => {
   const [listCategories, setListCategoires] = useState([])
   const [categoryType, setCategoryType] = useState("")
 
-  const getListCategories = async (type) => {
+  const updateListCategories = async (type) => {
     let data = await getCategory();
     if (type == 'income') {
       data = data.filter((item) => item.type == 'income')
@@ -143,7 +143,7 @@ const TransactionCreateForm = ({transactionData}) => {
     }
     else {
 
-      getListCategories(type)
+      updateListCategories(type)
       setCategoryType(type)
     }
     setTransactionInput({...transactionInput, card : globalCard.id.toString()})

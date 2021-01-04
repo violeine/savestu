@@ -104,8 +104,8 @@ const CardCreateForm = () => {
     if (isCheck(cardError,"create", 'card')) {
       try {
         setCardCreate()
-        console.log(await createCard(cardInput))
-        navigation.goBack()
+        let card = await createCard(cardInput)
+        navigation.navigate('Card', {cardId : card.id})
       }
       catch {
         console.error();
