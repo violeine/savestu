@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 
-import { useCardState } from "../db";
+import { useCardState,useDateState,useDateDispatch } from "../db";
 import { TextMoney } from '../services/TextMoney';
 import { formatDateDisplay, formatDateDB, nextDate, nextMonth } from "../services/DateFunctions";
 
@@ -21,19 +21,18 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
 
   // STATE
   const { money, name, id } = useCardState();
-  const [curDate, setCurDate] = useState('');
+  const curDate = useDateState();
+  const setCurDate= useDateDispatch();
 
-  useEffect(() => {
-    onPressCurDate();
-  }, [])
+  // useEffect(() => {
+  //   onPressCurDate();
+  // }, [])
 
 
   // FUNC ONPRESS
-  // -- Date --
+  //  -- Date --
   const onPressCurDate = () => {
-    setCurDate(
-      formatDateDB(new Date())
-    )
+    setCurDate( formatDateDB(new Date()))
   }
 
   const onPressNextDate = () => {

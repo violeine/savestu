@@ -1,7 +1,7 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { View, StyleSheet, Text, ScrollView, Button } from "react-native";
 
-import { useCardDispatch,useCardState } from "../db";
+import { useCardDispatch,useCardState,useDateState } from "../db";
 
 import {getCategoryByCard} from '../db/category'
 
@@ -12,8 +12,6 @@ import AddButton from "../components/AddButton";
 import DonutChart from "../components/DonutChart";
 import CateItem from "../components/CateItem";
 import {getTransactionByCardAndDate} from '../db/transaction'
-
-
 
 
 const HomeScreen = ({ navigation }) => {
@@ -37,9 +35,9 @@ const HomeScreen = ({ navigation }) => {
   }
 
   // STATE
-  const [cardId, setCardId] = useState("1");
   const [screenData, setScreenData]=useState(null);
   const dispatch = useCardDispatch();
+  const date= useDateState();
   const {id : cardID, money}  = useCardState();
   const cardData = useCardState();
   useEffect(()=>{
@@ -88,8 +86,12 @@ const HomeScreen = ({ navigation }) => {
 
     {screenData?
       <View style={styles.container}>
-
       {/* first row */}
+      {
+      // <ScrollView>
+      //   <Text>{JSON.stringify(date,null,2)}</Text>
+      // </ScrollView>
+      }
       <View style={styles.flexBetween}>
         {[1,2,3,4].map((el) => {
           const {id, name, color, sum} = screenData.categories[el];

@@ -11,7 +11,7 @@ import AccountScreen from "./src/screens/AccountScreen";
 import UpdateScreen from "./src/screens/UpdateScreen"
 import CreateScreen from "./src/screens/CreateScreen"
 import DebugScreen from "./src/screens/DebugScreen"
-import { useInitDbHook, CardProvider } from "./src/db";
+import { useInitDbHook, CardProvider,DateProvider } from "./src/db";
 
 
 const Stack = createStackNavigator();
@@ -129,7 +129,6 @@ const Main = () => {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
-
             if (route.name === "Home") {
               iconName = focused ? "home" : "home-outline";
               size = focused ? 34 : 30;
@@ -194,9 +193,12 @@ const Main = () => {
 };
 
 const App = () => (
-  <CardProvider>
-    <Main />
-  </CardProvider>
+
+    <DateProvider>
+      <CardProvider>
+        <Main />
+      </CardProvider>
+    </DateProvider>
 );
 
 export default App;
