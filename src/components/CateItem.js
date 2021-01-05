@@ -35,7 +35,7 @@ export default function CateItem({ color, cate, money = 0, visible = true }) {
 
       <Pressable
         onPress={onPressCateItem}
-        onPress={() => console.log('Cate item Pressed')}
+        // onPress={() => console.log('Cate item Pressed')}
         disabled={visible ? false : true}
         style={({ pressed }) =>
           [
@@ -53,7 +53,7 @@ export default function CateItem({ color, cate, money = 0, visible = true }) {
       <Text style={{ color: color, fontSize: 13 }}>
         {TextMoney(money)}
       </Text>
-      
+
     </View>
   );
 }

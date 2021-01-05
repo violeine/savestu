@@ -27,8 +27,7 @@ export default function DonutChart({ card, series = [0], sliceColor = ['#ddd'], 
       setSeries(series);
       setSliceColor(sliceColor);
     }
-
-  }, [card]);
+  }, [sliceColor]);
 
   // DEBUG
   // console.log('\n---- Donut Chart ----\n', income, expense);

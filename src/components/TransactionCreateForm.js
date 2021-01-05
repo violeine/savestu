@@ -7,7 +7,7 @@ import {
 } from "../db/transaction";
 import {getCategory} from '../db/category'
 
-import {	
+import {
   strRegex,
 	capitalizeFirstLetter,
   isCheckChangeColor,
@@ -50,7 +50,7 @@ const TransactionCreateForm = ({transactionData}) => {
     }
     else if (type == 'expense') {
       data = data.filter((item) => item.type == 'expense')
-    } 
+    }
     setListCategoires(data)
   }
 
@@ -115,8 +115,8 @@ const TransactionCreateForm = ({transactionData}) => {
       return {...transactionInput, cash : _cash}
     }
     else return {...transactionInput}
-  } 
- 
+  }
+
   const handleCreateBtn = async () => {
     if (isCheck(transactionError, "create", 'transaction')) {
       try {
@@ -194,7 +194,7 @@ const TransactionCreateForm = ({transactionData}) => {
               {
                 listCategories
                 ? listCategories.map( (e, i) => (
-                  e.id == "1" ? 
+                  e.id == "1" ?
                   null
                   :<Picker.Item label={e.name} value={e.id} key={e+i}/>
                 ))
@@ -227,7 +227,7 @@ const TransactionCreateForm = ({transactionData}) => {
             }
           </View>
         </View>
-        
+
         {/* Category type */}
         <View style={{alignItems : 'center'}}>
           <TextInput
@@ -310,7 +310,7 @@ const TransactionCreateForm = ({transactionData}) => {
           checkTransactionInfor={checkTransactionInfor}
           transactionError={transactionError}
         />
-        
+
       </ScrollView>
 
     </>

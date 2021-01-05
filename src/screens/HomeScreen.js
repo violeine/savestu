@@ -1,9 +1,9 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { View, StyleSheet, Text, TextInput, Button } from "react-native";
+import { View, StyleSheet, Text, ScrollView, Button } from "react-native";
 
-import { useCardDispatch } from "../db";
-import { getCardById } from "../db/card";
-import {getAllCategory} from '../db/category'
+import { useCardDispatch,useCardState } from "../db";
+
+import {getCategoryByCard} from '../db/category'
 
 import CalendarModal from "../components/CalendarModal";
 import CardModal from "../components/CardModal";
@@ -25,34 +25,44 @@ const HomeScreen = ({ navigation }) => {
     navigation.setOptions({
       header: () => (
         <HeaderBarT
-          showCalendarModal={() => setCalendarModalVisible(true)}
-          showCardModal={() => setCardModalVisible(true)}
+        showCalendarModal={() => setCalendarModalVisible(true)}
+        showCardModal={() => setCardModalVisible(true)}
         />
       ),
     })
   );
-
+  async function getScreenData(cardID) {
+    const data = await getCategoryByCard(cardID);
+    setScreenData(data);
+  }
 
   // STATE
   const [cardId, setCardId] = useState("1");
+  const [screenData, setScreenData]=useState(null);
   const dispatch = useCardDispatch();
+  const {id : cardID, money}  = useCardState();
+  const cardData = useCardState();
+  useEffect(()=>{
+    getScreenData(cardID)
+  }, [cardID])
+
+
 
   // TEST DONUT CHART
-  const [cardData, setCardData] = useState(undefined);
   const [seriesCateExpense, setSeriesCateExpense] = useState([80, 50, 60]);
   const [sliceCateColor, setSliceCateColor] = useState(['#ff8000', '#18c20c', '#278CD9']);
 
 
   // FETCH
   // const fetchTransDate = async () => {
-  //   const data = await getTransactionByDate('1/1/2020');
-  //   setTransDate(data);
-  // }
+    //   const data = await getTransactionByDate('1/1/2020');
+    //   setTransDate(data);
+    // }
 
 
   // useEffect(() => {
-  //   fetchTransDate();
-  // }, [type,date]);
+    //   fetchTransDate();
+    // }, [type,date]);
 
 
   // DEBUG
@@ -62,81 +72,87 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <>
-      <View>
-        <CalendarModal
-          visible={calendarModalVisible}
-          showCalendarModal={() => setCalendarModalVisible(true)}
-          hideCalendarModal={() => setCalendarModalVisible(false)}
-        />
+    <View>
+    <CalendarModal
+    visible={calendarModalVisible}
+    showCalendarModal={() => setCalendarModalVisible(true)}
+    hideCalendarModal={() => setCalendarModalVisible(false)}
+    />
 
-        <CardModal
-          visible={cardModalVisible}
-          showCardModal={() => setCardModalVisible(true)}
-          hideCardModal={() => setCardModalVisible(false)}
-        />
-      </View>
+    <CardModal
+    visible={cardModalVisible}
+    showCardModal={() => setCardModalVisible(true)}
+    hideCardModal={() => setCardModalVisible(false)}
+    />
+    </View>
 
-
+    {screenData?
       <View style={styles.container}>
 
-        {/* first row */}
-        <View style={styles.flexBetween}>
-          <CateItem color='#ff8000' cate='Eating' money={20} />
-          <CateItem color='#18c20c' cate='Transportation' money={50} />
-          <CateItem color='#278CD9' cate='Parking' />
-          <CateItem color='#B97E2F' cate='Drinking' />
-        </View>
-
-        {/* second row */}
-        <View style={styles.flexBetween}>
-          <View style={styles.aside}>
-            <CateItem color='#01dfa3' cate='Transferring' />
-            <CateItem color='#ece800' cate='Movie' />
-          </View>
-
-
-          {
-            cardData ?
-              <View>
-                <DonutChart
-                  card={cardData}
-                  series={seriesCateExpense}
-                  sliceColor={sliceCateColor}
-                  income={99000}
-                  expense={-65000}
-                />
-              </View>
-
-              : null
-          }
-
-
-          <View style={styles.aside}>
-            <CateItem color='#FF3E3E' cate='Shopping' />
-            <CateItem color='#FF00D5' cate='Groceries' />
-          </View>
-        </View>
-
-
-        {/* third round */}
-        <View style={styles.flexBetween}>
-          <CateItem color='#FF6594' cate='Phone' />
-          <CateItem color='#B506FF' cate='House' />
-          <CateItem color='#000000' visible={false} />
-          <CateItem color='#000000' visible={false} />
-        </View>
-
-        <AddButton />
-
+      {/* first row */}
+      <View style={styles.flexBetween}>
+        {[1,2,3,4].map((el) => {
+          const {id, name, color, sum} = screenData.categories[el];
+          return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+        })}
       </View>
 
+      {/* second row */}
+      <View style={styles.flexBetween}>
+      <View style={styles.aside}>
+      {[5,6].map((el) => {
+        const {id, name, color, sum} = screenData.categories[el];
+        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+      })}
+      </View>
+
+
+      {
+        cardData ?
+        <View>
+        <DonutChart
+        card={cardData}
+        series={screenData.sum}
+        sliceColor={screenData.color}
+        income={screenData.income}
+        expense={screenData.expense}
+        />
+        </View>
+
+        : null
+      }
+
+
+      <View style={styles.aside}>
+      {[7,8].map((el) => {
+        const {id, name, color, sum} = screenData.categories[el];
+        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+      })}
+      </View>
+      </View>
+
+
+      {/* third round */}
+      <View style={styles.flexBetween}>
+      {[9,10,11].map((el) => {
+        const {id, name, color, sum} = screenData.categories[el];
+        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+      })}
+
+      <CateItem color='#000000' visible={false} />
+      </View>
+
+      <AddButton />
+
+      </View>: null}
+
+
     </>
-  );
+);
 
 };
 
-const styles = StyleSheet.create({
-  container: {
+const styles = StyleSheet.create({ container: {
     flex: 1,
     paddingTop: 30,
     backgroundColor: '#fafafa',

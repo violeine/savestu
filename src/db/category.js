@@ -22,6 +22,19 @@ export const getCategoryByCard = async (card) => {
       name: rows._array.map((i) => i.name),
       color: rows._array.map((i) => i.color),
       sum: rows._array.map((i) => i.sum),
+      income:rows._array.reduce((acc, el) => {
+        if (el.type =="income") {
+          return acc+el.sum
+        }
+        return acc;
+      },0),
+      expense:rows._array.reduce((acc, el) => {
+        if (el.type =="expense") {
+          return acc+el.sum
+        }
+        return acc;
+      },0)
+
     };
   } catch (err) {
     console.log(err);
