@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { View, ScrollView, StyleSheet, Text, Button, Alert } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 import { updateCard, deleteCard } from '../db/card'
-import {	
+import {
   strRegex,
-	hideOnCreate,
-	capitalizeFirstLetter,
+  hideOnCreate,
+  capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck,
   objectForUpdate
@@ -96,11 +96,11 @@ const CardUpdateForm = ({ data }) => {
   const handleUpdateBtn = async () => {
     let res = objectForUpdate(cardInput, data);
 
-    if (isCheck(cardError,"update",'card')) {
-      if (typeof res  === "object") {
+    if (isCheck(cardError, "update", 'card')) {
+      if (typeof res === "object") {
         try {
-          let card =await updateCard(res);
-          navigation.navigate('Card', {cardId: card.id})
+          let card = await updateCard(res);
+          navigation.navigate('Card', { cardId: card.id })
         }
         catch {
           console.error()
@@ -267,7 +267,6 @@ const CardUpdateForm = ({ data }) => {
           }
         </View>
 
-        <BtnAction title={capitalizeFirstLetter('update') + ' Card'} type='primary' onPress={handleUpdateBtn} />
         <View style={hideOnCreate('update')}>
           <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
         </View>

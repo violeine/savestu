@@ -20,14 +20,10 @@ const Stack = createStackNavigator();
 
 function HomeStackScreen() {
   return (
-<<<<<<< HEAD
     <>
-      <StatusBar barStyle="light-content" backgroundColor="#229B79" hidden={false} />
+      <StatusBar barStyle="light-content" backgroundColor="#2cc197" hidden={false} />
       <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-        />
+        <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen
           name="Create"
           component={CreateScreen}
@@ -37,18 +33,6 @@ function HomeStackScreen() {
         />
       </Stack.Navigator>
     </>
-=======
-    <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen
-        name="Create"
-        component={CreateScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-    </Stack.Navigator>
->>>>>>> a42114c4490a5f8e0d0fda7cc847b04400815c77
   );
 }
 

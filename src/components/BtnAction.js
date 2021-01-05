@@ -1,10 +1,11 @@
 import React from 'react';
 import { Pressable, View, Text, StyleSheet } from 'react-native';
+import { MaterialCommunityIcons, AntDesign, MaterialIcons } from '@expo/vector-icons';
 
 import { LightenDarkenColor } from '../services/ColorFunction'
 
 
-export default function BtnAction({ title, onPress, type = 'primary' }) {
+export default function BtnAction({ title = '', onPress, type = 'primary' }) {
 
   const color = chooseColor(type);
 
@@ -19,9 +20,7 @@ export default function BtnAction({ title, onPress, type = 'primary' }) {
           styles.btn
         ]}
     >
-      <Text style={chooseStyle(type)}>
-        {title}
-      </Text>
+      {chooseIcon(type)}
     </Pressable>
   );
 }
@@ -50,16 +49,35 @@ function chooseStyle(type) {
     fontWeight: "bold",
     textTransform: "capitalize",
   })
+}
 
+function chooseIcon(type) {
+  let iconSize = 20;
+  let iconColor = '#fff'
 
+  switch (type) {
+    case 'delete': return (
+      <MaterialCommunityIcons name="delete" size={iconSize} color={iconColor} />
+    )
+
+    case 'primary': return (
+      <AntDesign name="check" size={iconSize} color={iconColor} />
+    )
+
+    case 'cancel': return (
+      <MaterialIcons name="cancel" size={iconSize} color={iconColor} />
+    )
+
+    default: return null;
+  }
 }
 
 const styles = StyleSheet.create({
   btn: {
-    width: 300,
-    height: 40,
+    width: 50,
+    height: 50,
     marginTop: 20,
-    borderRadius: 5,
+    borderRadius: 100,
     alignSelf: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -71,8 +89,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
-    elevation: 3,
   },
 
 });

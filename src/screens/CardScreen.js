@@ -69,7 +69,6 @@ export default function CardScreen({ navigation, route }) {
             : <Text style={styles.centerItem}>You have no card</Text>
         }
 
-        <BtnAction title="Refresh" type="primary" onPress={fetchData} />
       </ScrollView>
     </>
   );
