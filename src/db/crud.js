@@ -62,17 +62,6 @@ export async function updateCard(data) {
     }
 }
 
-export async function deleteCard(id) {
-  if ((await countCard()) > 1)
-    try {
-      const beforeDeleted = await getCardById(id);
-      await execSql(`delete from cards where id=?  `, [id]);
-      return beforeDeleted;
-    } catch (err) {
-      console.log(err);
-    }
-}
-
 export const createCategory = async ({ name, color, type }) => {
   try {
     const [
