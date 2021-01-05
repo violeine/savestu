@@ -38,6 +38,7 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
           },
           styles.container,
         ]}
+      onLongPress={() => onLongPress(el)}
     >
 
       {/* Left side */}

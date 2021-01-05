@@ -1,21 +1,21 @@
 import React from 'react'
 import {View, StyleSheet} from 'react-native'
 import CardCreateForm from '../components/CardCreateForm'
-import CategoryForm from '../components/CategoryForm'
-import TransactionForm from '../components/TransactionForm'
+import CategoryCreateForm from '../components/CategoryCreateForm'
+import TransactionCreateForm from '../components/TransactionCreateForm'
 
-const CreateScreen = ({route, navigation}) => {
-    const {type} = route.params;
+const CreateScreen = ({route}) => {
+    const {type, transactionData} = route.params;
     
     return (
         <>
             {
                 type === "card" 
                 ?
-                    <CardCreateForm navigation={navigation}/> 
+                    <CardCreateForm /> 
                 : type === "category" ?
-                    <CategoryForm />
-                : <TransactionForm />
+                    <CategoryCreateForm />
+                : <TransactionCreateForm transactionData={transactionData}/>
             }
         </>
     );

@@ -1,13 +1,17 @@
 import { execSql } from "./utils";
-import {getCardById,createTransaction} from './crud';
-export {
-  createCard,
-  getCard,
-  getCardById,
-  updateCard,
-  deleteCard,
-  createTransaction,
-} from "./crud";
+import { getCardById, createTransaction } from "./crud";
+export { createCard, getCard, getCardById, updateCard } from "./crud";
+
+export async function deleteCard(id) {
+  if ((await countCard()) > 1)
+    try {
+      const beforeDeleted = await getCardById(id);
+      await execSql(`delete from cards where id=?  `, [id]);
+      return beforeDeleted;
+    } catch (err) {
+      console.log(err);
+    }
+}
 
 export async function countCard() {
   try {

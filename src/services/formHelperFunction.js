@@ -9,12 +9,18 @@ const strRegex = (type) => {
 		case "money":
 			result = /\D/;
 			break;
-
+		case "cash":
+			result= /\D/;
+			break
 		case "goal":
 			result = /\D/;
 			break;
+			case 'note': 
+			setCardError({...cardError, "note": "✓ Check"})
+		default: 
+			result = "";
+			break
 
-		default: result = "";
 	}
 	return result;
 }
@@ -34,15 +40,29 @@ function capitalizeFirstLetter(string) {
 }
 
 function isCheckChangeColor(err) {
-  if (err == '✓ Check') return { width: 300, color: '#2cc197' };
-  else return { width: 300, color: 'red' };
+  if (err == '✓ Check') return { width: 300, color: '#2cc197'};
+  else return { width: 300, color: 'red'};
 }
 
-function isCheck(err) {
-	for (let attr in err) {
-		if (err[attr] !== "✓ Check" && err[attr] !== "") return false;
+function isCheck(err, type, obj) {
+	if (obj == 'card') {
+		for (let attr in err) {
+			if (err[attr] !== "✓ Check" && err[attr] !== "") return false;
+		}
 	}
+	else if (obj == 'transaction') {
+		for (let attr in err) {
+			if (err[attr] !== "✓ Check") return false
+		}
+	}
+	else if (obj == 'category') {
+		for (let attr in err) {
+			if (err[attr] !== "✓ Check") return false
+		}
+	}
+
 	return true;
+
 }
 
 function objectForUpdate(input, data) {
@@ -52,7 +72,7 @@ function objectForUpdate(input, data) {
 
 	for (let attr in input) {
 
-		if (data[attr] === input[attr]) continue;
+		if (data[attr] == input[attr]) continue;
 		else result[attr] = input[attr]
 
 	}

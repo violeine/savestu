@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { View, ScrollView, StyleSheet, Text, Button, Alert } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import { Picker } from '@react-native-picker/picker'
+import {useNavigation} from '@react-navigation/native'
 
-import { getCardById, updateCard, deleteCard } from '../db/card'
+import { updateCard, deleteCard } from '../db/card'
 import {	
   strRegex,
 	hideOnCreate,
-	hideOnUpdate,
 	capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck,
-  objectForUpdate} from '../services/formHelperFunction'
+  objectForUpdate
+} from '../services/formHelperFunction'
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 
 
-const CardUpdateForm = ({ data, navigation }) => {
-
+const CardUpdateForm = ({ data }) => {
+  const navigation = useNavigation()
   const [cardInput, setCardInput] = useState({
     name: "",
     type: "",
@@ -27,32 +27,11 @@ const CardUpdateForm = ({ data, navigation }) => {
   });
 
   const [cardError, setCardError] = useState({
-    name: "",
-    type: "",
-    money: "",
-    goal: "",
-    note: "",
+    name: "✓ Check",
+    money: "✓ Check",
+    goal: "✓ Check",
+    note: "✓ Check",
   })
-
-//   const strRegex = (type) => {
-//     let result;
-//     switch (type) {
-//       case "name":
-//         result = /[\^\\.!\[\]@><;:'"~-]/;
-//         break;
-
-//       case "money":
-//         result = /\D/;
-//         break;
-
-//       case "goal":
-//         result = /\D/;
-//         break;
-
-//       default: result = "";
-//     }
-//     return result;
-//   }
 
   const checkCardInfor = (type, value) => {
     let err;
@@ -115,12 +94,17 @@ const CardUpdateForm = ({ data, navigation }) => {
   }
 
   const handleUpdateBtn = async () => {
-    if (isCheck(cardError)) {
-      if (typeof objectForUpdate(cardInput, data) === "object") {
-        console.log(objectForUpdate(cardInput,data))
-        console.log(await updateCard(objectForUpdate(cardInput,data)));
-        // alert success
-        console.log('update success')
+    let res = objectForUpdate(cardInput, data);
+
+    if (isCheck(cardError,"update",'card')) {
+      if (typeof res  === "object") {
+        try {
+          let card =await updateCard(res);
+          navigation.navigate('Card', {cardId: card.id})
+        }
+        catch {
+          console.error()
+        }
       }
       else {
         //alert error "No thing to update"
@@ -135,50 +119,32 @@ const CardUpdateForm = ({ data, navigation }) => {
   }
 
   const deleteAlert = () =>
-  Alert.alert(
-    "Warning",
-    'Do you want to delet this card',
-    [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: 'cancel',
-      },
-
-      {
-        text: "OK",
-        onPress: async () =>  {
-          console.log(await deleteCard(data.id))
-          console.log("OK Pressed"), navigation.goBack()
+    Alert.alert(
+      "Warning",
+      'Do you want to delet this card',
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: 'cancel',
         },
-      },
-    ]
-  );
+
+        {
+          text: "OK",
+          onPress: async () => {
+            console.log(await deleteCard(data.id))
+            console.log("OK Pressed"), navigation.goBack()
+          },
+        },
+      ]
+    );
 
   useEffect(() => {
     setCardInput({
       ...data
     })
+
   }, [])
-
-  // Hiện cảnh báo xác nhận khi muốn xoá
-//   const deleteAlert = () =>
-//     Alert.alert(
-//       "Warning",
-//       'Do you want to delet this card',
-//       [
-//         {
-//           text: "Cancel",
-//           onPress: () => console.log("Cancel Pressed"),
-//           style: 'cancel',
-//         },
-
-//         {
-//           text: "OK",
-//           onPress: () => (console.log("OK Pressed"), navigation.goBack()),
-//         },
-//       ]
-//     );
 
   const theme = {
     colors: {
@@ -200,25 +166,11 @@ const CardUpdateForm = ({ data, navigation }) => {
   return (
     <>
       <HeaderForm
-        navigation={navigation}
         title={capitalizeFirstLetter('update') + ' Card'}
-        onSubmit={() => console.log('Form Submit')}
+        onSubmit={handleUpdateBtn}
       />
 
       <ScrollView style={styles.container}>
-
-        <View style={[styles.picker, hideOnUpdate('update')]}>
-          <Picker
-            selectedValue={cardInput.type}
-            onValueChange={(itemValue, itemIndex) =>
-              setCardInput({ ...cardInput, type: itemValue })
-            }
-            prompt='Select card type'
-          >
-            <Picker.Item label="💳  Using" value="using" />
-            <Picker.Item label="💰  Saving" value="saving" />
-          </Picker>
-        </View>
 
         <View style={{ alignSelf: "center" }}>
           <TextInput
@@ -245,6 +197,7 @@ const CardUpdateForm = ({ data, navigation }) => {
 
         <View style={{ alignSelf: "center" }}>
           <TextInput
+            keyboardType={'numeric'}
             value={cardInput.money.toString()}
             onChangeText={(t) => {
               setCardInput({
@@ -269,19 +222,19 @@ const CardUpdateForm = ({ data, navigation }) => {
 
         <View style={{ alignSelf: "center" }}>
           <TextInput
-            value={cardInput.money.toString()}
+            value={cardInput.goal.toString()}
             onChangeText={(t) => {
               setCardInput({
                 ...cardInput,
-                money: t,
+                goal: t,
               })
-              checkCardInfor("money", t)
+              checkCardInfor("goal", t)
             }}
             label='Goal (saving)'
             placeholder='Input goal'
             mode='outlined'
             style={styles.input}
-            theme={cardError.money == '✓ Check' ? theme : themeErr}
+            theme={cardError.goal == '✓ Check' ? theme : themeErr}
             disabled={cardInput.type == 'saving' ? false : true}
           />
           {
@@ -314,7 +267,7 @@ const CardUpdateForm = ({ data, navigation }) => {
           }
         </View>
 
-        <BtnAction title={capitalizeFirstLetter('update') + ' Card'} type='primary' onPress={handleUpdateBtn}/>
+        <BtnAction title={capitalizeFirstLetter('update') + ' Card'} type='primary' onPress={handleUpdateBtn} />
         <View style={hideOnCreate('update')}>
           <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
         </View>
@@ -323,25 +276,6 @@ const CardUpdateForm = ({ data, navigation }) => {
     </>
   );
 }
-
-// function hideOnUpdate(type) {
-//   if (type == 'update')
-//     return { display: 'none' }
-// }
-
-// function hideOnCreate(type) {
-//   if (type == 'create')
-//     return { display: 'none' }
-// }
-
-// function capitalizeFirstLetter(string) {
-//   return string.charAt(0).toUpperCase() + string.slice(1);
-// }
-
-// function isCheckChangeColor(err) {
-//   if (err == '✓ Check') return { width: 300, color: '#2cc197' };
-//   else return { width: 300, color: 'red' };
-// }
 
 const styles = StyleSheet.create({
   container: {

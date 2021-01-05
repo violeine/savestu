@@ -10,9 +10,8 @@ import BtnAction from "../components/BtnAction";
 import HeaderStack from "../components/HeaderStack";
 
 
-export default function CardScreen({ navigation }) {
+export default function CardScreen({ navigation, route }) {
   const [card, setCard] = useState(undefined);
-
   // Lấy dữ liệu db & gán cho biến card
   const fetchData = async () => {
     const data = await getCard();
@@ -21,11 +20,14 @@ export default function CardScreen({ navigation }) {
 
   // Tự động chạy fetchData khi load xong screen
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (route.param?.cardId) {
+      fetchData()
+    }
+    fetchData()
+  },[route.params?.cardId]);
 
   const onLongPressCardItem = (item) => {
-    navigation.navigate("Update", { type: "card", data: { ...item } });
+    navigation.navigate("Update", { type: "card", data: { ...item }});
   };
 
   // Debug
@@ -37,7 +39,7 @@ export default function CardScreen({ navigation }) {
     <>
       <HeaderStack
         title="My Card"
-        onAction={() => console.log("Action Pressed")}
+        onAction={() => navigation.navigate('Create',{type : 'card'})}
       />
 
       <View style={styles.filter}>

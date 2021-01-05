@@ -10,6 +10,7 @@ import CardModal from "../components/CardModal";
 import HeaderBarT from "../components/HeaderBarT";
 import TransItem from '../components/TransItem'
 import BtnAction from '../components/BtnAction';
+import AddButton from '../components/AddButton';
 
 
 
@@ -38,6 +39,10 @@ export default function HistoryScreen({ navigation }) {
     setTransAll(data);
   };
 
+  const onLongPressTranItem = (item) => {
+    navigation.navigate('Update', {type: "transaction", data: {...item} })
+  }
+
   useEffect(() => {
     fetchDataAll();
   }, [])
@@ -47,7 +52,7 @@ export default function HistoryScreen({ navigation }) {
 
 
   return (
-    <>
+    <View style={styles.container}>
 
       <View>
         <CalendarModal
@@ -78,14 +83,14 @@ export default function HistoryScreen({ navigation }) {
         </View>
       </View>
 
-      <ScrollView style={styles.container}>
+      <ScrollView>
 
         {
           transAll
             ? transAll.map(el =>
               el.category == 1
                 ? null
-                : <TransItem el={el} key={el.id} />
+                : <TransItem el={el} key={el.id} onLongPress={onLongPressTranItem}/>
             )
             : <Text style={[styles.centerItem, styles.txtNotify]}>You have no transaction</Text>
         }
@@ -93,7 +98,10 @@ export default function HistoryScreen({ navigation }) {
         <BtnAction title='Fetch Data All' type='primary' onPress={fetchDataAll} />
 
       </ScrollView>
-    </>
+
+      <AddButton />
+      
+    </View>
   )
 }
 

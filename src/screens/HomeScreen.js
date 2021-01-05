@@ -2,8 +2,8 @@ import React, { useState, useLayoutEffect, useEffect } from "react";
 import { View, StyleSheet, Text, TextInput, Button } from "react-native";
 
 import { useCardDispatch } from "../db";
-import { getCardById } from "../db/card";
-import { getTransactionByDate } from "../db/transaction";
+import { getCardById, getCard } from "../db/card";
+import { getAllCategory } from '../db/category'
 
 import CalendarModal from "../components/CalendarModal";
 import CardModal from "../components/CardModal";
@@ -11,6 +11,8 @@ import HeaderBarT from "../components/HeaderBarT";
 import AddButton from "../components/AddButton";
 import DonutChart from "../components/DonutChart";
 import CateItem from "../components/CateItem";
+import { getTransactionByCardAndDate } from '../db/transaction'
+
 
 
 
@@ -41,25 +43,25 @@ const HomeScreen = ({ navigation }) => {
   const [sliceCateColor, setSliceCateColor] = useState(['#ff8000', '#18c20c', '#278CD9']);
 
 
-  // FETCH TEST DONUT CHART
-  const fetchCardData = async () => {
-    let data = await getCardById(2);
+  // FETCH
+  const getCardData = async () => {
+    const data = await getCardById(1);
     setCardData(data);
   }
 
 
   useEffect(() => {
-    fetchCardData();
+    getCardData()
   }, []);
 
 
   // DEBUG
-  console.log('\n==== HomeScreen ====\n', cardData);
+  // console.log('\n==== HOME SCREEN ====\n');
+  // console.log('----- transByDate -----\n', transDate);
 
 
   return (
     <>
-
       <View>
         <CalendarModal
           visible={calendarModalVisible}
@@ -146,10 +148,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingHorizontal: 20,
   },
-
   aside: {
     justifyContent: 'space-between',
-  },
+  }
 });
 
 export default HomeScreen;
