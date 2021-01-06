@@ -1,11 +1,13 @@
-import React, {useState, useEffect} from 'react'
-import {View, StyleSheet, ScrollView, Text, Alert} from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, StyleSheet, ScrollView, Text, Alert } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import {Picker} from '@react-native-picker/picker'
-import {useNavigation} from '@react-navigation/native'
-import {getCard, transferMoney} from '../db/card'
-import {useCardState, useCardDispatch} from '../db/index'
-import { strRegex,
+import { Picker } from '@react-native-picker/picker'
+import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native'
+import { getCard, transferMoney } from '../db/card'
+import { useCardState, useCardDispatch } from '../db/index'
+import {
+  strRegex,
   isCheckChangeColor,
   isCheck,
   getEmoji
@@ -18,19 +20,19 @@ const TranferCreateForm = () => {
   const navigation = useNavigation()
   const globalCard = useCardState()
   const dispatch = useCardDispatch()
-  
+
   const [tranferInput, setTranferInput] = useState({
     sendId: "",
-    receiveId : "",
-    money : "",
-    note : ""
+    receiveId: "",
+    money: "",
+    note: ""
   })
 
   const [tranferError, setTranferError] = useState({
     sendId: "✓ Check",
-    receiveId: "✘ This field can not be empty",
-    money: "✘ This field can not be empty",
-    note:"✓ Check"
+    receiveId: "✘ Empty",
+    money: "✘ Empty",
+    note: "✓ Check"
   })
 
   const [listCards, setListCards] = useState([])
@@ -39,21 +41,21 @@ const TranferCreateForm = () => {
     let err;
     // Kiểm tra input rỗng
     if (value.length == 0) {
-      err = '✘ This field can not be empty';
+      err = '✘ Empty';
 
       switch (type) {
         case 'sendId':
           setTranferError({ ...tranferError, "sendId": err })
           break
         case 'receiveId':
-          setTranferError({...tranferError, "receiveId" : err})
+          setTranferError({ ...tranferError, "receiveId": err })
           break
         case 'money':
           setTranferError({ ...tranferError, "money": err })
           break
-        
+
         case 'note':
-          setTranferError({...tranferError, "note": err})
+          setTranferError({ ...tranferError, "note": err })
           break
         default: break;
       }
@@ -68,10 +70,10 @@ const TranferCreateForm = () => {
         break
       case 'receiveId':
         err = value == tranferInput.sendId ? "✘ Send Card and Receive Card must be diff" : "✓ Check"
-        setTranferError({...tranferError, "receiveId" : err})
+        setTranferError({ ...tranferError, "receiveId": err })
         break
       case "money":
-        err = !strRegex("money").test(value)
+        err = strRegex("money").test(value)
           ? "✘ Money must be number"
           : "✓ Check"
         setTranferError({ ...tranferError, "money": err })
@@ -87,8 +89,8 @@ const TranferCreateForm = () => {
     }
   }
 
-  const handleCreateBtn = async() => {
-    if (isCheck(tranferError,"create", 'tranfer')) {
+  const handleCreateBtn = async () => {
+    if (isCheck(tranferError, "create", 'tranfer')) {
       try {
         const data = await transferMoney(tranferInput)
         console.log(data)
@@ -114,30 +116,30 @@ const TranferCreateForm = () => {
 
 
   const notiAlert = () =>
-  Alert.alert(
-    "Warning",
-    "Do you want to make this tranfer. Can't be undo",
-    [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: 'cancel',
-      },
-
-      {
-        text: "OK",
-        onPress: () =>  {
-          handleCreateBtn()
+    Alert.alert(
+      "Warning",
+      "Do you want to make this tranfer. Can't be undo",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: 'cancel',
         },
-      },
-    ]
-  );
-    
+
+        {
+          text: "OK",
+          onPress: () => {
+            handleCreateBtn()
+          },
+        },
+      ]
+    );
+
 
   useEffect(() => {
     getAllCards()
-    setTranferInput({...tranferInput, sendId : globalCard.id})
-  },[])
+    setTranferInput({ ...tranferInput, sendId: globalCard.id })
+  }, [])
 
   const theme = {
     colors: {
@@ -155,7 +157,7 @@ const TranferCreateForm = () => {
     }
   }
 
-  return(
+  return (
     <>
       <HeaderForm
         title='Tranfer Money'
@@ -165,14 +167,18 @@ const TranferCreateForm = () => {
       <ScrollView style={styles.container}>
         {/* Card send */}
         <View>
-          <View style={{width : 250, alignSelf: 'center'}}>
+          <View style={{ width: 250, alignSelf: 'center' }}>
             {
               globalCard
-                ? <CardItem el={globalCard}/>
+                ? <CardItem el={globalCard} />
                 : null
             }
           </View>
 
+        </View>
+
+        <View style={styles.iconTransfer}>
+          <AntDesign name="arrowdown" size={24} color="black" />
         </View>
 
         {/* Card receive */}
@@ -181,17 +187,17 @@ const TranferCreateForm = () => {
             <Picker
               selectedValue={tranferInput.receiveId}
               onValueChange={(itemValue) => {
-                  checkTranferInfor('receiveId',itemValue)
-                  setTranferInput({...tranferInput, receiveId : itemValue})
-                }
+                checkTranferInfor('receiveId', itemValue)
+                setTranferInput({ ...tranferInput, receiveId: itemValue })
+              }
               }
               prompt='Select Card Saving'
             >
-              <Picker.Item label="Pick Card Saving" value=""/>
+              <Picker.Item label="Pick Card Saving" value="" />
               {
                 listCards ?
-                  listCards.map((e,i) => <Picker.Item label={getEmoji(e.type) + "  " + e.name} key={e.name + i} value={e.id}/>)
-                : null
+                  listCards.map((e, i) => <Picker.Item label={getEmoji(e.type) + "  " + e.name} key={e.name + i} value={e.id} />)
+                  : null
               }
             </Picker>
 
@@ -200,10 +206,16 @@ const TranferCreateForm = () => {
           <View style={{ alignSelf: "center" }}>
             {
               tranferError.receiveId == ""
-              ? null
-              : <Text style={isCheckChangeColor(tranferError.receiveId)}>{tranferError.receiveId}</Text>
+                ? null
+                : <Text
+                  style={[
+                    isCheckChangeColor(tranferError.receiveId),
+                    { textAlign: "center" }]}
+                >
+                  {tranferError.receiveId}
+                </Text>
             }
-          </View> 
+          </View>
         </View>
 
         {/* money */}
@@ -239,7 +251,7 @@ const TranferCreateForm = () => {
                 ...tranferInput,
                 note: t,
               })
-              checkCardInfor("note", t)
+              checkTranferInfor("note", t)
             }}
             value={tranferInput.note}
             label='Note'
@@ -255,8 +267,6 @@ const TranferCreateForm = () => {
           }
         </View>
 
-        <BtnAction title='Tranfer Money' type='primary' onPress={notiAlert} />
-
       </ScrollView>
     </>
   );
@@ -271,15 +281,16 @@ const styles = StyleSheet.create({
 
   input: {
     width: 300,
-    height: 45,
+    height: 40,
     marginTop: 15,
     marginBottom: 5,
   },
 
   picker: {
-    width: 150,
-    height: 45,
-    marginVertical: 5,
+    width: 200,
+    height: 40,
+    marginTop: 15,
+    marginBottom: 5,
     alignSelf: "center",
     borderWidth: 1,
     borderRadius: 5,
@@ -291,6 +302,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'space-evenly',
     marginVertical: 20,
+  },
+
+  iconTransfer: {
+    alignSelf: "center",
+    marginTop: 15,
   },
 })
 

@@ -6,17 +6,17 @@ import CategoryUpdateForm from '../components/CategoryUpdateForm'
 import TransactionUpdateForm from '../components/TransactionUpdateForm'
 
 const UpdateScreen = ({ route }) => {
-    const { type, data } = route.params;
+    const { type, id } = route.params;
 
     return (
         <>
             {
                 type === "card" 
                 ?
-                    <CardUpdateForm data={data} />
+                    <CardUpdateForm cardId={id} />
                 : type === "category" ?
-                    <CategoryUpdateForm data={data}/>
-                : <TransactionUpdateForm data={data}/>
+                    <CategoryUpdateForm categoryId={id}/>
+                : <TransactionUpdateForm transactionId={id}/>
             }
         </>
     );

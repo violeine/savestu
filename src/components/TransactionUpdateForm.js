@@ -5,11 +5,12 @@ import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native'
 import {
   deleteTransaction,
-  updateTransaction
+  updateTransaction,
+  getTransactionById
 } from "../db/transaction";
-import {getCategory, getCategoryById} from '../db/category'
-import {getCardById} from '../db/card'
-import {	
+import { getCategory, getCategoryById } from '../db/category'
+import { getCardById } from '../db/card'
+import {
   strRegex,
   capitalizeFirstLetter,
   isCheckChangeColor,
@@ -23,8 +24,11 @@ import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 import CalendarPickerModal from './CalendarPickerModal'
 import CardItem from './CardItem'
+import { formatDateDisplay } from '../services/DateFunctions'
 
-const TransactionUpdateForm = ({ data }) => {
+
+
+const TransactionUpdateForm = ({ transactionId }) => {
   const dispatch = useCardDispatch();
   const navigation = useNavigation()
   const [visible, setVisible] = useState(false)
@@ -44,9 +48,19 @@ const TransactionUpdateForm = ({ data }) => {
     note: "✓ Check",
   })
 
+  const [tranTest, setTranTest] = useState(undefined)
+
   const [listCategories, setListCategoires] = useState([])
   const [card, setCard] = useState(undefined)
   const [categoryType, setCategoryType] = useState("")
+
+  const setTranObj = async (id) => {
+    let data = await getTransactionById(id);
+    getCardOfTran(data.card)
+    await getListCategories(data.category)
+    setTransactionInput({...data, cash: Math.abs(data.cash), card: data.card });
+    setTranTest(data)
+  }
 
   const updateListCategories = async (type, listCate) => {
     let data = listCate.length ? listCategories : (await getCategory())
@@ -76,7 +90,7 @@ const TransactionUpdateForm = ({ data }) => {
 
     // Kiểm tra input rỗng
     if (value.length == 0) {
-      err = '✘ This field can not be empty';
+      err = '✘ Empty';
 
       switch (type) {
         case 'cash':
@@ -112,8 +126,8 @@ const TransactionUpdateForm = ({ data }) => {
       case 'type':
         setTransactionError({ ...transactionError, 'type': "✓ Check" });
         break;
-      case 'cash' :
-        err = !strRegex("money").test(value)
+      case 'cash':
+        err = strRegex("money").test(value)
           ? "✘ Money must be number"
           : "✓ Check"
         setTransactionError({ ...transactionError, "cash": err })
@@ -139,7 +153,7 @@ const TransactionUpdateForm = ({ data }) => {
 
   const handleUpdateBtn = async () => {
     if (isCheck(transactionError, "update", "transaction")) {
-      let res = objectForUpdate(getTransactionCreate(), data)
+      let res = objectForUpdate(getTransactionCreate(), tranTest)
       console.log(res)
       if (typeof res === "object") {
         try {
@@ -187,14 +201,8 @@ const TransactionUpdateForm = ({ data }) => {
     ]
   );
 
-  const beforeRender = async () => {
-    getListCategories(data.category)
-    getCardOfTran(data.card)
-    setTransactionInput({...data, cash : Math.abs(data.cash), card : data.card})
-  }
-
   useEffect(() => {
-    beforeRender()
+    setTranObj(transactionId);
   }, [])
 
   const theme = {
@@ -222,6 +230,67 @@ const TransactionUpdateForm = ({ data }) => {
 
 
       <ScrollView style={styles.container}>
+
+
+        {/* Card */}
+        <View>
+          <View style={{ width: 250, alignSelf: 'center' }}>
+            {
+              card
+                ? <CardItem el={card} />
+                : null
+            }
+          </View>
+
+        </View>
+
+        {/* date */}
+        <View style={{ alignSelf: "center" }}>
+          <Pressable
+            onPress={() => setVisible(true)}
+            style={styles.datePicker}
+          >
+            <Text>
+              {
+                transactionInput.date
+                  ? formatDateDisplay(transactionInput.date)
+                  : 'Add date'
+              }
+            </Text>
+          </Pressable>
+
+          {
+            transactionError.date == ""
+              ? null
+              : <Text
+                style={[
+                  isCheckChangeColor(transactionError.date),
+                  { textAlign: "center" }
+                ]}>
+                {transactionError.date}
+              </Text>
+          }
+        </View>
+
+        {/* Category type */}
+        <View>
+          <View style={styles.picker}>
+            <Picker
+              selectedValue={categoryType}
+              onValueChange={(itemValue, listCategories) => {
+                updateListCategories(itemValue, listCategories)
+                setCategoryType(itemValue)
+              }
+              }
+              prompt='Select category type'
+            >
+              <Picker.Item label="Income" value="income" />
+              <Picker.Item label="Expense" value="expense" />
+            </Picker>
+          </View>
+        </View>
+
+
         {/* Category */}
         <View>
           <View style={styles.picker}>
@@ -237,12 +306,12 @@ const TransactionUpdateForm = ({ data }) => {
               <Picker.Item label="Pick Category" value="" />
               {
                 listCategories
-                ? listCategories.map( (e, i) => (
-                  e.id <= 3 ? 
-                  null
-                  :<Picker.Item label={getEmoji(e.name) + " " + e.name} value={e.id} key={e+i}/>
-                ))
-                : null
+                  ? listCategories.map((e, i) => (
+                    e.id <= 3 ?
+                      null
+                      : <Picker.Item label={getEmoji(e.name) + " " + e.name} value={e.id} key={e + i} />
+                  ))
+                  : null
               }
 
             </Picker>
@@ -252,39 +321,18 @@ const TransactionUpdateForm = ({ data }) => {
             {
               transactionError.category == ""
                 ? null
-                : <Text style={isCheckChangeColor(transactionError.category)}>{transactionError.category}</Text>
+                : <Text
+                  style={[
+                    isCheckChangeColor(transactionError.category),
+                    { textAlign: "center" }
+                  ]}
+                >
+                  {transactionError.category}
+                </Text>
             }
           </View>
         </View>
-        
-        {/* Card */}
-        <View>
-          <View style={{width : 250, alignSelf: 'center'}}>
-            {
-              card
-                ? <CardItem el={card}/>
-                : null
-            }
-          </View>
 
-        </View>
-        {/* Category type */}
-        <View>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={categoryType}
-              onValueChange={(itemValue, listCategories) => {
-                updateListCategories(itemValue, listCategories)
-                setCategoryType(itemValue)
-              }
-            }
-              prompt='Select category type'
-            >
-              <Picker.Item label="Income" value="income" />
-              <Picker.Item label="Expense" value="expense" />
-            </Picker>
-          </View>
-        </View>
 
         {/* Cash */}
         <View style={{ alignSelf: "center" }}>
@@ -311,6 +359,7 @@ const TransactionUpdateForm = ({ data }) => {
           }
         </View>
 
+
         {/* note */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
@@ -335,37 +384,14 @@ const TransactionUpdateForm = ({ data }) => {
           }
         </View>
 
-        {/* date */}
-        <View style={{ alignSelf: "center" }}>
-          <Pressable
-            onPress={() => setVisible(true)}
-            style={styles.datePicker}
-          >
-            <Text>
-              {
-                transactionInput.date
-                  ? transactionInput.date
-                  : 'Add date'
-              }
-            </Text>
-          </Pressable>
 
-          {
-            transactionError.date == ""
-              ? null
-              : <Text
-                style={[
-                  isCheckChangeColor(transactionError.date),
-                  { textAlign: "center" }
-                ]}>
-                {transactionError.date}
-              </Text>
-          }
-        </View>
+
+
 
         <View style={hideOnCreate('update')}>
           <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
         </View>
+
 
         <CalendarPickerModal visible={visible}
           setTransactionInput={setTransactionInput}
@@ -389,15 +415,16 @@ const styles = StyleSheet.create({
 
   input: {
     width: 300,
-    height: 45,
+    height: 40,
     marginTop: 15,
     marginBottom: 5,
   },
 
   picker: {
-    width: 300,
-    height: 45,
-    marginVertical: 5,
+    width: 200,
+    height: 40,
+    marginTop: 15,
+    marginBottom: 5,
     alignSelf: "center",
     borderWidth: 1,
     borderRadius: 5,
@@ -412,9 +439,10 @@ const styles = StyleSheet.create({
   },
 
   datePicker: {
-    width: 100,
+    width: 200,
     height: 40,
-    marginVertical: 10,
+    marginTop: 15,
+    marginBottom: 5,
     alignSelf: "center",
     flexDirection: "row",
     justifyContent: "center",
@@ -422,7 +450,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#999',
-    backgroundColor: '#f3f3f3',
   },
 });
 

@@ -9,13 +9,13 @@ const strRegex = (type) => {
 			break;
 
 		case "money":
-			result = /^(|-?\d+)$/;
+			result = /\D/;
 			break;
 		case "cash":
-			result = /^(|-?\d+)$/;
+			result = /\D/;
 			break
 		case "goal":
-			result = /^(|-?\d+)$/; ///^(|-?\d+)$/
+			result = /\D/; ///^(|-?\d+)$/
 			break;
 		case 'note':
 			setCardError({ ...cardError, "note": "✓ Check" })

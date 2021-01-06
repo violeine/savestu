@@ -3,7 +3,7 @@ import { View, ScrollView, StyleSheet, Text, Button, Alert } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import {useNavigation} from '@react-navigation/native'
 import {useCardDispatch, useCardState} from '../db/index'
-import { updateCard, deleteCard } from '../db/card'
+import { updateCard, deleteCard, getCardById } from '../db/card'
 import {
   strRegex,
   hideOnCreate,
@@ -17,7 +17,7 @@ import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 
 
-const CardUpdateForm = ({ data }) => {
+const CardUpdateForm = ({ cardId }) => {
   const dispatch = useCardDispatch()
   const navigation = useNavigation()
   const [cardInput, setCardInput] = useState({
@@ -35,12 +35,20 @@ const CardUpdateForm = ({ data }) => {
     note: "✓ Check",
   })
 
+  const [cardTest, setCardTest] = useState(undefined)
+
+  const setCardObj = async (id) => {
+    let card = await getCardById(id);
+    setCardInput({...card})
+    setCardTest({...card})
+  }
+
   const checkCardInfor = (type, value) => {
     let err;
 
     // Kiểm tra input rỗng
     if (value.length == 0) {
-      err = '✘ This field can not be empty';
+      err = '✘ Empty';
 
       switch (type) {
         case 'name':
@@ -70,14 +78,14 @@ const CardUpdateForm = ({ data }) => {
         break
 
       case "money":
-        err = !strRegex("money").test(value)
+        err = strRegex("money").test(value)
           ? "✘ Money must be number"
           : "✓ Check"
         setCardError({ ...cardError, "money": err })
         break;
 
       case "goal":
-        err = !strRegex("goal").test(value)
+        err = strRegex("goal").test(value)
           ? "✘ Goal must be number"
           : "✓ Check"
         setCardError({ ...cardError, "goal": err })
@@ -96,13 +104,12 @@ const CardUpdateForm = ({ data }) => {
   }
 
   const handleUpdateBtn = async () => {
-    let res = objectForUpdate(cardInput, data);
+    let res = objectForUpdate(cardInput, cardTest);
 
     if (isCheck(cardError, "update", 'card')) {
       if (typeof res === "object") {
         try {
           let card =await updateCard(res);
-          dispatch(card)
           navigation.navigate('Card', {cardId: card.id})
         }
         catch {
@@ -111,6 +118,7 @@ const CardUpdateForm = ({ data }) => {
       }
       else {
         //alert error "No thing to update"
+        console.log(cardError)
         navigation.goBack()
       }
     }
@@ -135,7 +143,8 @@ const CardUpdateForm = ({ data }) => {
         {
           text: "OK",
           onPress: async () => {
-            let card = await deleteCard(data.id)
+            let card = await deleteCard(cardTest.id)
+            console.log(card)
             navigation.navigate('Card', {cardId: card.id})
           },
         },
@@ -143,9 +152,7 @@ const CardUpdateForm = ({ data }) => {
     );
 
   useEffect(() => {
-    setCardInput({
-      ...data
-    })
+    setCardObj(cardId)
 
   }, [])
 
@@ -290,7 +297,7 @@ const styles = StyleSheet.create({
 
   input: {
     width: 300,
-    height: 45,
+    height: 40,
     marginTop: 15,
     marginBottom: 5,
   },

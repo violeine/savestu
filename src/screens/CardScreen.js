@@ -27,10 +27,10 @@ export default function CardScreen({ navigation, route }) {
       fetchData()
     }
     fetchData()
-  },[route.params?.cardId], cardCheck);
+  },[route.params?.cardId, cardCheck]);
 
-  const onLongPressCardItem = (item) => {
-    navigation.navigate("Update", { type: "card", data: { ...item }});
+  const onLongPressCardItem = (id) => {
+    navigation.navigate("Update", { type: "card", id: id});
   };
 
   // Debug

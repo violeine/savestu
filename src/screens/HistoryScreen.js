@@ -40,8 +40,8 @@ export default function HistoryScreen({ navigation }) {
     setTransAll(data);
   };
 
-  const onLongPressTranItem = (item) => {
-    navigation.navigate('Update', {type: "transaction", data: {...item} })
+  const onLongPressTranItem = (id) => {
+    navigation.navigate('Update', {type: "transaction", id : id })
   }
 
   useEffect(() => {
