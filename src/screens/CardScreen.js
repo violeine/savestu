@@ -8,10 +8,13 @@ import { Picker } from '@react-native-picker/picker'
 import CardItem from "../components/CardItem";
 import BtnAction from "../components/BtnAction";
 import HeaderStack from "../components/HeaderStack";
+import {useCardState} from "../db/index"
 
 
 export default function CardScreen({ navigation, route }) {
   const [card, setCard] = useState(undefined);
+  const {money} = useCardState()
+  const [cardCheck, setcardCheck] = useState(money)
   // Lấy dữ liệu db & gán cho biến card
   const fetchData = async () => {
     const data = await getCard();
@@ -24,10 +27,10 @@ export default function CardScreen({ navigation, route }) {
       fetchData()
     }
     fetchData()
-  },[route.params?.cardId]);
+  },[route.params?.cardId, cardCheck]);
 
-  const onLongPressCardItem = (item) => {
-    navigation.navigate("Update", { type: "card", data: { ...item }});
+  const onLongPressCardItem = (id) => {
+    navigation.navigate("Update", { type: "card", id: id});
   };
 
   // Debug
@@ -69,7 +72,6 @@ export default function CardScreen({ navigation, route }) {
             : <Text style={styles.centerItem}>You have no card</Text>
         }
 
-        <BtnAction title="Refresh" type="primary" onPress={fetchData} />
       </ScrollView>
     </>
   );

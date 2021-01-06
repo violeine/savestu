@@ -29,6 +29,8 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
 
   // console.log('\n----- TRANS ITEM -------\n');
 
+
+
   return (
     <Pressable
       style={({ pressed }) =>
@@ -38,13 +40,15 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
           },
           styles.container,
         ]}
-      onLongPress={() => onLongPress(el)}
+      onLongPress={el.category <= 3 ? onLongPress : (() => onLongPress(el.id))}
     >
 
       {/* Left side */}
       <View style={styles.leftSide}>
 
-        {dataCate ? chooseIcon(dataCate.name, 24, dataCate.color) : null}
+        <View style={styles.icon}>
+          {dataCate ? chooseIcon(dataCate.name, 24, dataCate.color) : null}
+        </View>
 
         <Text style={styles.date}>
           {formatDateDisplay(el.date)}
@@ -82,8 +86,12 @@ const styles = StyleSheet.create({
     // backgroundColor: 'lightblue',
   },
 
+  icon:{
+    width: 30,
+  },
+
   date: {
-    width: 80,
+    width: 70,
     marginLeft: 10,
     fontSize: 13,
     fontStyle: "italic",

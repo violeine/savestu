@@ -388,6 +388,23 @@ export default function DebugScreen() {
           }}
         />
         <TextInput
+          placeholder="goal"
+          value={cardUpdate.goal}
+          onChangeText={(t) =>
+            setCardUpdate({
+              ...cardUpdate,
+              goal: t,
+            })
+          }
+          style={{
+            borderColor: "gray",
+            borderWidth: 1,
+            width: 300,
+            padding: 5,
+            marginBottom: 2,
+          }}
+        />
+        <TextInput
           placeholder="note"
           onChangeText={(t) =>
             setCardUpdate({

@@ -1,10 +1,11 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, ScrollView, StyleSheet, Text } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import { Picker } from '@react-native-picker/picker'
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { createCard } from '../db/card'
-import { strRegex,
+import {
+  strRegex,
   capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck
@@ -24,9 +25,9 @@ const CardCreateForm = () => {
   });
 
   const [cardError, setCardError] = useState({
-    name: "✘ This field can not be empty",
-    type: "",
-    money: "",
+    name: "✘ Empty",
+    type: "✘ Empty",
+    money: "✘ Empty",
     goal: "",
     note: "✓ Check",
   })
@@ -35,7 +36,7 @@ const CardCreateForm = () => {
     let err;
     // Kiểm tra input rỗng
     if (value.length == 0) {
-      err = '✘ This field can not be empty';
+      err = '✘ Empty';
 
       switch (type) {
         case 'name':
@@ -66,7 +67,7 @@ const CardCreateForm = () => {
         break
       case "type":
         err = "✓ Check"
-        setCardError({...cardError, "type": err})
+        setCardError({ ...cardError, "type": err })
         break
       case "money":
         err = strRegex("money").test(value)
@@ -93,19 +94,21 @@ const CardCreateForm = () => {
     }
   }
 
-  const setCardCreate = async() => {
+  const setCardCreate = async () => {
     if (cardInput.type == 'using') {
-      await setCardInput({...cardInput, goal: -1})
+      await setCardInput({ ...cardInput, goal: -1 })
     }
-    else await setCardInput({...cardInput, money: 0})
+    else {
+      if (cardInput.money == "") await setCardInput({...cardInput, money: -1})
+    }
   }
 
   const handleCreateBtn = async () => {
-    if (isCheck(cardError,"create", 'card')) {
+    if (isCheck(cardError, "create", 'card')) {
       try {
         setCardCreate()
         let card = await createCard(cardInput)
-        navigation.navigate('Card', {cardId : card.id})
+        navigation.navigate('Card', { cardId: card.id })
       }
       catch {
         console.error();
@@ -114,9 +117,7 @@ const CardCreateForm = () => {
     }
     else {
       //alert Something Error -> Check Error
-      console.log(cardInput)
-
-      console.log(cardError)
+      
       console.log("Something Error -> Check Error")
     }
   }
@@ -146,19 +147,19 @@ const CardCreateForm = () => {
       />
 
       <ScrollView style={styles.container}>
-
+        {/* Card type */}
         <View>
           <View style={styles.picker}>
             <Picker
               selectedValue={cardInput.type}
               onValueChange={(itemValue) => {
-                  setCardInput({ ...cardInput, type: itemValue })
-                  checkCardInfor('type',itemValue)
-                }
+                setCardInput({ ...cardInput, type: itemValue })
+                checkCardInfor('type', itemValue)
+              }
               }
               prompt='Select card type'
             >
-              <Picker.Item label="Pick Type" value=""/>
+              <Picker.Item label="Pick Type" value="" />
               <Picker.Item label="💳  Using" value="using" />
               <Picker.Item label="💰  Saving" value="saving" />
             </Picker>
@@ -168,12 +169,20 @@ const CardCreateForm = () => {
           <View style={{ alignSelf: "center" }}>
             {
               cardError.type == ""
-              ? null
-              : <Text style={isCheckChangeColor(cardError.type)}>{cardError.type}</Text>
+                ? null
+                : <Text
+                  style={[
+                    isCheckChangeColor(cardError.type),
+                    { textAlign: "center" }
+                  ]}
+                >
+                  {cardError.type}
+                </Text>
             }
-          </View> 
+          </View>
         </View>
-
+        
+        {/* name */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             value={cardInput.name}
@@ -197,6 +206,7 @@ const CardCreateForm = () => {
           }
         </View>
 
+        {/* money */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             value={cardInput.money.toString()}
@@ -212,15 +222,16 @@ const CardCreateForm = () => {
             mode='outlined'
             style={styles.input}
             theme={cardError.money == '✓ Check' ? theme : themeErr}
-            disabled={cardInput.type == 'using' ? false : true}
+            keyboardType='numeric'
           />
           {
-            cardError.money == "" || cardInput.type != "using"
+            cardError.money == ""
               ? null
               : <Text style={isCheckChangeColor(cardError.money)}>{cardError.money}</Text>
           }
         </View>
-
+        
+        {/* goal */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             value={cardInput.goal.toString()}
@@ -237,6 +248,7 @@ const CardCreateForm = () => {
             style={styles.input}
             theme={cardError.goal == '✓ Check' ? theme : themeErr}
             disabled={cardInput.type == 'saving' ? false : true}
+            keyboardType='numeric'
           />
           {
             cardError.goal == "" || cardInput.type != "saving"
@@ -245,6 +257,7 @@ const CardCreateForm = () => {
           }
         </View>
 
+        {/* note */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             onChangeText={(t) => {
@@ -268,8 +281,6 @@ const CardCreateForm = () => {
           }
         </View>
 
-        <BtnAction title={capitalizeFirstLetter('create') + ' Card'} type='primary' onPress={handleCreateBtn} />
-
       </ScrollView>
     </>
   );
@@ -285,7 +296,7 @@ const styles = StyleSheet.create({
 
   input: {
     width: 300,
-    height: 45,
+    height: 40,
     marginTop: 15,
     marginBottom: 5,
   },

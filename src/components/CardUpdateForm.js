@@ -2,20 +2,23 @@ import React, { useEffect, useState } from 'react'
 import { View, ScrollView, StyleSheet, Text, Button, Alert } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import {useNavigation} from '@react-navigation/native'
-
-import { updateCard, deleteCard } from '../db/card'
-import {	
+import {useCardDispatch, useCardState} from '../db/index'
+import { updateCard, deleteCard, getCardById } from '../db/card'
+import {
   strRegex,
-	hideOnCreate,
-	capitalizeFirstLetter,
+  hideOnCreate,
+  capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck,
+  hideOnUsing,
+  getEmoji,
   objectForUpdate} from '../services/formHelperFunction'
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 
 
-const CardUpdateForm = ({ data }) => {
+const CardUpdateForm = ({ cardId }) => {
+  const dispatch = useCardDispatch()
   const navigation = useNavigation()
   const [cardInput, setCardInput] = useState({
     name: "",
@@ -32,12 +35,20 @@ const CardUpdateForm = ({ data }) => {
     note: "✓ Check",
   })
 
+  const [cardTest, setCardTest] = useState(undefined)
+
+  const setCardObj = async (id) => {
+    let card = await getCardById(id);
+    setCardInput({...card})
+    setCardTest({...card})
+  }
+
   const checkCardInfor = (type, value) => {
     let err;
 
     // Kiểm tra input rỗng
     if (value.length == 0) {
-      err = '✘ This field can not be empty';
+      err = '✘ Empty';
 
       switch (type) {
         case 'name':
@@ -93,10 +104,10 @@ const CardUpdateForm = ({ data }) => {
   }
 
   const handleUpdateBtn = async () => {
-    let res = objectForUpdate(cardInput, data);
+    let res = objectForUpdate(cardInput, cardTest);
 
-    if (isCheck(cardError,"update",'card')) {
-      if (typeof res  === "object") {
+    if (isCheck(cardError, "update", 'card')) {
+      if (typeof res === "object") {
         try {
           let card =await updateCard(res);
           navigation.navigate('Card', {cardId: card.id})
@@ -107,7 +118,8 @@ const CardUpdateForm = ({ data }) => {
       }
       else {
         //alert error "No thing to update"
-        console.log('No thing to update')
+        console.log(cardError)
+        navigation.goBack()
       }
     }
     else {
@@ -118,30 +130,29 @@ const CardUpdateForm = ({ data }) => {
   }
 
   const deleteAlert = () =>
-  Alert.alert(
-    "Warning",
-    'Do you want to delet this card',
-    [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: 'cancel',
-      },
-
-      {
-        text: "OK",
-        onPress: async () =>  {
-          console.log(await deleteCard(data.id))
-          console.log("OK Pressed"), navigation.goBack()
+    Alert.alert(
+      "Warning",
+      'Do you want to delete this card',
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: 'cancel',
         },
-      },
-    ]
-  );
+
+        {
+          text: "OK",
+          onPress: async () => {
+            let card = await deleteCard(cardTest.id)
+            console.log(card)
+            navigation.navigate('Card', {cardId: card.id})
+          },
+        },
+      ]
+    );
 
   useEffect(() => {
-    setCardInput({
-      ...data
-    })
+    setCardObj(cardId)
 
   }, [])
 
@@ -170,7 +181,18 @@ const CardUpdateForm = ({ data }) => {
       />
 
       <ScrollView style={styles.container}>
+        {/* type */}
+        <View style={{ alignSelf: "center" }}>
+          <TextInput
+            value={getEmoji(cardInput.type) + "  " +capitalizeFirstLetter(cardInput.type)}
+            label='Card Type'
+            placeholder="Input card name"
+            mode='outlined'
+            style={styles.input}
+          />
+        </View>
 
+        {/* name */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             value={cardInput.name}
@@ -194,31 +216,22 @@ const CardUpdateForm = ({ data }) => {
           }
         </View>
 
+        {/* money */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
+            keyboardType={'numeric'}
             value={cardInput.money.toString()}
-            onChangeText={(t) => {
-              setCardInput({
-                ...cardInput,
-                money: t,
-              })
-              checkCardInfor("money", t)
-            }}
             label='Money (using)'
             placeholder='Input money'
             mode='outlined'
             style={styles.input}
-            theme={cardError.money == '✓ Check' ? theme : themeErr}
-            disabled={cardInput.type == 'using' ? false : true}
+            keyboardType='numeric'
+            disabled={true}
           />
-          {
-            cardError.money == ""
-              ? null
-              : <Text style={isCheckChangeColor(cardError.money)}>{cardError.money}</Text>
-          }
         </View>
-
-        <View style={{ alignSelf: "center" }}>
+        
+        {/* goal */}
+        <View style={[{ alignSelf: "center" }, hideOnUsing(cardInput.type)]}>
           <TextInput
             value={cardInput.goal.toString()}
             onChangeText={(t) => {
@@ -234,14 +247,15 @@ const CardUpdateForm = ({ data }) => {
             style={styles.input}
             theme={cardError.goal == '✓ Check' ? theme : themeErr}
             disabled={cardInput.type == 'saving' ? false : true}
+            keyboardType='numeric'
           />
           {
-            cardError.goal == ""
+            cardError.goal == "" || cardInput.type != "saving"
               ? null
               : <Text style={isCheckChangeColor(cardError.goal)}>{cardError.goal}</Text>
           }
         </View>
-
+        {/* note */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             onChangeText={(t) => {
@@ -265,7 +279,6 @@ const CardUpdateForm = ({ data }) => {
           }
         </View>
 
-        <BtnAction title={capitalizeFirstLetter('update') + ' Card'} type='primary' onPress={handleUpdateBtn}/>
         <View style={hideOnCreate('update')}>
           <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
         </View>
@@ -284,7 +297,7 @@ const styles = StyleSheet.create({
 
   input: {
     width: 300,
-    height: 45,
+    height: 40,
     marginTop: 15,
     marginBottom: 5,
   },

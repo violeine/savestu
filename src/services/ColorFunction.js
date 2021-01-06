@@ -95,6 +95,10 @@ function chooseIcon(cate, size = 20, color = '#000') {
       <MaterialIcons name="local-cafe" size={size} color={color} />
     )
 
+    case 'Drinks': return (
+      <MaterialIcons name="local-cafe" size={size} color={color} />
+    )
+
     case 'Transferring': return (
       <MaterialIcons name="compare-arrows" size={size} color={color} />
     )

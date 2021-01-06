@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
 import { View, StyleSheet, Text, ScrollView, Button } from "react-native";
 
+
 import { useCardDispatch,useCardState,useDateState } from "../db";
 
 import {getCategoryByCard} from '../db/category'
@@ -11,7 +12,7 @@ import HeaderBarT from "../components/HeaderBarT";
 import AddButton from "../components/AddButton";
 import DonutChart from "../components/DonutChart";
 import CateItem from "../components/CateItem";
-import {getTransactionByCardAndDate} from '../db/transaction'
+import { getTransactionByCardAndDate } from '../db/transaction'
 
 
 const HomeScreen = ({ navigation }) => {
@@ -50,8 +51,6 @@ const HomeScreen = ({ navigation }) => {
   const [seriesCateExpense, setSeriesCateExpense] = useState([80, 50, 60]);
   const [sliceCateColor, setSliceCateColor] = useState(['#ff8000', '#18c20c', '#278CD9']);
 
-
-  // FETCH
   // const fetchTransDate = async () => {
     //   const data = await getTransactionByDate('1/1/2020');
     //   setTransDate(data);
