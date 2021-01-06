@@ -25,23 +25,23 @@ export async function countCard() {
   }
 }
 
-export const transferMoney = async ({ sendId, receiveId, money, note }) => {
+export const transferMoney = async ({ sendId, receiveId, money }) => {
   try {
-    sendName = (await getCardById(sendId)).name;
-    receiveName = (await getCardById(receiveId)).name;
+    var sendName = (await getCardById(sendId)).name;
+    var receiveName = (await getCardById(receiveId)).name;
     const sender = await createTransaction({
       category: 2,
       card: sendId,
       cash: -money,
       date: new Date().toLocaleDateString(),
-      note: `(Transfer money to card ${receiveName}) ${note}`,
+      note: `Transfer to ${receiveName}`,
     });
     const recipient = await createTransaction({
       category: 2,
       card: receiveId,
       cash: money,
       date: new Date().toLocaleDateString(),
-      note: `(Receive money from card ${sendName}) ${note}`,
+      note: `Receive from ${sendName}`,
     });
     return {
       sender,
