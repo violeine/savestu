@@ -25,8 +25,8 @@ const CardCreateForm = () => {
 
   const [cardError, setCardError] = useState({
     name: "✘ This field can not be empty",
-    type: "",
-    money: "",
+    type: "✘ This field can not be empty",
+    money: "✘ This field can not be empty",
     goal: "",
     note: "✓ Check",
   })
@@ -69,14 +69,14 @@ const CardCreateForm = () => {
         setCardError({...cardError, "type": err})
         break
       case "money":
-        err = strRegex("money").test(value)
+        err = !strRegex("money").test(value)
           ? "✘ Money must be number"
           : "✓ Check"
         setCardError({ ...cardError, "money": err })
         break;
 
       case "goal":
-        err = strRegex("goal").test(value)
+        err = !strRegex("goal").test(value)
           ? "✘ Goal must be number"
           : "✓ Check"
         setCardError({ ...cardError, "goal": err })
@@ -97,7 +97,9 @@ const CardCreateForm = () => {
     if (cardInput.type == 'using') {
       await setCardInput({...cardInput, goal: -1})
     }
-    else await setCardInput({...cardInput, money: 0})
+    else {
+      if (cardInput.money == "") await setCardInput({...cardInput, money: -1})
+    }
   }
 
   const handleCreateBtn = async () => {
@@ -114,9 +116,7 @@ const CardCreateForm = () => {
     }
     else {
       //alert Something Error -> Check Error
-      console.log(cardInput)
-
-      console.log(cardError)
+      
       console.log("Something Error -> Check Error")
     }
   }
@@ -146,7 +146,7 @@ const CardCreateForm = () => {
       />
 
       <ScrollView style={styles.container}>
-
+        {/* Card type */}
         <View>
           <View style={styles.picker}>
             <Picker
@@ -173,7 +173,8 @@ const CardCreateForm = () => {
             }
           </View> 
         </View>
-
+        
+        {/* name */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             value={cardInput.name}
@@ -197,6 +198,7 @@ const CardCreateForm = () => {
           }
         </View>
 
+        {/* money */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             value={cardInput.money.toString()}
@@ -212,15 +214,16 @@ const CardCreateForm = () => {
             mode='outlined'
             style={styles.input}
             theme={cardError.money == '✓ Check' ? theme : themeErr}
-            disabled={cardInput.type == 'using' ? false : true}
+            keyboardType='numeric'
           />
           {
-            cardError.money == "" || cardInput.type != "using"
+            cardError.money == ""
               ? null
               : <Text style={isCheckChangeColor(cardError.money)}>{cardError.money}</Text>
           }
         </View>
-
+        
+        {/* goal */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             value={cardInput.goal.toString()}
@@ -237,6 +240,7 @@ const CardCreateForm = () => {
             style={styles.input}
             theme={cardError.goal == '✓ Check' ? theme : themeErr}
             disabled={cardInput.type == 'saving' ? false : true}
+            keyboardType='numeric'
           />
           {
             cardError.goal == "" || cardInput.type != "saving"
@@ -245,6 +249,7 @@ const CardCreateForm = () => {
           }
         </View>
 
+        {/* note */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             onChangeText={(t) => {

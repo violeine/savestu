@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, ScrollView, StyleSheet, Text, Button, Alert } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import {useNavigation} from '@react-navigation/native'
-
+import {useCardDispatch, useCardState} from '../db/index'
 import { updateCard, deleteCard } from '../db/card'
 import {	
   strRegex,
@@ -10,12 +10,15 @@ import {
 	capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck,
+  hideOnUsing,
+  getEmoji,
   objectForUpdate} from '../services/formHelperFunction'
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 
 
 const CardUpdateForm = ({ data }) => {
+  const dispatch = useCardDispatch()
   const navigation = useNavigation()
   const [cardInput, setCardInput] = useState({
     name: "",
@@ -67,14 +70,14 @@ const CardUpdateForm = ({ data }) => {
         break
 
       case "money":
-        err = strRegex("money").test(value)
+        err = !strRegex("money").test(value)
           ? "✘ Money must be number"
           : "✓ Check"
         setCardError({ ...cardError, "money": err })
         break;
 
       case "goal":
-        err = strRegex("goal").test(value)
+        err = !strRegex("goal").test(value)
           ? "✘ Goal must be number"
           : "✓ Check"
         setCardError({ ...cardError, "goal": err })
@@ -99,6 +102,7 @@ const CardUpdateForm = ({ data }) => {
       if (typeof res  === "object") {
         try {
           let card =await updateCard(res);
+          dispatch(card)
           navigation.navigate('Card', {cardId: card.id})
         }
         catch {
@@ -107,7 +111,7 @@ const CardUpdateForm = ({ data }) => {
       }
       else {
         //alert error "No thing to update"
-        console.log('No thing to update')
+        navigation.goBack()
       }
     }
     else {
@@ -170,7 +174,18 @@ const CardUpdateForm = ({ data }) => {
       />
 
       <ScrollView style={styles.container}>
+        {/* type */}
+        <View style={{ alignSelf: "center" }}>
+          <TextInput
+            value={getEmoji(cardInput.type) + "  " +capitalizeFirstLetter(cardInput.type)}
+            label='Card Type'
+            placeholder="Input card name"
+            mode='outlined'
+            style={styles.input}
+          />
+        </View>
 
+        {/* name */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             value={cardInput.name}
@@ -194,31 +209,21 @@ const CardUpdateForm = ({ data }) => {
           }
         </View>
 
+        {/* money */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             value={cardInput.money.toString()}
-            onChangeText={(t) => {
-              setCardInput({
-                ...cardInput,
-                money: t,
-              })
-              checkCardInfor("money", t)
-            }}
             label='Money (using)'
             placeholder='Input money'
             mode='outlined'
             style={styles.input}
-            theme={cardError.money == '✓ Check' ? theme : themeErr}
-            disabled={cardInput.type == 'using' ? false : true}
+            keyboardType='numeric'
+            disabled={true}
           />
-          {
-            cardError.money == ""
-              ? null
-              : <Text style={isCheckChangeColor(cardError.money)}>{cardError.money}</Text>
-          }
         </View>
-
-        <View style={{ alignSelf: "center" }}>
+        
+        {/* goal */}
+        <View style={[{ alignSelf: "center" }, hideOnUsing(cardInput.type)]}>
           <TextInput
             value={cardInput.goal.toString()}
             onChangeText={(t) => {
@@ -234,14 +239,15 @@ const CardUpdateForm = ({ data }) => {
             style={styles.input}
             theme={cardError.goal == '✓ Check' ? theme : themeErr}
             disabled={cardInput.type == 'saving' ? false : true}
+            keyboardType='numeric'
           />
           {
-            cardError.goal == ""
+            cardError.goal == "" || cardInput.type != "saving"
               ? null
               : <Text style={isCheckChangeColor(cardError.goal)}>{cardError.goal}</Text>
           }
         </View>
-
+        {/* note */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             onChangeText={(t) => {

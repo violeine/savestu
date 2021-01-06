@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react'
-import { View, Text, StyleSheet, StatusBar, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, ScrollView, ToastAndroid } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { FontAwesome } from "@expo/vector-icons";
+import {showToastError} from '../services/formHelperFunction'
 
 import { getTransactionByCard } from "../db/transaction"
 
@@ -89,6 +90,8 @@ export default function HistoryScreen({ navigation }) {
             ? transAll.map(el =>
               el.category == 1
                 ? null
+                : el.category <= 3
+                ? <TransItem el={el} key={el.id} onLongPress={showToastError}/>
                 : <TransItem el={el} key={el.id} onLongPress={onLongPressTranItem}/>
             )
             : <Text style={[styles.centerItem, styles.txtNotify]}>You have no transaction</Text>

@@ -8,19 +8,21 @@ import {
   updateTransaction
 } from "../db/transaction";
 import {getCategory, getCategoryById} from '../db/category'
-import {getCard} from '../db/card'
+import {getCardById} from '../db/card'
 import {	
   strRegex,
 	capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck,
   objectForUpdate,
-  hideOnCreate
+  hideOnCreate,
+  getEmoji
 } from '../services/formHelperFunction'
 
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 import CalendarPickerModal from './CalendarPickerModal'
+import CardItem from './CardItem'
 
 const TransactionUpdateForm = ({data}) => {
   const navigation = useNavigation()
@@ -42,7 +44,7 @@ const TransactionUpdateForm = ({data}) => {
   })
 
   const [listCategories, setListCategoires] = useState([])
-  const [listCards, setListCards] = useState([])
+  const [card, setCard] = useState(undefined)
   const [categoryType, setCategoryType] = useState("")
 
   const updateListCategories = async (type , listCate) => {
@@ -63,9 +65,9 @@ const TransactionUpdateForm = ({data}) => {
     setCategoryType(data.type)
   }
 
-  const getAllCards = async () => {
-    const data = await getCard()
-    setListCards(data);
+  const getCardOfTran = async (cardId) => {
+    const data = await getCardById(cardId)
+    setCard(data);
   }
 
   const checkTransactionInfor = (type, value) => {
@@ -110,7 +112,7 @@ const TransactionUpdateForm = ({data}) => {
         setTransactionError({...transactionError, 'type' : "✓ Check"});
         break;
       case 'cash' :
-        err = strRegex("money").test(value)
+        err = !strRegex("money").test(value)
           ? "✘ Money must be number"
           : "✓ Check"
         setTransactionError({ ...transactionError, "cash": err })
@@ -142,6 +144,7 @@ const TransactionUpdateForm = ({data}) => {
         try {
           console.log(await updateTransaction(res))
           //alert Create transaction success
+          navigation.goBack()
         }
         catch {
           console.error()
@@ -150,6 +153,7 @@ const TransactionUpdateForm = ({data}) => {
       else {
         //alert "Nothing to update"
         console.log("No thing to update")
+        navigation.goBack()
       }
 
     }
@@ -174,7 +178,8 @@ const TransactionUpdateForm = ({data}) => {
         text: "OK",
         onPress: async () =>  {
           console.log(await deleteTransaction(transactionInput.id))
-          console.log("OK Pressed"), navigation.goBack()
+          console.log("OK Pressed") 
+          navigation.goBack()
         },
       },
     ]
@@ -182,9 +187,8 @@ const TransactionUpdateForm = ({data}) => {
     
   const beforeRender = async () =>  {
     getListCategories(data.category)
-    setTransactionInput({...data, cash : Math.abs(data.cash)})
-    getAllCards();
-
+    getCardOfTran(data.card)
+    setTransactionInput({...data, cash : Math.abs(data.cash), card : data.card})
   }
 
   useEffect(() => {
@@ -216,7 +220,7 @@ const TransactionUpdateForm = ({data}) => {
 
 
       <ScrollView style={styles.container}>
-
+        {/* Category */}
         <View>
           <View style={styles.picker}>
             <Picker
@@ -234,7 +238,7 @@ const TransactionUpdateForm = ({data}) => {
                 ? listCategories.map( (e, i) => (
                   e.id <= 3 ? 
                   null
-                  :<Picker.Item label={e.name} value={e.id} key={e+i}/>
+                  :<Picker.Item label={getEmoji(e.name) + " " + e.name} value={e.id} key={e+i}/>
                 ))
                 : null
               }
@@ -250,39 +254,19 @@ const TransactionUpdateForm = ({data}) => {
             }
           </View>
         </View>
-
+        
+        {/* Card */}
         <View>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={transactionInput.card}
-              onValueChange={(itemValue) => {
-                  setTransactionInput({ ...transactionInput, card: itemValue })
-                  checkTransactionInfor('card',itemValue)
-                }
-              }
-              prompt='Select category'
-            >
-              <Picker.Item label="Pick Card" value=""/>
-              {
-                listCards
-                ? listCards.map( (e, i) => (
-                  <Picker.Item label={e.name} value={e.id} key={e+i}/>
-                ))
-                : null
-              }
-
-            </Picker>
-          </View>
-
-          <View style={{alignSelf: "center"}}>
+          <View style={{width : 250, alignSelf: 'center'}}>
             {
-              transactionError.card == ""
-                ? null
-                : <Text style={isCheckChangeColor(transactionError.card)}>{transactionError.card}</Text>
+              card
+                ? <CardItem el={card}/>
+                : null
             }
           </View>
-        </View>
 
+        </View>
+        {/* Category type */}
         <View>
           <View style={styles.picker}>
             <Picker
@@ -292,7 +276,7 @@ const TransactionUpdateForm = ({data}) => {
                   setCategoryType(itemValue)
                 }
               }
-              prompt='Select category'
+              prompt='Select category type'
             >
               <Picker.Item label="Income" value="income"/>
               <Picker.Item label="Expense" value="expense"/>
@@ -300,6 +284,7 @@ const TransactionUpdateForm = ({data}) => {
           </View>
         </View>
 
+        {/* Cash */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             value={transactionInput.cash.toString()}
@@ -315,6 +300,7 @@ const TransactionUpdateForm = ({data}) => {
             mode='outlined'
             style={styles.input}
             theme={transactionError.cash == '✓ Check' ? theme : themeErr}
+            keyboardType='numeric'
           />
           {
             transactionError.cash == ""
@@ -323,6 +309,7 @@ const TransactionUpdateForm = ({data}) => {
           }
         </View>
 
+        {/* note */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
             onChangeText={(t) => {
@@ -346,6 +333,7 @@ const TransactionUpdateForm = ({data}) => {
           }
         </View>
 
+        {/* date */}
         <View style={{ alignSelf: "center" }}>
           <Pressable onPress={() => setVisible(true)} style={{backgroundColor: 'cyan', height: 30}}>
             <Text>{transactionInput.date}</Text>

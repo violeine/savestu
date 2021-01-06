@@ -29,6 +29,8 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
 
   // console.log('\n----- TRANS ITEM -------\n');
 
+
+
   return (
     <Pressable
       style={({ pressed }) =>
@@ -38,7 +40,7 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
           },
           styles.container,
         ]}
-      onLongPress={() => onLongPress(el)}
+      onLongPress={el.category <= 3 ? onLongPress : (() => onLongPress(el))}
     >
 
       {/* Left side */}

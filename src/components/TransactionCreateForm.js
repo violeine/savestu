@@ -1,28 +1,32 @@
 import React, {useState, useEffect} from 'react'
 import {View, StyleSheet, Text ,ScrollView, Pressable} from 'react-native'
 import { TextInput } from 'react-native-paper'
-import {Picker} from '@react-native-picker/picker';
+import {Picker} from '@react-native-picker/picker'
+import {useNavigation} from '@react-navigation/native'
 import {
   createTransaction,
 } from "../db/transaction";
-import {getCategory} from '../db/category'
+import {getCategory, getCategoryById} from '../db/category'
 
 import {	
   strRegex,
 	capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck,
+  getEmoji
 } from '../services/formHelperFunction'
 
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 import CalendarPickerModal from './CalendarPickerModal'
 import CardItem from './CardItem'
-import { useCardState } from '../db';
+import { useCardState, useCardDispatch } from '../db';
 
 const TransactionCreateForm = ({transactionData}) => {
+  const navigation = useNavigation()
   const {type, cateId} = transactionData
-  const globalCard = useCardState();
+  const globalCard = useCardState()
+  const dispatch = useCardDispatch()
 
   const [visible, setVisible] = useState(false)
   const [transactionInput, setTransactionInput] = useState({
@@ -52,6 +56,14 @@ const TransactionCreateForm = ({transactionData}) => {
       data = data.filter((item) => item.type == 'expense')
     } 
     setListCategoires(data)
+  }
+
+  const getOneCategory = async (cateId) => {
+    const data = await getCategoryById(cateId)
+    setListCategoires([data]);
+    setCategoryType(data.type)
+    setTransactionInput({...transactionInput, category: cateId, card : globalCard.id.toString()})
+    checkTransactionInfor('category', cateId)
   }
 
   const checkTransactionInfor = (type, value) => {
@@ -93,7 +105,7 @@ const TransactionCreateForm = ({transactionData}) => {
         setTransactionError({...transactionError, 'type' : "✓ Check"});
         break;
       case 'cash' :
-        err = strRegex("money").test(value)
+        err = !strRegex("money").test(value)
           ? "✘ Money must be number"
           : "✓ Check"
         setTransactionError({ ...transactionError, "cash": err })
@@ -120,7 +132,8 @@ const TransactionCreateForm = ({transactionData}) => {
   const handleCreateBtn = async () => {
     if (isCheck(transactionError, "create", 'transaction')) {
       try {
-        console.log(await createTransaction(getTransactionCreate()))
+        dispatch(await createTransaction(getTransactionCreate()))
+        navigation.goBack()
         //alert Create transaction success
       }
       catch {
@@ -137,9 +150,8 @@ const TransactionCreateForm = ({transactionData}) => {
   }
 
   const beforeRender = () => {
-
     if (cateId) {
-      console.log('test')
+      getOneCategory(cateId);
     }
     else {
 
@@ -194,9 +206,9 @@ const TransactionCreateForm = ({transactionData}) => {
               {
                 listCategories
                 ? listCategories.map( (e, i) => (
-                  e.id == "1" ? 
+                  e.id <= "3" ? 
                   null
-                  :<Picker.Item label={e.name} value={e.id} key={e+i}/>
+                  :<Picker.Item label={getEmoji(e.name) + " " + e.name} value={e.id} key={e+i}/>
                 ))
                 : null
               }
@@ -216,16 +228,13 @@ const TransactionCreateForm = ({transactionData}) => {
         {/* Card */}
         <View>
           <View style={{width : 250, alignSelf: 'center'}}>
-            <CardItem el={globalCard}/>
-          </View>
-
-          <View style={{alignSelf: "center"}}>
             {
-              transactionError.card == ""
-                ? null
-                : <Text style={isCheckChangeColor(transactionError.card)}>{transactionError.card}</Text>
+              globalCard
+                ? <CardItem el={globalCard}/>
+                : null
             }
           </View>
+
         </View>
         
         {/* Category type */}
@@ -257,6 +266,7 @@ const TransactionCreateForm = ({transactionData}) => {
             mode='outlined'
             style={styles.input}
             theme={transactionError.cash == '✓ Check' ? theme : themeErr}
+            keyboardType='numeric'
           />
           {
             transactionError.cash == ""
