@@ -88,9 +88,9 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.container}>
       {/* first row */}
       {
-      // <ScrollView>
-      //   <Text>{JSON.stringify(date,null,2)}</Text>
-      // </ScrollView>
+      <ScrollView>
+        <Text>{JSON.stringify(screenData.color,null,2)}</Text>
+      </ScrollView>
       }
       <View style={styles.flexBetween}>
         {[1,2,3,4].map((el) => {
@@ -109,20 +109,15 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
 
-      {
-        cardData ?
-        <View>
-        <DonutChart
-        card={cardData}
-        series={screenData.sum}
-        sliceColor={screenData.color}
-        income={screenData.income}
-        expense={screenData.expense}
-        />
-        </View>
-
-        : null
-      }
+      <View>
+      <DonutChart
+      card={cardData}
+      series={screenData.sum.length>0 ? screenData.sum : [1]}
+      sliceColor={screenData.color.length>0?screenData.color:["#fac"]}
+      income={screenData.income}
+      expense={screenData.expense}
+      />
+      </View>
 
 
       <View style={styles.aside}>

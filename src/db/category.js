@@ -20,8 +20,8 @@ export const getCategoryByCard = async (card) => {
     return {
       categories: rows._array,
       name: rows._array.map((i) => i.name),
-      color: rows._array.map((i) => i.color),
-      sum: rows._array.map((i) => i.sum),
+      color: rows._array.filter(i => i.sum != 0).map((i) => i.color),
+      sum: rows._array.map((i) => i.sum).filter(i => i!= 0),
       income:rows._array.reduce((acc, el) => {
         if (el.type =="income") {
           return acc+el.sum
