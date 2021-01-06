@@ -128,6 +128,7 @@ const TransactionCreateForm = ({ transactionData }) => {
       return { ...transactionInput, cash: _cash }
     }
     else return { ...transactionInput }
+
   }
 
   const handleCreateBtn = async () => {
@@ -271,7 +272,6 @@ const TransactionCreateForm = ({ transactionData }) => {
             }
           </View>
         </View>
-
 
         {/* Cash */}
         <View style={{ alignSelf: "center" }}>

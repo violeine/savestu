@@ -1,6 +1,7 @@
 import { createCard, getCard } from "./card";
 import { createCategory } from "./category";
 import React, { createContext, useState, useEffect, useContext } from "react";
+import {formatDateDB}  from '../services/DateFunctions'
 import * as fs from "expo-file-system";
 import * as SQLite from "expo-sqlite";
 
@@ -198,13 +199,15 @@ const init = async (setFinished) => {
 
 async function useInitDbHook() {
   const dispatch = useCardDispatch();
+  const setDate = useDateDispatch();
   const [finish, setFinished] = useState(false);
   useEffect(() => {
     init(setFinished);
   }, []);
   if (finish) {
-    const data = (await getCard())[0];
-    dispatch(data);
+    const data = await getCard();
+     dispatch(data[0]);
+     setDate(formatDateDB(new Date()));
   }
 }
 
@@ -238,11 +241,43 @@ function useCardDispatch() {
   return context;
 }
 
+const DateStateContext = createContext();
+const DateDispatchContext = createContext();
+
+function DateProvider({ children }) {
+  const [date, setDate] = useState('');
+  return (
+    <DateStateContext.Provider value={date}>
+      <DateDispatchContext.Provider value={setDate}>
+        {children}
+      </DateDispatchContext.Provider>
+    </DateStateContext.Provider>
+  );
+}
+
+function useDateState() {
+  const context = useContext(DateStateContext);
+  if (context === undefined) {
+    throw new Error("useDateState must be used within a DateProvider");
+  }
+  return context;
+}
+
+function useDateDispatch() {
+  const context = useContext(DateDispatchContext);
+  if (context === undefined) {
+    throw new Error("useDateDispatch must be used within a DateProvider");
+  }
+  return context;
+}
 export {
   initDb,
   cleanUp,
   useInitDbHook,
   CardProvider,
+  DateProvider,
+  useDateState,
+  useDateDispatch,
   useCardState,
   useCardDispatch,
 };

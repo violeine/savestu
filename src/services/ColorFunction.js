@@ -79,7 +79,7 @@ function changMoneyColor(money = 0) {
 
 function chooseIcon(cate, size = 20, color = '#000') {
   switch (cate) {
-    case 'Eating': return (
+    case 'Food': return (
       <MaterialCommunityIcons name="silverware-fork-knife" size={size} color={color} />
     )
 
@@ -91,7 +91,7 @@ function chooseIcon(cate, size = 20, color = '#000') {
       <FontAwesome5 name="parking" size={size} color={color} />
     )
 
-    case 'Drinking': return (
+    case 'Drinks': return (
       <MaterialIcons name="local-cafe" size={size} color={color} />
     )
 
