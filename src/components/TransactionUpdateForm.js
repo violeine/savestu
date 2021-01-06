@@ -282,7 +282,7 @@ const TransactionUpdateForm = ({ data }) => {
                 updateListCategories(itemValue, listCategories)
                 setCategoryType(itemValue)
               }
-              }
+            }
               prompt='Select category type'
             >
               <Picker.Item label="Income" value="income" />

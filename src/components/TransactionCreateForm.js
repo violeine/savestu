@@ -228,17 +228,12 @@ const TransactionCreateForm = ({transactionData}) => {
         {/* Card */}
         <View>
           <View style={styles.cardPicker}>
-            <CardItem el={globalCard} />
-          </View>
-
-          <View style={{ alignSelf: "center" }}>
             {
               globalCard
                 ? <CardItem el={globalCard}/>
                 : null
             }
           </View>
-
         </View>
 
         {/* Category type */}
