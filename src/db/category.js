@@ -19,7 +19,6 @@ export const getCategoryByCard = async (card) => {
         END) sum FROM categories c
       LEFT JOIN transactions t ON c.id = t.category
       GROUP BY c.id, c.name, c.color
-      ORDER BY sum DESC
     `,
       [card, card]
     );
@@ -62,7 +61,7 @@ export const getCategoryByCardAndDate = async ({ card, date }) => {
         END) sum FROM categories c
       LEFT JOIN transactions t ON c.id = t.category
       GROUP BY c.id, c.name, c.color
-      ORDER BY sum DESC
+
     `,
       [card, date, card, date]
     );

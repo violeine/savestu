@@ -110,7 +110,7 @@ const CardUpdateForm = ({ cardId }) => {
       if (typeof res === "object") {
         try {
           let card =await updateCard(res);
-          navigation.navigate('Card', {cardId: card.id})
+          navigation.navigate('Card', {cardId: card})
         }
         catch {
           console.error()
@@ -145,7 +145,7 @@ const CardUpdateForm = ({ cardId }) => {
           onPress: async () => {
             let card = await deleteCard(cardTest.id)
             console.log(card)
-            navigation.navigate('Card', {cardId: card.id})
+            navigation.navigate('Card', {cardId: card})
           },
         },
       ]
@@ -229,7 +229,7 @@ const CardUpdateForm = ({ cardId }) => {
             disabled={true}
           />
         </View>
-        
+
         {/* goal */}
         <View style={[{ alignSelf: "center" }, hideOnUsing(cardInput.type)]}>
           <TextInput

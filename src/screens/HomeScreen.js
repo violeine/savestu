@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, ScrollView, Button } from "react-native";
 
 import { useCardDispatch,useCardState,useDateState } from "../db";
 
-import {getCategoryByCard} from '../db/category'
+import {getCategoryByCard, getCategoryByCardAndDate} from '../db/category'
 
 import CalendarModal from "../components/CalendarModal";
 import CardModal from "../components/CardModal";
@@ -12,8 +12,6 @@ import HeaderBarT from "../components/HeaderBarT";
 import AddButton from "../components/AddButton";
 import DonutChart from "../components/DonutChart";
 import CateItem from "../components/CateItem";
-import { getTransactionByCardAndDate } from '../db/transaction'
-
 
 const HomeScreen = ({ navigation }) => {
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
@@ -30,8 +28,8 @@ const HomeScreen = ({ navigation }) => {
       ),
     })
   );
-  async function getScreenData(cardID) {
-    const data = await getCategoryByCard(cardID);
+  async function getScreenData(cardID,date) {
+    const data = await getCategoryByCardAndDate({card:cardID, date});
     setScreenData(data);
   }
 
@@ -42,8 +40,8 @@ const HomeScreen = ({ navigation }) => {
   const {id : cardID, money}  = useCardState();
   const cardData = useCardState();
   useEffect(()=>{
-    getScreenData(cardID)
-  }, [cardID])
+    getScreenData(cardID,date)
+  }, [cardID,date,money])
 
 
 
@@ -88,7 +86,7 @@ const HomeScreen = ({ navigation }) => {
       {/* first row */}
       {
       <ScrollView>
-        <Text>{JSON.stringify(screenData.color,null,2)}</Text>
+        <Text>{JSON.stringify(screenData.categories,null,2)}</Text>
       </ScrollView>
       }
       <View style={styles.flexBetween}>

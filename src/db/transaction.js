@@ -71,7 +71,7 @@ export const getTransactionByCardAndDate = async ({ card, date }) => {
     SELECT * FROM transactions
     WHERE card=? AND date=?
   `,
-      [date]
+      [card,date]
     );
     return rows._array;
   } catch (err) {
