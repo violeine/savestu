@@ -25,9 +25,9 @@ const CardCreateForm = () => {
   });
 
   const [cardError, setCardError] = useState({
-    name: "✘ This field can not be empty",
-    type: "✘ This field can not be empty",
-    money: "✘ This field can not be empty",
+    name: "✘ Empty",
+    type: "✘ Empty",
+    money: "✘ Empty",
     goal: "",
     note: "✓ Check",
   })
@@ -36,7 +36,7 @@ const CardCreateForm = () => {
     let err;
     // Kiểm tra input rỗng
     if (value.length == 0) {
-      err = '✘ This field can not be empty';
+      err = '✘ Empty';
 
       switch (type) {
         case 'name':
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
 
   input: {
     width: 300,
-    height: 45,
+    height: 40,
     marginTop: 15,
     marginBottom: 5,
   },

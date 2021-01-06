@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { View, StyleSheet, Text, ScrollView, Pressable } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import {Picker} from '@react-native-picker/picker'
-import {useNavigation} from '@react-navigation/native'
-import {
-  createTransaction,
-} from "../db/transaction";
-import {getCategory, getCategoryById} from '../db/category'
+import { Picker } from '@react-native-picker/picker'
+import { useNavigation } from '@react-navigation/native'
+import { createTransaction, } from "../db/transaction";
+import { getCategory, getCategoryById } from '../db/category'
 
 import {
   strRegex,
@@ -16,15 +14,18 @@ import {
   getEmoji
 } from '../services/formHelperFunction'
 
-import BtnAction from './BtnAction'
-import HeaderForm from './HeaderForm'
-import CalendarPickerModal from './CalendarPickerModal'
-import CardItem from './CardItem'
+import BtnAction from './BtnAction';
+import HeaderForm from './HeaderForm';
+import CalendarPickerModal from './CalendarPickerModal';
+import CardItem from './CardItem';
+import { formatDateDisplay } from '../services/DateFunctions'
 import { useCardState, useCardDispatch } from '../db';
 
-const TransactionCreateForm = ({transactionData}) => {
+
+
+const TransactionCreateForm = ({ transactionData }) => {
   const navigation = useNavigation()
-  const {type, cateId} = transactionData
+  const { type, cateId } = transactionData
   const globalCard = useCardState()
   const dispatch = useCardDispatch()
 
@@ -38,9 +39,9 @@ const TransactionCreateForm = ({transactionData}) => {
   });
 
   const [transactionError, setTransactionError] = useState({
-    category: "✘ This field can not be empty",
-    cash: "✘ This field can not be empty",
-    date: "✘ This field can not be empty",
+    category: "✘ Empty",
+    cash: "✘ Empty",
+    date: "✘ Empty",
     note: "✓ Check",
   })
 
@@ -62,7 +63,7 @@ const TransactionCreateForm = ({transactionData}) => {
     const data = await getCategoryById(cateId)
     setListCategoires([data]);
     setCategoryType(data.type)
-    setTransactionInput({...transactionInput, category: cateId, card : globalCard.id.toString()})
+    setTransactionInput({ ...transactionInput, category: cateId, card: globalCard.id.toString() })
     checkTransactionInfor('category', cateId)
   }
 
@@ -71,7 +72,7 @@ const TransactionCreateForm = ({transactionData}) => {
 
     // Kiểm tra input rỗng
     if (value.length == 0) {
-      err = '✘ This field can not be empty';
+      err = '✘ Empty';
 
       switch (type) {
         case 'cash':
@@ -104,7 +105,7 @@ const TransactionCreateForm = ({transactionData}) => {
       case 'type':
         setTransactionError({ ...transactionError, 'type': "✓ Check" });
         break;
-      case 'cash' :
+      case 'cash':
         err = !strRegex("money").test(value)
           ? "✘ Money must be number"
           : "✓ Check"
@@ -190,6 +191,46 @@ const TransactionCreateForm = ({transactionData}) => {
 
       <ScrollView style={styles.container}>
 
+        {/* Card */}
+        <View>
+          <View style={styles.cardPicker}>
+            {
+              globalCard
+                ? <CardItem el={globalCard} />
+                : null
+            }
+          </View>
+        </View>
+
+
+        {/* date */}
+        <View style={{ alignSelf: "center" }}>
+          <Pressable
+            onPress={() => setVisible(true)}
+            style={styles.datePicker}
+          >
+            <Text>
+              {
+                transactionInput.date
+                  ? formatDateDisplay(transactionInput.date)
+                  : 'Add date'
+              }
+            </Text>
+          </Pressable>
+
+          {
+            transactionError.date == ""
+              ? null
+              : <Text
+                style={[
+                  isCheckChangeColor(transactionError.date),
+                  { textAlign: "center" }
+                ]}>
+                {transactionError.date}
+              </Text>
+          }
+        </View>
+
         {/* Category picker */}
         <View>
           <View style={styles.picker}>
@@ -205,12 +246,12 @@ const TransactionCreateForm = ({transactionData}) => {
               <Picker.Item label="Pick Category" value="" />
               {
                 listCategories
-                ? listCategories.map( (e, i) => (
-                  e.id <= "3" ? 
-                  null
-                  :<Picker.Item label={getEmoji(e.name) + " " + e.name} value={e.id} key={e+i}/>
-                ))
-                : null
+                  ? listCategories.map((e, i) => (
+                    e.id <= "3" ?
+                      null
+                      : <Picker.Item label={getEmoji(e.name) + " " + e.name} value={e.id} key={e + i} />
+                  ))
+                  : null
               }
 
             </Picker>
@@ -220,34 +261,17 @@ const TransactionCreateForm = ({transactionData}) => {
             {
               transactionError.category == ""
                 ? null
-                : <Text style={isCheckChangeColor(transactionError.category)}>{transactionError.category}</Text>
+                : <Text
+                  style={[
+                    isCheckChangeColor(transactionError.category),
+                    { textAlign: "center" }
+                  ]}>
+                  {transactionError.category}
+                </Text>
             }
           </View>
         </View>
 
-        {/* Card */}
-        <View>
-          <View style={styles.cardPicker}>
-            {
-              globalCard
-                ? <CardItem el={globalCard}/>
-                : null
-            }
-          </View>
-        </View>
-
-        {/* Category type */}
-        <View style={{ alignItems: 'center' }}>
-          <TextInput
-            value={categoryType}
-            label='Type'
-            placeholder='Cate type'
-            mode='outlined'
-            style={styles.input}
-            theme={categoryType != '' ? theme : themeErr}
-            disabled={true}
-          />
-        </View>
 
         {/* Cash */}
         <View style={{ alignSelf: "center" }}>
@@ -274,6 +298,7 @@ const TransactionCreateForm = ({transactionData}) => {
           }
         </View>
 
+
         {/* Note    */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
@@ -298,33 +323,6 @@ const TransactionCreateForm = ({transactionData}) => {
           }
         </View>
 
-        {/* date */}
-        <View style={{ alignSelf: "center" }}>
-          <Pressable
-            onPress={() => setVisible(true)}
-            style={styles.datePicker}
-          >
-            <Text>
-              {
-                transactionInput.date
-                  ? transactionInput.date
-                  : 'Add date'
-              }
-            </Text>
-          </Pressable>
-
-          {
-            transactionError.date == ""
-              ? null
-              : <Text
-                style={[
-                  isCheckChangeColor(transactionError.date),
-                  { textAlign: "center" }
-                ]}>
-                {transactionError.date}
-              </Text>
-          }
-        </View>
 
         <CalendarPickerModal visible={visible}
           setTransactionInput={setTransactionInput}
@@ -349,15 +347,16 @@ const styles = StyleSheet.create({
 
   input: {
     width: 300,
-    height: 45,
+    height: 40,
     marginTop: 15,
     marginBottom: 5,
   },
 
   picker: {
-    width: 300,
-    height: 45,
-    marginVertical: 5,
+    width: 200,
+    height: 40,
+    marginTop: 15,
+    marginBottom: 5,
     alignSelf: "center",
     borderWidth: 1,
     borderRadius: 5,
@@ -372,15 +371,16 @@ const styles = StyleSheet.create({
   },
 
   cardPicker: {
-    width: 250,
+    width: 300,
     marginTop: 10,
     alignSelf: "center",
   },
 
   datePicker: {
-    width: 100,
+    width: 200,
     height: 40,
-    marginVertical: 10,
+    marginTop: 15,
+    marginBottom: 5,
     alignSelf: "center",
     flexDirection: "row",
     justifyContent: "center",
@@ -388,7 +388,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#999',
-    backgroundColor: '#f3f3f3',
   },
 });
 

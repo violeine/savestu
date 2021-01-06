@@ -40,7 +40,7 @@ const CardUpdateForm = ({ data }) => {
 
     // Kiểm tra input rỗng
     if (value.length == 0) {
-      err = '✘ This field can not be empty';
+      err = '✘ Empty';
 
       switch (type) {
         case 'name':
@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
 
   input: {
     width: 300,
-    height: 45,
+    height: 40,
     marginTop: 15,
     marginBottom: 5,
   },

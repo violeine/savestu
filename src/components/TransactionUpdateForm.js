@@ -7,9 +7,9 @@ import {
   deleteTransaction,
   updateTransaction
 } from "../db/transaction";
-import {getCategory, getCategoryById} from '../db/category'
-import {getCardById} from '../db/card'
-import {	
+import { getCategory, getCategoryById } from '../db/category'
+import { getCardById } from '../db/card'
+import {
   strRegex,
   capitalizeFirstLetter,
   isCheckChangeColor,
@@ -23,6 +23,9 @@ import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 import CalendarPickerModal from './CalendarPickerModal'
 import CardItem from './CardItem'
+import { formatDateDisplay } from '../services/DateFunctions'
+
+
 
 const TransactionUpdateForm = ({ data }) => {
   const navigation = useNavigation()
@@ -75,7 +78,7 @@ const TransactionUpdateForm = ({ data }) => {
 
     // Kiểm tra input rỗng
     if (value.length == 0) {
-      err = '✘ This field can not be empty';
+      err = '✘ Empty';
 
       switch (type) {
         case 'cash':
@@ -111,7 +114,7 @@ const TransactionUpdateForm = ({ data }) => {
       case 'type':
         setTransactionError({ ...transactionError, 'type': "✓ Check" });
         break;
-      case 'cash' :
+      case 'cash':
         err = !strRegex("money").test(value)
           ? "✘ Money must be number"
           : "✓ Check"
@@ -164,38 +167,31 @@ const TransactionUpdateForm = ({ data }) => {
   }
 
   const deleteAlert = () =>
-  Alert.alert(
-    "Warning",
-    'Do you want to delet this transaction',
-    [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: 'cancel',
-      },
-
-      {
-        text: "OK",
-        onPress: async () =>  {
-          console.log(await deleteTransaction(transactionInput.id))
-          console.log("OK Pressed") 
-          navigation.goBack()
-        }
-      },
-      {
-        text: "OK",
-        onPress: async () => {
-          console.log(await deleteTransaction(transactionInput.id))
-          console.log("OK Pressed"), navigation.goBack()
+    Alert.alert(
+      "Warning",
+      'Do you want to delet this transaction',
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: 'cancel',
         },
-      },
-    ]
-  );
+
+        {
+          text: "OK",
+          onPress: async () => {
+            console.log(await deleteTransaction(transactionInput.id))
+            console.log("OK Pressed")
+            navigation.goBack()
+          }
+        },
+      ]
+    );
 
   const beforeRender = async () => {
     getListCategories(data.category)
     getCardOfTran(data.card)
-    setTransactionInput({...data, cash : Math.abs(data.cash), card : data.card})
+    setTransactionInput({ ...data, cash: Math.abs(data.cash), card: data.card })
   }
 
   useEffect(() => {
@@ -227,6 +223,67 @@ const TransactionUpdateForm = ({ data }) => {
 
 
       <ScrollView style={styles.container}>
+
+
+        {/* Card */}
+        <View>
+          <View style={{ width: 250, alignSelf: 'center' }}>
+            {
+              card
+                ? <CardItem el={card} />
+                : null
+            }
+          </View>
+
+        </View>
+
+        {/* date */}
+        <View style={{ alignSelf: "center" }}>
+          <Pressable
+            onPress={() => setVisible(true)}
+            style={styles.datePicker}
+          >
+            <Text>
+              {
+                transactionInput.date
+                  ? formatDateDisplay(transactionInput.date)
+                  : 'Add date'
+              }
+            </Text>
+          </Pressable>
+
+          {
+            transactionError.date == ""
+              ? null
+              : <Text
+                style={[
+                  isCheckChangeColor(transactionError.date),
+                  { textAlign: "center" }
+                ]}>
+                {transactionError.date}
+              </Text>
+          }
+        </View>
+
+        {/* Category type */}
+        <View>
+          <View style={styles.picker}>
+            <Picker
+              selectedValue={categoryType}
+              onValueChange={(itemValue, listCategories) => {
+                updateListCategories(itemValue, listCategories)
+                setCategoryType(itemValue)
+              }
+              }
+              prompt='Select category type'
+            >
+              <Picker.Item label="Income" value="income" />
+              <Picker.Item label="Expense" value="expense" />
+            </Picker>
+          </View>
+        </View>
+
+
         {/* Category */}
         <View>
           <View style={styles.picker}>
@@ -242,12 +299,12 @@ const TransactionUpdateForm = ({ data }) => {
               <Picker.Item label="Pick Category" value="" />
               {
                 listCategories
-                ? listCategories.map( (e, i) => (
-                  e.id <= 3 ? 
-                  null
-                  :<Picker.Item label={getEmoji(e.name) + " " + e.name} value={e.id} key={e+i}/>
-                ))
-                : null
+                  ? listCategories.map((e, i) => (
+                    e.id <= 3 ?
+                      null
+                      : <Picker.Item label={getEmoji(e.name) + " " + e.name} value={e.id} key={e + i} />
+                  ))
+                  : null
               }
 
             </Picker>
@@ -257,39 +314,18 @@ const TransactionUpdateForm = ({ data }) => {
             {
               transactionError.category == ""
                 ? null
-                : <Text style={isCheckChangeColor(transactionError.category)}>{transactionError.category}</Text>
+                : <Text
+                  style={[
+                    isCheckChangeColor(transactionError.category),
+                    { textAlign: "center" }
+                  ]}
+                >
+                  {transactionError.category}
+                </Text>
             }
           </View>
         </View>
-        
-        {/* Card */}
-        <View>
-          <View style={{width : 250, alignSelf: 'center'}}>
-            {
-              card
-                ? <CardItem el={card}/>
-                : null
-            }
-          </View>
 
-        </View>
-        {/* Category type */}
-        <View>
-          <View style={styles.picker}>
-            <Picker
-              selectedValue={categoryType}
-              onValueChange={(itemValue, listCategories) => {
-                updateListCategories(itemValue, listCategories)
-                setCategoryType(itemValue)
-              }
-            }
-              prompt='Select category type'
-            >
-              <Picker.Item label="Income" value="income" />
-              <Picker.Item label="Expense" value="expense" />
-            </Picker>
-          </View>
-        </View>
 
         {/* Cash */}
         <View style={{ alignSelf: "center" }}>
@@ -316,6 +352,7 @@ const TransactionUpdateForm = ({ data }) => {
           }
         </View>
 
+
         {/* note */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
@@ -340,37 +377,14 @@ const TransactionUpdateForm = ({ data }) => {
           }
         </View>
 
-        {/* date */}
-        <View style={{ alignSelf: "center" }}>
-          <Pressable
-            onPress={() => setVisible(true)}
-            style={styles.datePicker}
-          >
-            <Text>
-              {
-                transactionInput.date
-                  ? transactionInput.date
-                  : 'Add date'
-              }
-            </Text>
-          </Pressable>
 
-          {
-            transactionError.date == ""
-              ? null
-              : <Text
-                style={[
-                  isCheckChangeColor(transactionError.date),
-                  { textAlign: "center" }
-                ]}>
-                {transactionError.date}
-              </Text>
-          }
-        </View>
+
+
 
         <View style={hideOnCreate('update')}>
           <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
         </View>
+
 
         <CalendarPickerModal visible={visible}
           setTransactionInput={setTransactionInput}
@@ -394,15 +408,16 @@ const styles = StyleSheet.create({
 
   input: {
     width: 300,
-    height: 45,
+    height: 40,
     marginTop: 15,
     marginBottom: 5,
   },
 
   picker: {
-    width: 300,
-    height: 45,
-    marginVertical: 5,
+    width: 200,
+    height: 40,
+    marginTop: 15,
+    marginBottom: 5,
     alignSelf: "center",
     borderWidth: 1,
     borderRadius: 5,
@@ -417,9 +432,10 @@ const styles = StyleSheet.create({
   },
 
   datePicker: {
-    width: 100,
+    width: 200,
     height: 40,
-    marginVertical: 10,
+    marginTop: 15,
+    marginBottom: 5,
     alignSelf: "center",
     flexDirection: "row",
     justifyContent: "center",
@@ -427,7 +443,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#999',
-    backgroundColor: '#f3f3f3',
   },
 });
 
