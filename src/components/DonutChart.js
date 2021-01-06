@@ -5,7 +5,6 @@ import Pie from 'react-native-pie-chart';
 
 import { TextMoney } from '../services/TextMoney';
 import { changMoneyColor } from '../services/ColorFunction';
-import { useScreens } from 'react-native-screens';
 
 
 

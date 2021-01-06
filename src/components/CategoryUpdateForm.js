@@ -16,7 +16,7 @@ import HeaderForm from './HeaderForm'
 import BtnAction from './BtnAction'
 import ColorPickerModal from './ColorPickerModal'
 
-const CategoryUpdateForm = ({data}) => {
+const CategoryUpdateForm = ({categoryId}) => {
 
   const [categoryInput, setCategoryInput] = useState({
     "name" : "",

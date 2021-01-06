@@ -13,7 +13,7 @@ const CalendarPickerModal = ({visible, hideCalendarPicker,transactionInput, setT
   return (
     <View style={styles.centeredView}>
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={visible}
       >

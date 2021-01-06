@@ -39,7 +39,7 @@ const AddButton = () => {
               icon: 'arrow-left-right',
               color: '#FFF',
               style: { backgroundColor: '#2da6f6' },
-              onPress: () => console.log('Pressed Transfer'),
+              onPress: () => navigation.navigate('Create', {type: 'tranfer'}),
             },
           ]}
           onStateChange={onStateChange}
