@@ -2,8 +2,8 @@ import React, { useState, useLayoutEffect, useEffect } from "react";
 import { View, StyleSheet, Text, TextInput, Button } from "react-native";
 
 import { useCardDispatch } from "../db";
-import { getCardById } from "../db/card";
-import {getAllCategory} from '../db/category'
+import { getCardById, getCard } from "../db/card";
+import { getAllCategory } from '../db/category'
 
 import CalendarModal from "../components/CalendarModal";
 import CardModal from "../components/CardModal";
@@ -11,7 +11,7 @@ import HeaderBarT from "../components/HeaderBarT";
 import AddButton from "../components/AddButton";
 import DonutChart from "../components/DonutChart";
 import CateItem from "../components/CateItem";
-import {getTransactionByCardAndDate} from '../db/transaction'
+import { getTransactionByCardAndDate } from '../db/transaction'
 
 
 
@@ -44,15 +44,15 @@ const HomeScreen = ({ navigation }) => {
 
 
   // FETCH
-  // const fetchTransDate = async () => {
-  //   const data = await getTransactionByDate('1/1/2020');
-  //   setTransDate(data);
-  // }
+  const getCardData = async () => {
+    const data = await getCardById(1);
+    setCardData(data);
+  }
 
 
-  // useEffect(() => {
-  //   fetchTransDate();
-  // }, [type,date]);
+  useEffect(() => {
+    getCardData()
+  }, []);
 
 
   // DEBUG

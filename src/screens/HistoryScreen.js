@@ -11,6 +11,7 @@ import CardModal from "../components/CardModal";
 import HeaderBarT from "../components/HeaderBarT";
 import TransItem from '../components/TransItem'
 import BtnAction from '../components/BtnAction';
+import AddButton from '../components/AddButton';
 
 
 
@@ -52,7 +53,7 @@ export default function HistoryScreen({ navigation }) {
 
 
   return (
-    <>
+    <View style={styles.container}>
 
       <View>
         <CalendarModal
@@ -83,7 +84,7 @@ export default function HistoryScreen({ navigation }) {
         </View>
       </View>
 
-      <ScrollView style={styles.container}>
+      <ScrollView>
 
         {
           transAll
@@ -100,7 +101,10 @@ export default function HistoryScreen({ navigation }) {
         <BtnAction title='Fetch Data All' type='primary' onPress={fetchDataAll} />
 
       </ScrollView>
-    </>
+
+      <AddButton />
+      
+    </View>
   )
 }
 

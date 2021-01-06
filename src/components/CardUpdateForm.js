@@ -4,10 +4,10 @@ import { TextInput } from 'react-native-paper'
 import {useNavigation} from '@react-navigation/native'
 import {useCardDispatch, useCardState} from '../db/index'
 import { updateCard, deleteCard } from '../db/card'
-import {	
+import {
   strRegex,
-	hideOnCreate,
-	capitalizeFirstLetter,
+  hideOnCreate,
+  capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck,
   hideOnUsing,
@@ -98,8 +98,8 @@ const CardUpdateForm = ({ data }) => {
   const handleUpdateBtn = async () => {
     let res = objectForUpdate(cardInput, data);
 
-    if (isCheck(cardError,"update",'card')) {
-      if (typeof res  === "object") {
+    if (isCheck(cardError, "update", 'card')) {
+      if (typeof res === "object") {
         try {
           let card =await updateCard(res);
           dispatch(card)
@@ -122,25 +122,25 @@ const CardUpdateForm = ({ data }) => {
   }
 
   const deleteAlert = () =>
-  Alert.alert(
-    "Warning",
-    'Do you want to delet this card',
-    [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: 'cancel',
-      },
-
-      {
-        text: "OK",
-        onPress: async () =>  {
-          console.log(await deleteCard(data.id))
-          console.log("OK Pressed"), navigation.goBack()
+    Alert.alert(
+      "Warning",
+      'Do you want to delet this card',
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: 'cancel',
         },
-      },
-    ]
-  );
+
+        {
+          text: "OK",
+          onPress: async () => {
+            console.log(await deleteCard(data.id))
+            console.log("OK Pressed"), navigation.goBack()
+          },
+        },
+      ]
+    );
 
   useEffect(() => {
     setCardInput({
@@ -212,6 +212,7 @@ const CardUpdateForm = ({ data }) => {
         {/* money */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
+            keyboardType={'numeric'}
             value={cardInput.money.toString()}
             label='Money (using)'
             placeholder='Input money'
@@ -271,7 +272,6 @@ const CardUpdateForm = ({ data }) => {
           }
         </View>
 
-        <BtnAction title={capitalizeFirstLetter('update') + ' Card'} type='primary' onPress={handleUpdateBtn}/>
         <View style={hideOnCreate('update')}>
           <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
         </View>

@@ -46,8 +46,8 @@ function capitalizeFirstLetter(string) {
 }
 
 function isCheckChangeColor(err) {
-	if (err == '✓ Check') return { width: 300, color: '#2cc197' };
-	else return { width: 300, color: 'red' };
+  if (err == '✓ Check') return { width: 300, color: '#2cc197'};
+  else return { width: 300, color: '#fb858e'};
 }
 
 function isCheck(err, type, obj) {
