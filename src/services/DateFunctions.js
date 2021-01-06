@@ -1,73 +1,37 @@
-import { format, addDays } from 'date-fns';
+import { format, addDays, addMonths,addYears } from 'date-fns';
 
 
-
-// Format 12/24/20 -> Thu, 24/12
-
-
-
-function formatDateDisplay(date) {
-
+function formatDateDisplay({date, type}) {
   // return về string
-  return format(new Date(date), 'eee, d/M');
+  const fm= {date: 'eee, d/M',
+             month: 'MMM yyyy',
+             year: 'yyyy'}
+  return format(new Date(date), fm[type]);
 }
 
-function formatDateDB(date) {
-
+function formatDateDB({date,type}) {
   // trả về kiểu dữ liệu new Date()
-  return format(date, 'MM/dd/yy');
-
+  if (type=="date") return {date: format(date, 'MM/dd/yy')}
+  if (type=="month") return {month: format(date, 'MM'),
+                             year: format(date, 'yy')}
+  if (type=="year") return {year:format(date, 'yy')}
 }
 
-function formatMonthDisplay() {
-
-}
-
-function formatYearDisplay() {
-
-}
 
 // Next, Prev
 
 // Trả về string format MM/DD/yy
-function nextDate(date, amount) {
-  return formatDateDB(
-    addDays(new Date(date), amount)
-  );
+function nextDate({date, type}, amount) {
+  if (type==="date") return {date:addDays(new Date(date), amount), type}
+  if (type==="month") return {date:addMonths(new Date(date), amount), type}
+  if (type==="year") return {date:addYears(new Date(date), amount), type}
 }
 
-
-function prevDate() {
-
-}
-
-function nextMonth() {
-
-}
-
-function prevMonth() {
-
-}
-
-function nextYear() {
-
-}
-
-function prevYear() {
-
-}
 
 
 
 export {
   formatDateDisplay,
-  formatMonthDisplay,
-  formatYearDisplay,
   formatDateDB,
   nextDate,
-  prevDate,
-  nextMonth,
-  prevMonth,
-  nextYear,
-  prevYear,
 }

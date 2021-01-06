@@ -3,8 +3,9 @@ import { View, StyleSheet, Text, ScrollView, Button } from "react-native";
 
 
 import { useCardDispatch,useCardState,useDateState } from "../db";
+import {formatDateDB} from "../services/DateFunctions"
 
-import {getCategoryByCard, getCategoryByCardAndDate} from '../db/category'
+import {getCategoryByCard, getCategoryByCardAndDate, getCategoryByCardAndMonth,getCategoryByCardAndYear} from '../db/category'
 
 import CalendarModal from "../components/CalendarModal";
 import CardModal from "../components/CardModal";
@@ -29,13 +30,27 @@ const HomeScreen = ({ navigation }) => {
     })
   );
   async function getScreenData(cardID,date) {
-    const data = await getCategoryByCardAndDate({card:cardID, date});
+    if (date.type === "date")
+    {const data = await getCategoryByCardAndDate({card:cardID,
+                                                  ...formatDateDB(date)})
     setScreenData(data);
+    }
+
+    if (date.type === "month")
+    {const data = await getCategoryByCardAndMonth({card:cardID,
+                                                  ...formatDateDB(date)});
+    setScreenData(data); }
+    if (date.type === "year")
+    {const data = await getCategoryByCardAndYear({card:cardID,
+                                                  ...formatDateDB(date)});
+    setScreenData(data); }
+    if (date.type === "all")
+    {const data = await getCategoryByCard(cardID);
+    setScreenData(data); }
   }
 
   // STATE
   const [screenData, setScreenData]=useState(null);
-  const dispatch = useCardDispatch();
   const date= useDateState();
   const {id : cardID, money}  = useCardState();
   const cardData = useCardState();
@@ -45,9 +60,6 @@ const HomeScreen = ({ navigation }) => {
 
 
 
-  // TEST DONUT CHART
-  const [seriesCateExpense, setSeriesCateExpense] = useState([80, 50, 60]);
-  const [sliceCateColor, setSliceCateColor] = useState(['#ff8000', '#18c20c', '#278CD9']);
 
   // const fetchTransDate = async () => {
     //   const data = await getTransactionByDate('1/1/2020');
@@ -80,13 +92,13 @@ const HomeScreen = ({ navigation }) => {
     hideCardModal={() => setCardModalVisible(false)}
     />
     </View>
-
     {screenData?
       <View style={styles.container}>
       {/* first row */}
       {
       <ScrollView>
-        <Text>{JSON.stringify(screenData.categories,null,2)}</Text>
+          <Text>{JSON.stringify({card:cardID,
+            ...date},null,2)}</Text>
       </ScrollView>
       }
       <View style={styles.flexBetween}>

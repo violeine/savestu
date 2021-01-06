@@ -1,14 +1,22 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Modal, Pressable } from 'react-native'
-
+import {useDateDispatch, useDateState} from '../db'
 import { LightenDarkenColor } from '../services/ColorFunction';
 
 const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
+  const date=useDateState();
+  const update=useDateDispatch();
 
+  function change(str){
+      return function () {
+          update({...date, type:str});
+          hideCalendarModal();
+      }
+  }
 
   return (
     <View style={styles.centeredView}>
-      <Modal  
+      <Modal
         animationType="fade"
         transparent={true}
         visible={visible}
@@ -21,7 +29,7 @@ const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
             {/* By day, week */}
             <View style={styles.modalChild}>
               <Pressable
-                onPress={hideCalendarModal}
+                onPress={change("date")}
                 style={({ pressed }) =>
                   [
                     {
@@ -30,11 +38,11 @@ const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
                     styles.modalChild2, styles.borderBottom, styles.borderRight,
                   ]}
               >
-                <Text style={{ fontWeight: "bold" }}>By Day</Text>
+                <Text style={{ fontWeight: "bold" }}>By Date</Text>
               </Pressable>
 
               <Pressable
-                onPress={hideCalendarModal}
+                onPress={change("month")}
                 style={({ pressed }) =>
                   [
                     {
@@ -43,7 +51,7 @@ const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
                     styles.modalChild2, styles.borderBottom,
                   ]}
               >
-                <Text style={{ fontWeight: "bold" }}>By Week</Text>
+                <Text style={{ fontWeight: "bold" }}>By Month</Text>
               </Pressable>
             </View>
 
@@ -51,7 +59,7 @@ const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
             {/* By month, year */}
             <View style={styles.modalChild}>
               <Pressable
-                onPress={hideCalendarModal}
+                onPress={change("year")}
                 style={({ pressed }) =>
                   [
                     {
@@ -60,11 +68,11 @@ const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
                     styles.modalChild2, styles.borderRight,
                   ]}
               >
-                <Text style={{ fontWeight: "bold" }}>By Month</Text>
+                <Text style={{ fontWeight: "bold" }}>By Year</Text>
               </Pressable>
 
               <Pressable
-                onPress={hideCalendarModal}
+                onPress={change("all")}
                 style={({ pressed }) =>
                   [
                     {
@@ -73,7 +81,7 @@ const CalendarModal = ({ visible, hideCalendarModal, showCalendarModal }) => {
                     styles.modalChild2,
                   ]}
               >
-                <Text style={{ fontWeight: "bold" }}>By Year</Text>
+                <Text style={{ fontWeight: "bold" }}>By All</Text>
               </Pressable>
             </View>
 

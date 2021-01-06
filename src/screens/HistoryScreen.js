@@ -5,7 +5,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import {showToastError} from '../services/formHelperFunction'
 
 import {useDateState, useCardState} from "../db"
-import { getTransactionByCardAndDate } from "../db/transaction"
+import { getTransactionByCardAndDate,getTransactionByCard,getTransactionByCardAndMonth, getTransactionByCardAndYear } from "../db/transaction"
+
+import {formatDateDB} from "../services/DateFunctions"
 
 import CalendarModal from "../components/CalendarModal";
 import CardModal from "../components/CardModal";
@@ -37,8 +39,23 @@ export default function HistoryScreen({ navigation }) {
   const [transAll, setTransAll] = useState(undefined);
   const [{id:cardID, money}, date]= [useCardState(), useDateState()];
   const fetchDataAll = async () => {
-    const data = await getTransactionByCardAndDate({card:cardID, date});
+    if (date.type === "date")
+    {const data = await getTransactionByCardAndDate({card:cardID,
+                                                  ...formatDateDB(date)})
     setTransAll(data);
+    }
+
+    if (date.type === "month")
+    {const data = await getTransactionByCardAndMonth({card:cardID,
+                                                  ...formatDateDB(date)});
+    setTransAll(data); }
+    if (date.type === "year")
+    {const data = await getTransactionByCardAndYear({card:cardID,
+                                                  ...formatDateDB(date)});
+    setTransAll(data); }
+    if (date.type === "all")
+    {const data = await getTransactionByCard(cardID);
+    setTransAll(data); }
   };
 
   const onLongPressTranItem = (id) => {

@@ -93,14 +93,15 @@ export const getCategoryByCardAndDate = async ({ card, date }) => {
 };
 
 export const getCategoryByCardAndMonth = async ({ card, month, year }) => {
-  month = (month % 13).toLocaleString("en-US", {
-    minimumIntegerDigits: 2,
-    useGrouping: false,
-  });
-  year = (year % 100).toLocaleString("en-US", {
-    minimumIntegerDigits: 2,
-    useGrouping: false,
-  });
+  // month = (month % 13).toLocaleString("en-US", {
+  //   minimumIntegerDigits: 2,
+  //   useGrouping: false,
+  // });
+  // year = (year % 100).toLocaleString("en-US", {
+  //   minimumIntegerDigits: 2,
+  //   useGrouping: false,
+  // });
+  console.log(month, year);
   try {
     const [, { rows }] = await execSql(
       `
@@ -112,7 +113,6 @@ export const getCategoryByCardAndMonth = async ({ card, month, year }) => {
         END) sum FROM categories c
       LEFT JOIN transactions t ON c.id = t.category
       GROUP BY c.id, c.name, c.color
-      ORDER BY sum DESC
     `,
       [card, month, year, card, month, year]
     );
@@ -144,10 +144,10 @@ export const getCategoryByCardAndMonth = async ({ card, month, year }) => {
 };
 
 export const getCategoryByCardAndYear = async ({ card, year }) => {
-  year = (year % 100).toLocaleString("en-US", {
-    minimumIntegerDigits: 2,
-    useGrouping: false,
-  });
+  // year = (year % 100).toLocaleString("en-US", {
+  //   minimumIntegerDigits: 2,
+  //   useGrouping: false,
+  // });
   try {
     const [, { rows }] = await execSql(
       `
@@ -159,7 +159,6 @@ export const getCategoryByCardAndYear = async ({ card, year }) => {
         END) sum FROM categories c
       LEFT JOIN transactions t ON c.id = t.category
       GROUP BY c.id, c.name, c.color
-      ORDER BY sum DESC
     `,
       [card, year, card, year]
     );

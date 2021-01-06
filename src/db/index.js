@@ -207,7 +207,9 @@ async function useInitDbHook() {
   if (finish) {
     const data = await getCard();
      dispatch(data[0]);
-     setDate(formatDateDB(new Date()));
+     setDate(
+       {date: new Date(),
+        type: "date"});
   }
 }
 

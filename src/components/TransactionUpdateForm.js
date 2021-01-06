@@ -253,7 +253,9 @@ const TransactionUpdateForm = ({ transactionId }) => {
             <Text>
               {
                 transactionInput.date
-                  ? formatDateDisplay(transactionInput.date)
+                  ? formatDateDisplay(
+                    { date: transactionInput.date,
+                      type:"date"})
                   : 'Add date'
               }
             </Text>
