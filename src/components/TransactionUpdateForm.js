@@ -18,13 +18,14 @@ import {
   hideOnCreate,
   getEmoji
 } from '../services/formHelperFunction'
-
+import {useCardDispatch} from "../db/index"
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 import CalendarPickerModal from './CalendarPickerModal'
 import CardItem from './CardItem'
 
 const TransactionUpdateForm = ({ data }) => {
+  const dispatch = useCardDispatch();
   const navigation = useNavigation()
   const [visible, setVisible] = useState(false)
   const [transactionInput, setTransactionInput] = useState({
@@ -142,8 +143,9 @@ const TransactionUpdateForm = ({ data }) => {
       console.log(res)
       if (typeof res === "object") {
         try {
-          console.log(await updateTransaction(res))
+          let data = await updateTransaction(res)
           //alert Create transaction success
+          dispatch(data);
           navigation.goBack()
         }
         catch {
@@ -177,17 +179,10 @@ const TransactionUpdateForm = ({ data }) => {
       {
         text: "OK",
         onPress: async () =>  {
-          console.log(await deleteTransaction(transactionInput.id))
-          console.log("OK Pressed") 
+          let data = await deleteTransaction(transactionInput.id)
+          dispatch(data);
           navigation.goBack()
         }
-      },
-      {
-        text: "OK",
-        onPress: async () => {
-          console.log(await deleteTransaction(transactionInput.id))
-          console.log("OK Pressed"), navigation.goBack()
-        },
       },
     ]
   );

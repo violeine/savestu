@@ -39,6 +39,13 @@ function HistoryStackScreen() {
         component={HistoryScreen}
       />
       <Stack.Screen
+        name="Create"
+        component={CreateScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="Update"
         component={UpdateScreen}
         options={{

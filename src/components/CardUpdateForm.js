@@ -124,7 +124,7 @@ const CardUpdateForm = ({ data }) => {
   const deleteAlert = () =>
     Alert.alert(
       "Warning",
-      'Do you want to delet this card',
+      'Do you want to delete this card',
       [
         {
           text: "Cancel",
@@ -135,8 +135,8 @@ const CardUpdateForm = ({ data }) => {
         {
           text: "OK",
           onPress: async () => {
-            console.log(await deleteCard(data.id))
-            console.log("OK Pressed"), navigation.goBack()
+            let card = await deleteCard(data.id)
+            navigation.navigate('Card', {cardId: card.id})
           },
         },
       ]
