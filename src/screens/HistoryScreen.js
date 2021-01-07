@@ -18,7 +18,7 @@ import AddButton from '../components/AddButton';
 
 
 
-export default function HistoryScreen({ navigation }) {
+export default function HistoryScreen({ navigation,route }) {
   // HEADER
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [cardModalVisible, setCardModalVisible] = useState(false);
@@ -37,8 +37,11 @@ export default function HistoryScreen({ navigation }) {
 
   // DATA
   const [transAll, setTransAll] = useState(undefined);
-  const [{id:cardID, money}, date]= [useCardState(), useDateState()];
-  const fetchDataAll = async () => {
+  const date=useDateState();
+  const card=useCardState();
+  const {id:cardID, money}=card;
+  const fetchDataAll = async (cardID,date) => {
+
     if (date.type === "date") {
       const data = await getTransactionByCardAndDate({
         card: cardID,
@@ -72,8 +75,8 @@ export default function HistoryScreen({ navigation }) {
   }
 
   useEffect(() => {
-    fetchDataAll();
-  }, [cardID, date,money])
+    fetchDataAll(cardID,date);
+  }, [cardID, date,money, card,route.params?.update])
 
   // console.log('\n===== HISTORY SCREEN =====\n');
   // console.log('---- data All -----\n', transAll);
@@ -117,8 +120,8 @@ export default function HistoryScreen({ navigation }) {
               el.category == 1
                 ? null
                 : el.category <= 3
-                ? <TransItem el={el} key={el.id} onLongPress={showToastError}/>
-                : <TransItem el={el} key={el.id} onLongPress={onLongPressTranItem}/>
+                ? <TransItem el={el} key={el} onLongPress={showToastError}/>
+                : <TransItem el={el} key={el} onLongPress={onLongPressTranItem}/>
             )
             : <Text style={[styles.centerItem, styles.txtNotify]}>You have no transaction</Text>
         }
