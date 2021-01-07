@@ -84,6 +84,21 @@ const defaultCategory = [
     color: "#ece800",
     type: "expense",
   },
+  {
+    name: "Salary",
+    color: "#3fd53a",
+    type: "income",
+  },
+  {
+    name: "Maintenance",
+    color: "#e0006c",
+    type: "income",
+  },
+  {
+    name: "Other Income",
+    color: "#13dfff",
+    type: "income",
+  },
 ];
 
 function initDb(setFinished) {
