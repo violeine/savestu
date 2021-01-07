@@ -39,27 +39,36 @@ export default function HistoryScreen({ navigation }) {
   const [transAll, setTransAll] = useState(undefined);
   const [{id:cardID, money}, date]= [useCardState(), useDateState()];
   const fetchDataAll = async () => {
-    if (date.type === "date")
-    {const data = await getTransactionByCardAndDate({card:cardID,
-                                                  ...formatDateDB(date)})
-    setTransAll(data);
+    if (date.type === "date") {
+      const data = await getTransactionByCardAndDate({
+        card: cardID,
+        ...formatDateDB(date)
+      })
+      setTransAll(data);
     }
 
-    if (date.type === "month")
-    {const data = await getTransactionByCardAndMonth({card:cardID,
-                                                  ...formatDateDB(date)});
-    setTransAll(data); }
-    if (date.type === "year")
-    {const data = await getTransactionByCardAndYear({card:cardID,
-                                                  ...formatDateDB(date)});
-    setTransAll(data); }
-    if (date.type === "all")
-    {const data = await getTransactionByCard(cardID);
-    setTransAll(data); }
+    if (date.type === "month") {
+      const data = await getTransactionByCardAndMonth({
+        card: cardID,
+        ...formatDateDB(date)
+      });
+      setTransAll(data);
+    }
+    if (date.type === "year") {
+      const data = await getTransactionByCardAndYear({
+        card: cardID,
+        ...formatDateDB(date)
+      });
+      setTransAll(data);
+    }
+    if (date.type === "all") {
+      const data = await getTransactionByCard(cardID);
+      setTransAll(data);
+    }
   };
 
   const onLongPressTranItem = (id) => {
-    navigation.navigate('Update', {type: "transaction", id : id })
+    navigation.navigate('Update', { type: "transaction", id: id })
   }
 
   useEffect(() => {
@@ -101,7 +110,7 @@ export default function HistoryScreen({ navigation }) {
           </Picker>
         </View>
     </View>
-      <ScrollView style={styles.container}>
+      <ScrollView>
         {
           transAll
             ? transAll.map(el =>
@@ -114,13 +123,9 @@ export default function HistoryScreen({ navigation }) {
             : <Text style={[styles.centerItem, styles.txtNotify]}>You have no transaction</Text>
         }
 
-    {// <BtnAction title='Fetch Data All' type='primary' onPress={fetchDataAll} />
-    }
-
       </ScrollView>
 
       <AddButton />
-
     </View>
   )
 }
@@ -129,6 +134,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fafafa',
+    paddingBottom: 100,
   },
 
   centerItem: {
@@ -142,12 +148,10 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingTop: 20,
     paddingBottom: 10,
-    backgroundColor: "#fafafa",
   },
 
   picker: {
     width: 170,
-    height: 40,
     marginLeft: 5,
     justifyContent: "center",
   },
