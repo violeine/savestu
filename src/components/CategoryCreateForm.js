@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
-import {View, StyleSheet, Text, ScrollView, Pressable} from 'react-native'
+import React, { useState } from 'react'
+import { View, StyleSheet, Text, ScrollView, Pressable } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import { Picker } from '@react-native-picker/picker'
 
-import { strRegex,
+import {
+  strRegex,
   capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck,
@@ -17,20 +18,20 @@ import {
 import HeaderForm from './HeaderForm'
 import BtnAction from './BtnAction'
 import ColorPickerModal from './ColorPickerModal'
-import {useNavigation} from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 
 const CategoryCreateForm = () => {
-  const navigation  = useNavigation()
+  const navigation = useNavigation()
   const [categoryInput, setCategoryInput] = useState({
-    "name" : "",
-    "color" : "#2cc197",
-    "type" : "",
+    "name": "",
+    "color": "#2cc197",
+    "type": "",
   })
 
   const [categoryError, setCategoryError] = useState({
-    "name" : "✘ This field can not be empty",
-    "color" : "✓ Check",
-    "type" : "✘ This field can not be empty"
+    "name": "✘ This field can not be empty",
+    "color": "✓ Check",
+    "type": "✘ This field can not be empty"
   })
 
   const [visible, setVisible] = useState(false)
@@ -50,7 +51,7 @@ const CategoryCreateForm = () => {
           break;
         default: break;
         case 'color':
-          setCategoryError({...categoryError, 'color' : err})
+          setCategoryError({ ...categoryError, 'color': err })
       }
       return;
     }
@@ -65,11 +66,11 @@ const CategoryCreateForm = () => {
         break
       case "type":
         err = "✓ Check"
-        setCategoryError({...categoryError, "type": err})
+        setCategoryError({ ...categoryError, "type": err })
         break
       case "type":
         err = "✓ Check"
-        setCategoryError({...categoryError, "color": err})
+        setCategoryError({ ...categoryError, "color": err })
         break
       default: break;
     }
@@ -108,7 +109,7 @@ const CategoryCreateForm = () => {
     }
   }
 
-  return(
+  return (
     <>
       <HeaderForm
         title={capitalizeFirstLetter('create') + ' Category'}
@@ -122,24 +123,31 @@ const CategoryCreateForm = () => {
             <Picker
               selectedValue={categoryInput.type}
               onValueChange={(itemValue) => {
-                  setCategoryInput({ ...categoryInput, type: itemValue })
-                  checkCategoryInfor('type',itemValue)
-                }
+                setCategoryInput({ ...categoryInput, type: itemValue })
+                checkCategoryInfor('type', itemValue)
+              }
               }
               prompt='Select Type'
             >
-              <Picker.Item label="Pick Type" value=""/>
-              <Picker.Item label={getEmoji("income") + "  Income"}value="income"/>
-              <Picker.Item label={getEmoji("expense") + "  Expense"} value="expense"/>
+              <Picker.Item label="Pick Type" value="" />
+              <Picker.Item label={getEmoji("income") + "  Income"} value="income" />
+              <Picker.Item label={getEmoji("expense") + "  Expense"} value="expense" />
 
             </Picker>
           </View>
-              
-          <View style={{alignSelf: "center"}}>
+
+          <View style={{ alignSelf: "center" }}>
             {
               categoryError.type == ""
                 ? null
-                : <Text style={isCheckChangeColor(categoryError.type)}>{categoryError.type}</Text>
+                : <Text
+                  style={[
+                    isCheckChangeColor(categoryError.type),
+                    { textAlign: "center" }
+                  ]}
+                >
+                  {categoryError.type}
+                </Text>
             }
           </View>
         </View>
@@ -166,25 +174,36 @@ const CategoryCreateForm = () => {
               : <Text style={isCheckChangeColor(categoryError.name)}>{categoryError.name}</Text>
           }
         </View>
-        
-        <View style={{alignSelf: "center", marginTop: 10}}>
-          
+
+        <View style={{ alignSelf: "center", marginTop: 10 }}>
+
           <Pressable
             onPress={() => setVisible(true)}
           >
-            <View style={{alignSelf: "center", height: 20, width:20, backgroundColor: categoryInput.color}}></View>
+            <View
+              style={[styles.colorPicker, { backgroundColor: categoryInput.color }]}></View>
           </Pressable>
           {
             categoryError.color == ""
               ? null
-              : <Text style={isCheckChangeColor(categoryError.color)}>{categoryError.color}</Text>
+              : <Text
+                style={[
+                  isCheckChangeColor(categoryError.color),
+                  { textAlign: "center" }
+                ]}>
+                {categoryError.color}
+              </Text>
           }
         </View>
 
-        
-        <BtnAction title={capitalizeFirstLetter('create') + ' category'} type='primary' onPress={handleCreateBtn}/>
 
-        <ColorPickerModal 
+        <BtnAction
+          title={capitalizeFirstLetter('create') + ' category'}
+          type='primary'
+          onPress={handleCreateBtn}
+        />
+
+        <ColorPickerModal
           visible={visible}
           hideModal={() => setVisible(false)}
           setCategoryInput={setCategoryInput}
@@ -192,7 +211,7 @@ const CategoryCreateForm = () => {
           setCategoryError={setCategoryError}
           categoryError={categoryError}
           checkCategoryInfor={checkCategoryInfor}
-        />   
+        />
       </ScrollView>
 
     </>
@@ -228,6 +247,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'space-evenly',
     marginVertical: 20,
+  },
+
+  colorPicker: {
+    alignSelf: "center",
+    width: 30,
+    height: 30,
+    marginTop: 15,
+    marginBottom: 5,
   },
 })
 
