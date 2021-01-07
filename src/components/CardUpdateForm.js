@@ -12,6 +12,7 @@ import {
   hideOnUsing,
   getEmoji,
   objectForUpdate} from '../services/formHelperFunction'
+import {NumberWithSpace, numberWithSpacetoNumber} from '../services/TextMoney'
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 
@@ -109,7 +110,7 @@ const CardUpdateForm = ({ cardId }) => {
       if (typeof res === "object") {
         try {
           let card =await updateCard(res);
-          navigation.navigate('Card', {cardId: card.id})
+          navigation.navigate('Card', {cardId: card})
         }
         catch {
           console.error()
@@ -144,7 +145,7 @@ const CardUpdateForm = ({ cardId }) => {
           onPress: async () => {
             let card = await deleteCard(cardTest.id)
             console.log(card)
-            navigation.navigate('Card', {cardId: card.id})
+            navigation.navigate('Card', {cardId: card})
           },
         },
       ]
@@ -219,7 +220,7 @@ const CardUpdateForm = ({ cardId }) => {
         <View style={{ alignSelf: "center" }}>
           <TextInput
             keyboardType={'numeric'}
-            value={cardInput.money.toString()}
+            value={NumberWithSpace(cardInput.money.toString())}
             label='Money (using)'
             placeholder='Input money'
             mode='outlined'
@@ -228,17 +229,17 @@ const CardUpdateForm = ({ cardId }) => {
             disabled={true}
           />
         </View>
-        
+
         {/* goal */}
         <View style={[{ alignSelf: "center" }, hideOnUsing(cardInput.type)]}>
           <TextInput
-            value={cardInput.goal.toString()}
+            value={NumberWithSpace(cardInput.goal.toString())}
             onChangeText={(t) => {
               setCardInput({
                 ...cardInput,
-                goal: t,
+                goal: numberWithSpacetoNumber(t),
               })
-              checkCardInfor("goal", t)
+              checkCardInfor("goal", numberWithSpacetoNumber(t))
             }}
             label='Goal (saving)'
             placeholder='Input goal'

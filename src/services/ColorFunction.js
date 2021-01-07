@@ -77,7 +77,7 @@ function changMoneyColor(money = 0) {
   )
 }
 
-function chooseIcon(cate, size = 20, color = '#000') {
+function chooseIcon(cate, size = 20, color = '#acacac') {
   switch (cate) {
     case 'Food': return (
       <MaterialCommunityIcons name="silverware-fork-knife" size={size} color={color} />
@@ -95,11 +95,11 @@ function chooseIcon(cate, size = 20, color = '#000') {
       <MaterialIcons name="local-cafe" size={size} color={color} />
     )
 
-    case 'Drinks': return (
-      <MaterialIcons name="local-cafe" size={size} color={color} />
+    case 'Deposit': return (
+      <MaterialIcons name="compare-arrows" size={size} color={color} />
     )
 
-    case 'Transferring': return (
+    case 'Withdrawal': return (
       <MaterialIcons name="compare-arrows" size={size} color={color} />
     )
 
@@ -123,7 +123,9 @@ function chooseIcon(cate, size = 20, color = '#000') {
       <MaterialCommunityIcons name="home-currency-usd" size={size} color={color} />
     )
 
-    default: return (null)
+    default: return (
+      <MaterialIcons name="attach-money" size={size} color={color} />
+    )
   }
 }
 

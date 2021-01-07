@@ -146,7 +146,7 @@ export default function DebugScreen() {
     console.log(
       await transferMoney({
         sendId: 2,
-        receiveId: 2,
+        receiveId: 1,
         money: 3200000,
         date: "03/01/19",
         note: "Rút tiền iđ sinh nhật",
@@ -825,6 +825,4 @@ export default function DebugScreen() {
       </View>
     </ScrollView>
   );
-};
-
-
+}

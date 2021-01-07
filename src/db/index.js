@@ -1,7 +1,7 @@
 import { createCard, getCard } from "./card";
 import { createCategory } from "./category";
 import React, { createContext, useState, useEffect, useContext } from "react";
-import {formatDateDB}  from '../services/DateFunctions'
+import { formatDateDB } from "../services/DateFunctions";
 import * as fs from "expo-file-system";
 import * as SQLite from "expo-sqlite";
 
@@ -30,12 +30,12 @@ const defaultCategory = [
     type: "income",
   },
   {
-    name: "Transfer (Deposit)",
+    name: "Deposit",
     color: "#01dfa3",
     type: "income",
   },
   {
-    name: "Transfer (Withdrawal)",
+    name: "Withdrawal",
     color: "#fe205c",
     type: "expense",
   },
@@ -83,6 +83,21 @@ const defaultCategory = [
     name: "Movie",
     color: "#ece800",
     type: "expense",
+  },
+  {
+    name: "Salary",
+    color: "#3fd53a",
+    type: "income",
+  },
+  {
+    name: "Maintenance",
+    color: "#e0006c",
+    type: "income",
+  },
+  {
+    name: "Other Income",
+    color: "#13dfff",
+    type: "income",
   },
 ];
 
@@ -145,7 +160,10 @@ function initDb(setFinished) {
          create trigger update_card_money_after_update_transaction after update on transactions
            begin
              update cards
-             set money = money - old.cash + new.cash
+             set money = money - old.cash
+             where id = old.card;
+             update cards
+             set money = money + new.cash
              where id = new.card;
            end;
        `);
@@ -206,8 +224,8 @@ async function useInitDbHook() {
   }, []);
   if (finish) {
     const data = await getCard();
-     dispatch(data[0]);
-     setDate(formatDateDB(new Date()));
+    dispatch(data[0]);
+    setDate({ date: new Date(), type: "date" });
   }
 }
 
@@ -245,7 +263,7 @@ const DateStateContext = createContext();
 const DateDispatchContext = createContext();
 
 function DateProvider({ children }) {
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState("");
   return (
     <DateStateContext.Provider value={date}>
       <DateDispatchContext.Provider value={setDate}>

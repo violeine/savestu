@@ -3,8 +3,9 @@ import { View, StyleSheet, Text, ScrollView, Button } from "react-native";
 
 
 import { useCardDispatch,useCardState,useDateState } from "../db";
+import {formatDateDB} from "../services/DateFunctions"
 
-import {getCategoryByCard} from '../db/category'
+import {getCategoryByCard, getCategoryByCardAndDate, getCategoryByCardAndMonth,getCategoryByCardAndYear} from '../db/category'
 
 import CalendarModal from "../components/CalendarModal";
 import CardModal from "../components/CardModal";
@@ -12,8 +13,6 @@ import HeaderBarT from "../components/HeaderBarT";
 import AddButton from "../components/AddButton";
 import DonutChart from "../components/DonutChart";
 import CateItem from "../components/CateItem";
-import { getTransactionByCardAndDate } from '../db/transaction'
-
 
 const HomeScreen = ({ navigation }) => {
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
@@ -30,26 +29,37 @@ const HomeScreen = ({ navigation }) => {
       ),
     })
   );
-  async function getScreenData(cardID) {
-    const data = await getCategoryByCard(cardID);
+  async function getScreenData(cardID,date) {
+    if (date.type === "date")
+    {const data = await getCategoryByCardAndDate({card:cardID,
+                                                  ...formatDateDB(date)})
     setScreenData(data);
+    }
+
+    if (date.type === "month")
+    {const data = await getCategoryByCardAndMonth({card:cardID,
+                                                  ...formatDateDB(date)});
+    setScreenData(data); }
+    if (date.type === "year")
+    {const data = await getCategoryByCardAndYear({card:cardID,
+                                                  ...formatDateDB(date)});
+    setScreenData(data); }
+    if (date.type === "all")
+    {const data = await getCategoryByCard(cardID);
+    setScreenData(data); }
   }
 
   // STATE
   const [screenData, setScreenData]=useState(null);
-  const dispatch = useCardDispatch();
   const date= useDateState();
   const {id : cardID, money}  = useCardState();
   const cardData = useCardState();
   useEffect(()=>{
-    getScreenData(cardID)
-  }, [cardID])
+    getScreenData(cardID,date)
+  }, [cardID,date,money])
 
 
 
-  // TEST DONUT CHART
-  const [seriesCateExpense, setSeriesCateExpense] = useState([80, 50, 60]);
-  const [sliceCateColor, setSliceCateColor] = useState(['#ff8000', '#18c20c', '#278CD9']);
 
   // const fetchTransDate = async () => {
     //   const data = await getTransactionByDate('1/1/2020');
@@ -82,19 +92,19 @@ const HomeScreen = ({ navigation }) => {
     hideCardModal={() => setCardModalVisible(false)}
     />
     </View>
-
     {screenData?
       <View style={styles.container}>
       {/* first row */}
       {
-      <ScrollView>
-        <Text>{JSON.stringify(screenData.color,null,2)}</Text>
-      </ScrollView>
+      // <ScrollView>
+      //     <Text>{JSON.stringify({card:cardID,
+      //       ...date},null,2)}</Text>
+      // </ScrollView>
       }
       <View style={styles.flexBetween}>
         {[1,2,3,4].map((el) => {
           const {id, name, color, sum} = screenData.categories[el];
-          return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+          return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
         })}
       </View>
 
@@ -103,7 +113,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.aside}>
       {[5,6].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
-        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
       </View>
 
@@ -112,7 +122,7 @@ const HomeScreen = ({ navigation }) => {
       <DonutChart
       card={cardData}
       series={screenData.sum.length>0 ? screenData.sum : [1]}
-      sliceColor={screenData.color.length>0?screenData.color:["#fac"]}
+      sliceColor={screenData.color.length>0?screenData.color:["#cacaca"]}
       income={screenData.income}
       expense={screenData.expense}
       />
@@ -122,7 +132,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.aside}>
       {[7,8].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
-        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
       </View>
       </View>
@@ -132,7 +142,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.flexBetween}>
       {[9,10,11].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
-        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
 
       <CateItem color='#000000' visible={false} />

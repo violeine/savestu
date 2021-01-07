@@ -41,7 +41,7 @@ export const getTransactionByCardAndYear = async ({ card, year }) => {
        SELECT * FROM transactions
        WHERE card=? AND date LIKE (SELECT '%/'||?)
       `,
-      [card, (year % 100).toString()]
+      [card, year]
     );
     return rows._array;
   } catch (err) {
@@ -56,7 +56,7 @@ export const getTransactionByCardAndMonth = async ({ card, month, year }) => {
     SELECT * FROM transactions
     WHERE card=? AND date LIKE (select ?||'/%/'||?)
   `,
-      [card, (month % 13).toString(), (year % 100).toString()]
+      [card, month, year]
     );
     return rows._array;
   } catch (err) {
@@ -71,7 +71,7 @@ export const getTransactionByCardAndDate = async ({ card, date }) => {
     SELECT * FROM transactions
     WHERE card=? AND date=?
   `,
-      [date]
+      [card,date]
     );
     return rows._array;
   } catch (err) {

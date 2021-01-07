@@ -18,17 +18,17 @@ import {
   objectForUpdate,
   getEmoji
 } from '../services/formHelperFunction'
-import {useCardDispatch} from "../db/index"
+import {useCardDispatch, useCardState} from "../db/index"
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 import CalendarPickerModal from './CalendarPickerModal'
 import CardItem from './CardItem'
 import { formatDateDisplay } from '../services/DateFunctions'
-
-
+import {NumberWithSpace, numberWithSpacetoNumber} from '../services/TextMoney'
 
 const TransactionUpdateForm = ({ transactionId }) => {
-  const dispatch = useCardDispatch();
+  const dispatch = useCardDispatch()
+  const globalCard = useCardState()
   const navigation = useNavigation()
   const [visible, setVisible] = useState(false)
   const [transactionInput, setTransactionInput] = useState({
@@ -160,7 +160,8 @@ const TransactionUpdateForm = ({ transactionId }) => {
         try {
           let data = await updateTransaction(res)
           //alert Create transaction success
-          dispatch(data);
+          dispatch({...globalCard, money: globalCard.money + 1})
+          dispatch({...globalCard, money: globalCard.money})
           navigation.goBack()
         }
         catch {
@@ -254,7 +255,9 @@ const TransactionUpdateForm = ({ transactionId }) => {
             <Text>
               {
                 transactionInput.date
-                  ? formatDateDisplay(transactionInput.date)
+                  ? formatDateDisplay(
+                    { date: transactionInput.date,
+                      type:"date"})
                   : 'Add date'
               }
             </Text>
@@ -336,13 +339,13 @@ const TransactionUpdateForm = ({ transactionId }) => {
         {/* Cash */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
-            value={transactionInput.cash.toString()}
+            value={NumberWithSpace(transactionInput.cash.toString())}
             onChangeText={(t) => {
               setTransactionInput({
                 ...transactionInput,
-                cash: t,
+                cash: numberWithSpacetoNumber(t),
               })
-              checkTransactionInfor("cash", t)
+              checkTransactionInfor("cash", numberWithSpacetoNumber(t))
             }}
             label='Cash'
             placeholder='Input cash'

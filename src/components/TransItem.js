@@ -51,7 +51,7 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
         </View>
 
         <Text style={styles.date}>
-          {formatDateDisplay(el.date)}
+      {formatDateDisplay({date:el.date, type:"date"})}
         </Text>
 
         <Text style={styles.note}>{el.note}</Text>

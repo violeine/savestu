@@ -84,13 +84,26 @@ function getEmoji(strName) {
 		"Groceries": "🛒",
 		"Movie": "🎞️",
 		"using": "💳",
-		"saving": "💰"
+		"saving": "💰",
+		"Salary": "💰",
+		"Maintenance": "💰",
 	}
-	return emojiObj[strName]
+	
+	if (emojiObj[strName]){
+		return emojiObj[strName]
+	}
+	else {
+		return "💰"
+	}
 }
 
 // input: Create, Update, card, transaction
 
+function showDot(str, strLength) {
+	if (str.length >= strLength) return (str.slice(4)+'... ')
+	else return str;
+}
+ 
 function showToastError() {
 	ToastAndroid.show("You can't update transfer", ToastAndroid.SHORT);
 }

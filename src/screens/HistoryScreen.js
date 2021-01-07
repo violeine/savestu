@@ -4,7 +4,10 @@ import { Picker } from '@react-native-picker/picker'
 import { FontAwesome } from "@expo/vector-icons";
 import {showToastError} from '../services/formHelperFunction'
 
-import { getTransactionByCard } from "../db/transaction"
+import {useDateState, useCardState} from "../db"
+import { getTransactionByCardAndDate,getTransactionByCard,getTransactionByCardAndMonth, getTransactionByCardAndYear } from "../db/transaction"
+
+import {formatDateDB} from "../services/DateFunctions"
 
 import CalendarModal from "../components/CalendarModal";
 import CardModal from "../components/CardModal";
@@ -34,10 +37,25 @@ export default function HistoryScreen({ navigation }) {
 
   // DATA
   const [transAll, setTransAll] = useState(undefined);
-
+  const [{id:cardID, money}, date]= [useCardState(), useDateState()];
   const fetchDataAll = async () => {
-    const data = await getTransactionByCard(1);
+    if (date.type === "date")
+    {const data = await getTransactionByCardAndDate({card:cardID,
+                                                  ...formatDateDB(date)})
     setTransAll(data);
+    }
+
+    if (date.type === "month")
+    {const data = await getTransactionByCardAndMonth({card:cardID,
+                                                  ...formatDateDB(date)});
+    setTransAll(data); }
+    if (date.type === "year")
+    {const data = await getTransactionByCardAndYear({card:cardID,
+                                                  ...formatDateDB(date)});
+    setTransAll(data); }
+    if (date.type === "all")
+    {const data = await getTransactionByCard(cardID);
+    setTransAll(data); }
   };
 
   const onLongPressTranItem = (id) => {
@@ -46,7 +64,7 @@ export default function HistoryScreen({ navigation }) {
 
   useEffect(() => {
     fetchDataAll();
-  }, [])
+  }, [cardID, date,money])
 
   // console.log('\n===== HISTORY SCREEN =====\n');
   // console.log('---- data All -----\n', transAll);
@@ -82,10 +100,8 @@ export default function HistoryScreen({ navigation }) {
             <Picker.Item label="By money" value="money" />
           </Picker>
         </View>
-      </View>
-
-      <ScrollView>
-
+    </View>
+      <ScrollView style={styles.container}>
         {
           transAll
             ? transAll.map(el =>
@@ -98,12 +114,13 @@ export default function HistoryScreen({ navigation }) {
             : <Text style={[styles.centerItem, styles.txtNotify]}>You have no transaction</Text>
         }
 
-        <BtnAction title='Fetch Data All' type='primary' onPress={fetchDataAll} />
+    {// <BtnAction title='Fetch Data All' type='primary' onPress={fetchDataAll} />
+    }
 
       </ScrollView>
 
       <AddButton />
-      
+
     </View>
   )
 }

@@ -21,7 +21,8 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
 
   // STATE
   const { money, name, id } = useCardState();
-  const curDate = useDateState();
+  const {type} = useDateState();
+  const dateObj = useDateState();
   const setCurDate= useDateDispatch();
 
   // useEffect(() => {
@@ -32,19 +33,17 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
   // FUNC ONPRESS
   //  -- Date --
   const onPressCurDate = () => {
-    setCurDate( formatDateDB(new Date()))
+    setCurDate(
+      {date: new Date(),
+      type})
   }
 
   const onPressNextDate = () => {
-    setCurDate(
-      nextDate(curDate, 1)
-    )
+    setCurDate(nextDate(dateObj,1))
   }
 
   const onPressPrevDate = () => {
-    setCurDate(
-      nextDate(curDate, -1)
-    )
+    setCurDate( nextDate(dateObj,-1))
   }
 
   // SHOW TOAST
@@ -70,7 +69,7 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
             ]}
         >
           <MaterialCommunityIcons name="calendar-today" size={24} color="#fff" />
-          <Text style={styles.text}> By date</Text>
+          <Text style={styles.text}> By {type}</Text>
         </Pressable>
 
         <Pressable
@@ -92,8 +91,52 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
 
 
       {/* Date controller */}
-      <View style={styles.dateContainer}>
-
+    <View style={styles.dateContainer}>
+    { dateObj&&type=="all" ?
+      <>
+      <Pressable
+          style={({ pressed }) =>
+            [
+              {
+                backgroundColor: pressed ? '#fbfbfb31' : 'transparent',
+              },
+              styles.controllerIcon,
+            ]
+          }
+        >
+          <FontAwesome5 name="less-than" size={12} color="#fff" />
+        </Pressable>
+      <Pressable
+          style={({ pressed }) =>
+            [
+              {
+                backgroundColor: pressed ? '#fbfbfb31' : 'transparent',
+              },
+              styles.textBigContainer,
+            ]
+          }
+        >
+          <Text style={styles.textBig}>
+            {
+                "all"
+            }
+          </Text>
+      </Pressable>
+      <Pressable
+          style={({ pressed }) =>
+            [
+              {
+                backgroundColor: pressed ? '#fbfbfb31' : 'transparent',
+              },
+              styles.controllerIcon,
+            ]
+          }
+        >
+          <FontAwesome5 name="greater-than" size={12} color="#fff" />
+        </Pressable>
+      </>
+      :
+      <>
         <Pressable
           onPress={onPressPrevDate}
           style={({ pressed }) =>
@@ -120,12 +163,9 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
             ]
           }
         >
-
           <Text style={styles.textBig}>
             {
-              curDate
-                ? formatDateDisplay(curDate)
-                : null
+              dateObj.date && type !="all"?  formatDateDisplay(dateObj):"all"
             }
           </Text>
         </Pressable>
@@ -144,7 +184,7 @@ const HeaderBarT = ({ showCalendarModal, showCardModal }) => {
         >
           <FontAwesome5 name="greater-than" size={12} color="#fff" />
         </Pressable>
-
+      </> }
       </View>
 
     </View >

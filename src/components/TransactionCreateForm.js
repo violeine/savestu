@@ -13,18 +13,18 @@ import {
   isCheck,
   getEmoji
 } from '../services/formHelperFunction'
+import {NumberWithSpace, numberWithSpacetoNumber} from '../services/TextMoney'
 
-import BtnAction from './BtnAction';
 import HeaderForm from './HeaderForm';
 import CalendarPickerModal from './CalendarPickerModal';
 import CardItem from './CardItem';
-import { formatDateDisplay } from '../services/DateFunctions'
+import { formatDateDisplay,formatDateDB } from '../services/DateFunctions'
 import { useCardState, useCardDispatch } from '../db';
 
 
 
 const TransactionCreateForm = ({ transactionData }) => {
-  const date = useDateState()
+  const {date} = useDateState()
   const navigation = useNavigation()
   const { type, cateId } = transactionData
   const globalCard = useCardState()
@@ -61,10 +61,10 @@ const TransactionCreateForm = ({ transactionData }) => {
   }
 
   const getOneCategory = async (cateId) => {
+    let _date = formatDateDB({date: date, type: 'date'})["date"]
     const data = await getCategoryById(cateId)
     setListCategoires([data]);
     setCategoryType(data.type)
-    setTransactionInput({ ...transactionInput, category: cateId, card: globalCard.id.toString() })
     checkTransactionInfor('category', cateId)
   }
 
@@ -135,12 +135,13 @@ const TransactionCreateForm = ({ transactionData }) => {
   const handleCreateBtn = async () => {
     if (isCheck(transactionError)) {
       try {
-        dispatch(await createTransaction(getTransactionCreate()))
+        let data = await createTransaction(getTransactionCreate())
+        dispatch(data)
         navigation.goBack()
         //alert Create transaction success
       }
       catch {
-
+        console.log(transactionError)
         console.error()
       }
 
@@ -153,15 +154,16 @@ const TransactionCreateForm = ({ transactionData }) => {
   }
 
   const beforeRender = () => {
+    let _date = formatDateDB({date: date, type: 'date'})["date"]
     if (cateId) {
       getOneCategory(cateId);
-      setTransactionInput({ ...transactionInput, card: globalCard.id.toString()})
+      setTransactionInput({ ...transactionInput, category: cateId, card: globalCard.id.toString(), date: _date })
     }
     else {
 
       updateListCategories(type)
       setCategoryType(type)
-      setTransactionInput({ ...transactionInput, card: globalCard.id.toString(), date : date })
+      setTransactionInput({ ...transactionInput, card: globalCard.id.toString(), date : _date })
     }
 
     setVisible(false)
@@ -217,8 +219,12 @@ const TransactionCreateForm = ({ transactionData }) => {
             <Text>
               {
                 transactionInput.date
-                  ? formatDateDisplay(transactionInput.date)
-                  : 'Add date'
+                  ? formatDateDisplay(
+                    {date: transactionInput.date,
+                      type:"date"})
+                  : formatDateDisplay(
+                    {date,
+                      type:"date"})
               }
             </Text>
           </Pressable>
@@ -280,13 +286,13 @@ const TransactionCreateForm = ({ transactionData }) => {
         {/* Cash */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
-            value={transactionInput.cash.toString()}
+            value={NumberWithSpace(transactionInput.cash.toString())}
             onChangeText={(t) => {
               setTransactionInput({
                 ...transactionInput,
-                cash: t,
+                cash: numberWithSpacetoNumber(t),
               })
-              checkTransactionInfor("cash", t)
+              checkTransactionInfor("cash", numberWithSpacetoNumber(t))
             }}
             label='Cash'
             placeholder='Input cash'
