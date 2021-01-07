@@ -30,12 +30,12 @@ const defaultCategory = [
     type: "income",
   },
   {
-    name: "Transfer (Deposit)",
+    name: "Deposit",
     color: "#01dfa3",
     type: "income",
   },
   {
-    name: "Transfer (Withdrawal)",
+    name: "Withdrawal",
     color: "#fe205c",
     type: "expense",
   },
