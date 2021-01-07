@@ -155,14 +155,12 @@ const TransactionUpdateForm = ({ transactionId }) => {
   const handleUpdateBtn = async () => {
     if (isCheck(transactionError)) {
       let res = objectForUpdate(getTransactionCreate(), tranTest)
-      console.log(res)
       if (typeof res === "object") {
         try {
           let data = await updateTransaction(res)
           //alert Create transaction success
-          dispatch({...globalCard, money: globalCard.money + 1})
-          dispatch({...globalCard, money: globalCard.money})
-          navigation.goBack()
+          dispatch(data)
+          navigation.navigate('History', {update:getTransactionCreate()});
         }
         catch {
           console.error()
@@ -170,8 +168,8 @@ const TransactionUpdateForm = ({ transactionId }) => {
       }
       else {
         //alert "Nothing to update"
-        console.log("No thing to update")
-        navigation.goBack()
+        console.log("No thing to update");
+        navigation.goBack();
       }
 
     }
@@ -386,7 +384,7 @@ const TransactionUpdateForm = ({ transactionId }) => {
           }
         </View>
 
-        <BtnAction title='Delete card' type='delete' 
+        <BtnAction title='Delete card' type='delete'
           onPress={isCheck(transactionError) ? deleteAlert : null}
         />
 

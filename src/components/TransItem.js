@@ -24,7 +24,7 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
   // Tự động lấy dữ liệu khi load screen lần đầu
   useEffect(() => {
     fetchDataCate();
-  }, [])
+  }, [el])
 
 
   // console.log('\n----- TRANS ITEM -------\n');
