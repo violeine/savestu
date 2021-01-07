@@ -60,12 +60,11 @@ const TransactionCreateForm = ({ transactionData }) => {
     setListCategoires(data)
   }
 
-  const getOneCategory = async (cateId) => {
-    let _date = formatDateDB({date: date, type: 'date'})["date"]
+  const getOneCategory = async (cateId, _date) => {
     const data = await getCategoryById(cateId)
-    setListCategoires([data]);
+    await setListCategoires([data])
+    setTransactionInput({ ...transactionInput, category: cateId, card: globalCard.id.toString(), date: _date })
     setCategoryType(data.type)
-    checkTransactionInfor('category', cateId)
   }
 
   const checkTransactionInfor = (type, value) => {
@@ -156,8 +155,7 @@ const TransactionCreateForm = ({ transactionData }) => {
   const beforeRender = () => {
     let _date = formatDateDB({date: date, type: 'date'})["date"]
     if (cateId) {
-      getOneCategory(cateId);
-      setTransactionInput({ ...transactionInput, category: cateId, card: globalCard.id.toString(), date: _date })
+      getOneCategory(cateId,_date)
     }
     else {
 
@@ -165,8 +163,6 @@ const TransactionCreateForm = ({ transactionData }) => {
       setCategoryType(type)
       setTransactionInput({ ...transactionInput, card: globalCard.id.toString(), date : _date })
     }
-
-    setVisible(false)
   }
 
   useEffect(() => {

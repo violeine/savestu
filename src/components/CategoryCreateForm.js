@@ -112,7 +112,7 @@ const CategoryCreateForm = () => {
     <>
       <HeaderForm
         title={capitalizeFirstLetter('create') + ' Category'}
-        onSubmit={() => console.log('text')}
+        onSubmit={handleCreateBtn}
       />
 
       <ScrollView style={styles.container}>
