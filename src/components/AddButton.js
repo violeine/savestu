@@ -25,21 +25,21 @@ const AddButton = () => {
               icon: 'plus',
               color: '#FFF',
               style: { backgroundColor: '#29e038' },
-              onPress: () => navigation.navigate('Create', {type: 'transaction', transactionData: {type : 'income'}}),
+              onPress: () => navigation.navigate('Create', { type: 'transaction', transactionData: { type: 'income' } }),
             },
             {
               label: 'Add Expense',
               icon: 'minus',
               color: '#FFF',
               style: { backgroundColor: '#f62d2d' },
-              onPress: () => navigation.navigate('Create', {type: 'transaction', transactionData: {type : 'expense'}}),
+              onPress: () => navigation.navigate('Create', { type: 'transaction', transactionData: { type: 'expense' } }),
             },
             {
               label: 'Transfer',
               icon: 'arrow-left-right',
               color: '#FFF',
               style: { backgroundColor: '#2da6f6' },
-              onPress: () => navigation.navigate('Create', {type: 'tranfer'}),
+              onPress: () => navigation.navigate('Create', { type: 'tranfer' }),
             },
           ]}
           onStateChange={onStateChange}

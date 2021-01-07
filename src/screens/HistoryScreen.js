@@ -41,29 +41,37 @@ export default function HistoryScreen({ navigation,route }) {
   const card=useCardState();
   const {id:cardID, money}=card;
   const fetchDataAll = async (cardID,date) => {
-    if (date.type === "date")
-    {var data = await getTransactionByCardAndDate({card:cardID,
-                                                  ...formatDateDB(date)})
 
+    if (date.type === "date") {
+      const data = await getTransactionByCardAndDate({
+        card: cardID,
+        ...formatDateDB(date)
+      })
+      setTransAll(data);
     }
 
-    if (date.type === "month")
-    {var data = await getTransactionByCardAndMonth({card:cardID,
-                                                  ...formatDateDB(date)});
-   }
-    if (date.type === "year")
-    {var data = await getTransactionByCardAndYear({card:cardID,
-                                                  ...formatDateDB(date)});
-    setTransAll(data); }
-    if (date.type === "all")
-    {var data = await getTransactionByCard(cardID);
+    if (date.type === "month") {
+      const data = await getTransactionByCardAndMonth({
+        card: cardID,
+        ...formatDateDB(date)
+      });
+      setTransAll(data);
     }
-    console.log(data);
-setTransAll(data);
+    if (date.type === "year") {
+      const data = await getTransactionByCardAndYear({
+        card: cardID,
+        ...formatDateDB(date)
+      });
+      setTransAll(data);
+    }
+    if (date.type === "all") {
+      const data = await getTransactionByCard(cardID);
+      setTransAll(data);
+    }
   };
 
   const onLongPressTranItem = (id) => {
-    navigation.navigate('Update', {type: "transaction", id : id })
+    navigation.navigate('Update', { type: "transaction", id: id })
   }
 
   useEffect(() => {
@@ -105,7 +113,7 @@ setTransAll(data);
           </Picker>
         </View>
     </View>
-      <ScrollView style={styles.container} >
+      <ScrollView>
         {
           transAll
             ? transAll.map(el =>
@@ -118,13 +126,9 @@ setTransAll(data);
             : <Text style={[styles.centerItem, styles.txtNotify]}>You have no transaction</Text>
         }
 
-    {// <BtnAction title='Fetch Data All' type='primary' onPress={fetchDataAll} />
-    }
-
       </ScrollView>
 
       <AddButton />
-
     </View>
   )
 }
@@ -133,6 +137,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fafafa',
+    paddingBottom: 100,
   },
 
   centerItem: {
@@ -146,12 +151,10 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingTop: 20,
     paddingBottom: 10,
-    backgroundColor: "#fafafa",
   },
 
   picker: {
     width: 170,
-    height: 40,
     marginLeft: 5,
     justifyContent: "center",
   },
