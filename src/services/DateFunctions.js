@@ -1,4 +1,4 @@
-import { format, addDays } from 'date-fns';
+import { format, addDays, formatISO } from 'date-fns';
 
 
 
@@ -17,6 +17,10 @@ function formatDateDB(date) {
   // trả về kiểu dữ liệu new Date()
   return format(date, 'MM/dd/yy');
 
+}
+
+function formartCalendarPicker(date) {
+  return formatISO(new Date(date),{ representation: 'date' })
 }
 
 function formatMonthDisplay() {
@@ -70,4 +74,5 @@ export {
   prevMonth,
   nextYear,
   prevYear,
+  formartCalendarPicker
 }

@@ -97,6 +97,7 @@ const CardCreateForm = () => {
   const setCardCreate = async () => {
     if (cardInput.type == 'using') {
       await setCardInput({ ...cardInput, goal: -1 })
+      checkCardInfor('goal', -1)
     }
     else {
       if (cardInput.money == "") await setCardInput({...cardInput, money: -1})
@@ -104,7 +105,7 @@ const CardCreateForm = () => {
   }
 
   const handleCreateBtn = async () => {
-    if (isCheck(cardError, "create", 'card')) {
+    if (isCheck(cardError,'card')) {
       try {
         setCardCreate()
         let card = await createCard(cardInput)

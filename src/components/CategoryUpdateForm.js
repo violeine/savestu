@@ -6,10 +6,13 @@ import { Picker } from '@react-native-picker/picker'
 import { strRegex,
   capitalizeFirstLetter,
   isCheckChangeColor,
-  isCheck
+  isCheck,
+  objectForUpdate
 } from '../services/formHelperFunction'
 import {
-  createCategory
+  updateCategory,
+  getCategoryByCard,
+  getCategoryById
 } from '../db/category'
 
 import HeaderForm from './HeaderForm'
@@ -20,7 +23,7 @@ const CategoryUpdateForm = ({categoryId}) => {
 
   const [categoryInput, setCategoryInput] = useState({
     "name" : "",
-    "color" : "#2cc197",
+    "color" : "",
     "type" : "",
   })
 
@@ -31,6 +34,11 @@ const CategoryUpdateForm = ({categoryId}) => {
   })
 
   const [visible, setVisible] = useState(false)
+
+  const setCateObj = async (id) => {
+    let cate = await getCategoryById(id)
+    setCategoryInput({...cate})
+  }
 
   const checkCategoryInfor = (type, value) => {
     let err;
@@ -73,10 +81,10 @@ const CategoryUpdateForm = ({categoryId}) => {
   }
 
   const handleCreateBtn = async () => {
-    if (isCheck(categoryError,"create", 'category')) {
+    if (isCheck(categoryError)) {
       try {
 
-        //console.log(await createCategory(categoryInput))
+        console.log(await updateCategory(categoryInput))
         console.log(categoryInput)
         // navigation.goBack()
       }
@@ -95,7 +103,7 @@ const CategoryUpdateForm = ({categoryId}) => {
   }
 
   useEffect(() => {
-    setCategoryInput({...data})
+    setCateObj(categoryId)
   },[])
 
   const theme = {

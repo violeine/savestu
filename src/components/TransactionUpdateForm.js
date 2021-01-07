@@ -16,7 +16,6 @@ import {
   isCheckChangeColor,
   isCheck,
   objectForUpdate,
-  hideOnCreate,
   getEmoji
 } from '../services/formHelperFunction'
 import {useCardDispatch} from "../db/index"
@@ -53,10 +52,12 @@ const TransactionUpdateForm = ({ transactionId }) => {
   const [listCategories, setListCategoires] = useState([])
   const [card, setCard] = useState(undefined)
   const [categoryType, setCategoryType] = useState("")
+  const [dateTran, setDateTran] = useState(undefined)
 
   const setTranObj = async (id) => {
     let data = await getTransactionById(id);
     getCardOfTran(data.card)
+    setDateTran(data.date)
     await getListCategories(data.category)
     setTransactionInput({...data, cash: Math.abs(data.cash), card: data.card });
     setTranTest(data)
@@ -152,7 +153,7 @@ const TransactionUpdateForm = ({ transactionId }) => {
   }
 
   const handleUpdateBtn = async () => {
-    if (isCheck(transactionError, "update", "transaction")) {
+    if (isCheck(transactionError)) {
       let res = objectForUpdate(getTransactionCreate(), tranTest)
       console.log(res)
       if (typeof res === "object") {
@@ -290,7 +291,6 @@ const TransactionUpdateForm = ({ transactionId }) => {
           </View>
         </View>
 
-
         {/* Category */}
         <View>
           <View style={styles.picker}>
@@ -332,7 +332,6 @@ const TransactionUpdateForm = ({ transactionId }) => {
             }
           </View>
         </View>
-
 
         {/* Cash */}
         <View style={{ alignSelf: "center" }}>
@@ -384,22 +383,22 @@ const TransactionUpdateForm = ({ transactionId }) => {
           }
         </View>
 
-
-
-
-
-        <View style={hideOnCreate('update')}>
-          <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
-        </View>
-
-
-        <CalendarPickerModal visible={visible}
-          setTransactionInput={setTransactionInput}
-          transactionInput={transactionInput}
-          hideCalendarPicker={() => setVisible(false)}
-          checkTransactionInfor={checkTransactionInfor}
-          transactionError={transactionError}
+        <BtnAction title='Delete card' type='delete' 
+          onPress={isCheck(transactionError) ? deleteAlert : null}
         />
+
+        {
+          dateTran ?
+            <CalendarPickerModal visible={visible}
+              dayUpdate={dateTran}
+              setTransactionInput={setTransactionInput}
+              transactionInput={transactionInput}
+              hideCalendarPicker={() => setVisible(false)}
+              checkTransactionInfor={checkTransactionInfor}
+              transactionError={transactionError}
+            />
+          : null
+        }
 
       </ScrollView>
     </>

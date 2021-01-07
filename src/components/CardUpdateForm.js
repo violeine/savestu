@@ -6,7 +6,6 @@ import {useCardDispatch, useCardState} from '../db/index'
 import { updateCard, deleteCard, getCardById } from '../db/card'
 import {
   strRegex,
-  hideOnCreate,
   capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck,
@@ -106,7 +105,7 @@ const CardUpdateForm = ({ cardId }) => {
   const handleUpdateBtn = async () => {
     let res = objectForUpdate(cardInput, cardTest);
 
-    if (isCheck(cardError, "update", 'card')) {
+    if (isCheck(cardError,'card')) {
       if (typeof res === "object") {
         try {
           let card =await updateCard(res);
@@ -279,9 +278,7 @@ const CardUpdateForm = ({ cardId }) => {
           }
         </View>
 
-        <View style={hideOnCreate('update')}>
-          <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
-        </View>
+        <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
 
       </ScrollView>
     </>

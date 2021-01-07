@@ -90,7 +90,7 @@ const TranferCreateForm = () => {
   }
 
   const handleCreateBtn = async () => {
-    if (isCheck(tranferError, "create", 'tranfer')) {
+    if (isCheck(tranferError)) {
       try {
         const data = await transferMoney(tranferInput)
         console.log(data)

@@ -5,7 +5,7 @@ import { Picker } from '@react-native-picker/picker'
 import { useNavigation } from '@react-navigation/native'
 import { createTransaction, } from "../db/transaction";
 import { getCategory, getCategoryById } from '../db/category'
-
+import {useDateState} from "../db/index"
 import {
   strRegex,
   capitalizeFirstLetter,
@@ -24,6 +24,7 @@ import { useCardState, useCardDispatch } from '../db';
 
 
 const TransactionCreateForm = ({ transactionData }) => {
+  const date = useDateState()
   const navigation = useNavigation()
   const { type, cateId } = transactionData
   const globalCard = useCardState()
@@ -41,7 +42,7 @@ const TransactionCreateForm = ({ transactionData }) => {
   const [transactionError, setTransactionError] = useState({
     category: "✘ Empty",
     cash: "✘ Empty",
-    date: "✘ Empty",
+    date: "✓ Check",
     note: "✓ Check",
   })
 
@@ -132,7 +133,7 @@ const TransactionCreateForm = ({ transactionData }) => {
   }
 
   const handleCreateBtn = async () => {
-    if (isCheck(transactionError, "create", 'transaction')) {
+    if (isCheck(transactionError)) {
       try {
         dispatch(await createTransaction(getTransactionCreate()))
         navigation.goBack()
@@ -154,13 +155,16 @@ const TransactionCreateForm = ({ transactionData }) => {
   const beforeRender = () => {
     if (cateId) {
       getOneCategory(cateId);
+      setTransactionInput({ ...transactionInput, card: globalCard.id.toString()})
     }
     else {
 
       updateListCategories(type)
       setCategoryType(type)
+      setTransactionInput({ ...transactionInput, card: globalCard.id.toString(), date : date })
     }
-    setTransactionInput({ ...transactionInput, card: globalCard.id.toString() })
+
+    setVisible(false)
   }
 
   useEffect(() => {
@@ -325,6 +329,7 @@ const TransactionCreateForm = ({ transactionData }) => {
 
 
         <CalendarPickerModal visible={visible}
+          dayUpdate={date}
           setTransactionInput={setTransactionInput}
           transactionInput={transactionInput}
           hideCalendarPicker={() => setVisible(false)}

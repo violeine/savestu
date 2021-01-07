@@ -1,15 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, Modal, Pressable } from 'react-native'
 import {Calendar} from 'react-native-calendars'
+import {formartCalendarPicker} from "../services/DateFunctions"
+const CalendarPickerModal = ({dayUpdate,visible, hideCalendarPicker,transactionInput, setTransactionInput, transactionError, checkTransactionInfor}) => {
 
-const CalendarPickerModal = ({visible, hideCalendarPicker,transactionInput, setTransactionInput, transactionError, checkTransactionInfor}) => {
   const [selectedDate, setSelectedDate] = useState("")
+
+
   const onDayPress = day => {
     setSelectedDate(day.dateString)
     setTransactionInput({...transactionInput, "date" : new Date(day.dateString).toLocaleDateString()})
     checkTransactionInfor('date',day)
     hideCalendarPicker()
   }
+
+  useEffect(() => {
+    setSelectedDate(formartCalendarPicker(dayUpdate))
+  }, [])
+
   return (
     <View style={styles.centeredView}>
       <Modal

@@ -16,7 +16,6 @@ import {
 import HeaderForm from './HeaderForm'
 import BtnAction from './BtnAction'
 import ColorPickerModal from './ColorPickerModal'
-import { set } from 'date-fns'
 
 const CategoryCreateForm = () => {
 
@@ -75,10 +74,10 @@ const CategoryCreateForm = () => {
   }
 
   const handleCreateBtn = async () => {
-    if (isCheck(categoryError,"create", 'category')) {
+    if (isCheck(categoryError)) {
       try {
 
-        //console.log(await createCategory(categoryInput))
+        console.log(await createCategory(categoryInput))
         console.log(categoryInput)
         // navigation.goBack()
       }
@@ -89,9 +88,6 @@ const CategoryCreateForm = () => {
     }
     else {
       //alert Something Error -> Check Error
-      console.log(categoryInput)
-
-      console.log(categoryError)
       console.log("Something Error -> Check Error")
     }
   }
