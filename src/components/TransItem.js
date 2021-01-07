@@ -7,7 +7,7 @@ import { getCategoryById } from '../db/category'
 import { TextMoney } from '../services/TextMoney';
 import { changMoneyColor, chooseIcon } from '../services/ColorFunction';
 import { formatDateDisplay } from '../services/DateFunctions';
-
+import {showDot} from '../services/formHelperFunction'
 
 
 
@@ -54,7 +54,7 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
       {formatDateDisplay({date:el.date, type:"date"})}
         </Text>
 
-        <Text style={styles.note}>{el.note}</Text>
+        <Text style={styles.note}>{showDot(el.note, 10)}</Text>
       </View>
 
 

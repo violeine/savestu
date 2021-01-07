@@ -3,7 +3,7 @@ import { Pressable, View, Text, StyleSheet, Image } from 'react-native';
 
 import { TextMoney } from '../services/TextMoney';
 import { changMoneyColor } from '../services/ColorFunction';
-
+import {showDot} from "../services/formHelperFunction"
 
 export default function CardItem({ el, onPress, onLongPress }) {
 
@@ -32,7 +32,7 @@ export default function CardItem({ el, onPress, onLongPress }) {
             style={styles.icon}
           />
 
-          <Text style={styles.name}>{el.name}</Text>
+          <Text style={styles.name}>{showDot(el.name,12)}</Text>
         </View>
 
         <View style={styles.rightSide}>

@@ -7,7 +7,7 @@ function TextMoney(money=0) {
 
 
 function NumberWithSpace(x) {
-  if (x != "") {
+  if (x !== "") {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   }
   else return ""

@@ -100,7 +100,7 @@ function getEmoji(strName) {
 // input: Create, Update, card, transaction
 
 function showDot(str, strLength) {
-	if (str.length >= strLength) return (str.slice(4)+'... ')
+	if (str.length >= strLength) return (str.slice(0,10)+'... ')
 	else return str;
 }
  
@@ -116,5 +116,6 @@ export {
 	objectForUpdate,
 	getEmoji,
 	showToastError,
-	hideOnUsing
+	hideOnUsing,
+	showDot
 }
