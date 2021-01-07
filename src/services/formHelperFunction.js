@@ -103,7 +103,8 @@ function getEmoji(strName) {
 		"Groceries": "🛒",
 		"Movie": "🎞️",
 		"using": "💳",
-		"saving": "💰"
+		"saving": "💰",
+		"": "👛",
 	}
 	return emojiObj[strName]
 }
