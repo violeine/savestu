@@ -52,10 +52,10 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
         </View>
 
         <Text style={styles.date}>
-      {formatDateDisplay({date:el.date, type:"date"})}
+          {formatDateDisplay({ date: el.date, type: "date" })}
         </Text>
 
-        <Text style={styles.note}>{showDot(el.note, 10)}</Text>
+        <Text style={styles.note}>{showDot(el.note, 23)}</Text>
       </View>
 
 
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
   },
 
   date: {
-    width: 70,
-    marginLeft: 10,
+    width: 65,
+    marginLeft: 5,
     fontSize: 13,
     fontStyle: "italic",
     // backgroundColor: 'lightcoral',
@@ -103,11 +103,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: '#333',
-
+    // backgroundColor: 'lightblue',
   },
 
   money: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
   },
 });

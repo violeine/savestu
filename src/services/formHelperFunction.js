@@ -29,7 +29,7 @@ const strRegex = (type) => {
 
 
 function hideOnUsing(type) {
-	return type == 'using' ? {display : 'none'} : null
+	return type == 'using' ? { display: 'none' } : null
 }
 
 function capitalizeFirstLetter(string) {
@@ -37,8 +37,8 @@ function capitalizeFirstLetter(string) {
 }
 
 function isCheckChangeColor(err) {
-  if (err == '✓ Check') return { width: 300, color: '#2cc197'};
-  else return { width: 300, color: '#fb858e'};
+	if (err == '✓ Check') return { width: 300, color: '#2cc197' };
+	else return { width: 300, color: '#fb858e' };
 }
 
 function isCheck(err, obj) {
@@ -88,8 +88,8 @@ function getEmoji(strName) {
 		"Salary": "💰",
 		"Maintenance": "💰",
 	}
-	
-	if (emojiObj[strName]){
+
+	if (emojiObj[strName]) {
 		return emojiObj[strName]
 	}
 	else {
@@ -100,10 +100,10 @@ function getEmoji(strName) {
 // input: Create, Update, card, transaction
 
 function showDot(str, strLength) {
-	if (str.length >= strLength) return (str.slice(0,10)+'... ')
+	if (str.length > strLength) return (str.slice(0, strLength) + '... ')
 	else return str;
 }
- 
+
 function showToastError() {
 	ToastAndroid.show("You can't update transfer", ToastAndroid.SHORT);
 }
