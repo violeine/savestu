@@ -10,14 +10,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#2cc197"
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.NhomMobile.SaveStu",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.NhomMobile.SaveStu",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
