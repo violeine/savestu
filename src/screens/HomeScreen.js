@@ -102,7 +102,7 @@ const HomeScreen = ({ navigation }) => {
       // </ScrollView>
       }
       <View style={styles.flexBetween}>
-        {[1,2,3,4].map((el) => {
+        {[3,4,5,6].map((el) => {
           const {id, name, color, sum} = screenData.categories[el];
           return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
         })}
@@ -111,7 +111,7 @@ const HomeScreen = ({ navigation }) => {
       {/* second row */}
       <View style={styles.flexBetween}>
       <View style={styles.aside}>
-      {[5,6].map((el) => {
+      {[7,8].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
         return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
@@ -130,7 +130,7 @@ const HomeScreen = ({ navigation }) => {
 
 
       <View style={styles.aside}>
-      {[7,8].map((el) => {
+      {[9,10].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
         return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
@@ -140,12 +140,11 @@ const HomeScreen = ({ navigation }) => {
 
       {/* third round */}
       <View style={styles.flexBetween}>
-      {[9,10,11].map((el) => {
+      {[11,12,13,14].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
         return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
 
-      <CateItem color='#000000' visible={false} />
       </View>
 
       <AddButton />
