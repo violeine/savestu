@@ -27,15 +27,6 @@ const strRegex = (type) => {
 	return result;
 }
 
-function hideOnUpdate(type) {
-	if (type == 'update')
-		return { display: 'none' }
-}
-
-function hideOnCreate(type) {
-	if (type == 'create')
-		return { display: 'none' }
-}
 
 function hideOnUsing(type) {
 	return type == 'using' ? {display : 'none'} : null
@@ -50,23 +41,13 @@ function isCheckChangeColor(err) {
   else return { width: 300, color: '#fb858e'};
 }
 
-function isCheck(err, type, obj) {
+function isCheck(err, obj) {
 	if (obj == 'card') {
 		for (let attr in err) {
 			if (err[attr] !== "✓ Check" && err[attr] !== "") return false;
 		}
 	}
-	else if (obj == 'transaction') {
-		for (let attr in err) {
-			if (err[attr] !== "✓ Check") return false
-		}
-	}
-	else if (obj == 'category') {
-		for (let attr in err) {
-			if (err[attr] !== "✓ Check") return false
-		}
-	}
-	else if (obj == 'tranfer') {
+	else {
 		for (let attr in err) {
 			if (err[attr] !== "✓ Check") return false
 		}
@@ -117,24 +98,23 @@ function getEmoji(strName) {
 }
 
 // input: Create, Update, card, transaction
-function showToastSuccess(action, obj) {
-	ToastAndroid.show(`${capitalizeFirstLetter(action)} ${obj} successfully`, ToastAndroid.SHORT);
-}
 
+function showDot(str, strLength) {
+	if (str.length >= strLength) return (str.slice(4)+'... ')
+	else return str;
+}
+ 
 function showToastError() {
 	ToastAndroid.show("You can't update transfer", ToastAndroid.SHORT);
 }
 
 export {
 	strRegex,
-	hideOnCreate,
-	hideOnUpdate,
 	capitalizeFirstLetter,
 	isCheckChangeColor,
 	isCheck,
 	objectForUpdate,
 	getEmoji,
 	showToastError,
-	showToastSuccess,
 	hideOnUsing
 }

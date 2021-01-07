@@ -12,6 +12,7 @@ import {
   isCheck,
   getEmoji
 } from '../services/formHelperFunction'
+import {NumberWithSpace, numberWithSpacetoNumber} from '../services/TextMoney'
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 import CardItem from './CardItem'
@@ -90,7 +91,7 @@ const TranferCreateForm = () => {
   }
 
   const handleCreateBtn = async () => {
-    if (isCheck(tranferError, "create", 'tranfer')) {
+    if (isCheck(tranferError)) {
       try {
         const data = await transferMoney(tranferInput)
         console.log(data)
@@ -221,13 +222,13 @@ const TranferCreateForm = () => {
         {/* money */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
-            value={tranferInput.money.toString()}
+            value={NumberWithSpace(tranferInput.money.toString())}
             onChangeText={(t) => {
               setTranferInput({
                 ...tranferInput,
-                money: t,
+                money: numberWithSpacetoNumber(t),
               })
-              checkTranferInfor("money", t)
+              checkTranferInfor("money", numberWithSpacetoNumber(t))
             }}
             label='Money (using)'
             placeholder='Input money'

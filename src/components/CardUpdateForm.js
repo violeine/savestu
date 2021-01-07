@@ -6,13 +6,13 @@ import {useCardDispatch, useCardState} from '../db/index'
 import { updateCard, deleteCard, getCardById } from '../db/card'
 import {
   strRegex,
-  hideOnCreate,
   capitalizeFirstLetter,
   isCheckChangeColor,
   isCheck,
   hideOnUsing,
   getEmoji,
   objectForUpdate} from '../services/formHelperFunction'
+import {NumberWithSpace, numberWithSpacetoNumber} from '../services/TextMoney'
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 
@@ -106,7 +106,7 @@ const CardUpdateForm = ({ cardId }) => {
   const handleUpdateBtn = async () => {
     let res = objectForUpdate(cardInput, cardTest);
 
-    if (isCheck(cardError, "update", 'card')) {
+    if (isCheck(cardError,'card')) {
       if (typeof res === "object") {
         try {
           let card =await updateCard(res);
@@ -220,7 +220,7 @@ const CardUpdateForm = ({ cardId }) => {
         <View style={{ alignSelf: "center" }}>
           <TextInput
             keyboardType={'numeric'}
-            value={cardInput.money.toString()}
+            value={NumberWithSpace(cardInput.money.toString())}
             label='Money (using)'
             placeholder='Input money'
             mode='outlined'
@@ -233,13 +233,13 @@ const CardUpdateForm = ({ cardId }) => {
         {/* goal */}
         <View style={[{ alignSelf: "center" }, hideOnUsing(cardInput.type)]}>
           <TextInput
-            value={cardInput.goal.toString()}
+            value={NumberWithSpace(cardInput.goal.toString())}
             onChangeText={(t) => {
               setCardInput({
                 ...cardInput,
-                goal: t,
+                goal: numberWithSpacetoNumber(t),
               })
-              checkCardInfor("goal", t)
+              checkCardInfor("goal", numberWithSpacetoNumber(t))
             }}
             label='Goal (saving)'
             placeholder='Input goal'
@@ -279,9 +279,7 @@ const CardUpdateForm = ({ cardId }) => {
           }
         </View>
 
-        <View style={hideOnCreate('update')}>
-          <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
-        </View>
+        <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
 
       </ScrollView>
     </>

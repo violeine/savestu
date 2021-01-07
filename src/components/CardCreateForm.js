@@ -10,6 +10,7 @@ import {
   isCheckChangeColor,
   isCheck
 } from '../services/formHelperFunction'
+import {NumberWithSpace, numberWithSpacetoNumber} from '../services/TextMoney'
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 
@@ -97,6 +98,7 @@ const CardCreateForm = () => {
   const setCardCreate = async () => {
     if (cardInput.type == 'using') {
       await setCardInput({ ...cardInput, goal: -1 })
+      checkCardInfor('goal', -1)
     }
     else {
       if (cardInput.money == "") await setCardInput({...cardInput, money: -1})
@@ -104,7 +106,7 @@ const CardCreateForm = () => {
   }
 
   const handleCreateBtn = async () => {
-    if (isCheck(cardError, "create", 'card')) {
+    if (isCheck(cardError,'card')) {
       try {
         setCardCreate()
         let card = await createCard(cardInput)
@@ -209,13 +211,13 @@ const CardCreateForm = () => {
         {/* money */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
-            value={cardInput.money.toString()}
+            value={NumberWithSpace(cardInput.money.toString())}
             onChangeText={(t) => {
               setCardInput({
                 ...cardInput,
-                money: t,
+                money: numberWithSpacetoNumber(t),
               })
-              checkCardInfor("money", t)
+              checkCardInfor("money", numberWithSpacetoNumber(t))
             }}
             label='Money (using)'
             placeholder='Input money'
@@ -234,13 +236,13 @@ const CardCreateForm = () => {
         {/* goal */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
-            value={cardInput.goal.toString()}
+            value={NumberWithSpace(cardInput.goal.toString())}
             onChangeText={(t) => {
               setCardInput({
                 ...cardInput,
-                goal: t,
+                goal: numberWithSpacetoNumber(t),
               })
-              checkCardInfor("goal", t)
+              checkCardInfor("goal", numberWithSpacetoNumber(t))
             }}
             label='Goal (saving)'
             placeholder='Input goal'

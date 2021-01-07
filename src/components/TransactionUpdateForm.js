@@ -16,20 +16,19 @@ import {
   isCheckChangeColor,
   isCheck,
   objectForUpdate,
-  hideOnCreate,
   getEmoji
 } from '../services/formHelperFunction'
-import {useCardDispatch} from "../db/index"
+import {useCardDispatch, useCardState} from "../db/index"
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 import CalendarPickerModal from './CalendarPickerModal'
 import CardItem from './CardItem'
 import { formatDateDisplay } from '../services/DateFunctions'
-
-
+import {NumberWithSpace, numberWithSpacetoNumber} from '../services/TextMoney'
 
 const TransactionUpdateForm = ({ transactionId }) => {
-  const dispatch = useCardDispatch();
+  const dispatch = useCardDispatch()
+  const globalCard = useCardState()
   const navigation = useNavigation()
   const [visible, setVisible] = useState(false)
   const [transactionInput, setTransactionInput] = useState({
@@ -53,10 +52,12 @@ const TransactionUpdateForm = ({ transactionId }) => {
   const [listCategories, setListCategoires] = useState([])
   const [card, setCard] = useState(undefined)
   const [categoryType, setCategoryType] = useState("")
+  const [dateTran, setDateTran] = useState(undefined)
 
   const setTranObj = async (id) => {
     let data = await getTransactionById(id);
     getCardOfTran(data.card)
+    setDateTran(data.date)
     await getListCategories(data.category)
     setTransactionInput({...data, cash: Math.abs(data.cash), card: data.card });
     setTranTest(data)
@@ -152,14 +153,15 @@ const TransactionUpdateForm = ({ transactionId }) => {
   }
 
   const handleUpdateBtn = async () => {
-    if (isCheck(transactionError, "update", "transaction")) {
+    if (isCheck(transactionError)) {
       let res = objectForUpdate(getTransactionCreate(), tranTest)
       console.log(res)
       if (typeof res === "object") {
         try {
           let data = await updateTransaction(res)
           //alert Create transaction success
-          dispatch(data);
+          dispatch({...globalCard, money: globalCard.money + 1})
+          dispatch({...globalCard, money: globalCard.money})
           navigation.goBack()
         }
         catch {
@@ -292,7 +294,6 @@ const TransactionUpdateForm = ({ transactionId }) => {
           </View>
         </View>
 
-
         {/* Category */}
         <View>
           <View style={styles.picker}>
@@ -335,17 +336,16 @@ const TransactionUpdateForm = ({ transactionId }) => {
           </View>
         </View>
 
-
         {/* Cash */}
         <View style={{ alignSelf: "center" }}>
           <TextInput
-            value={transactionInput.cash.toString()}
+            value={NumberWithSpace(transactionInput.cash.toString())}
             onChangeText={(t) => {
               setTransactionInput({
                 ...transactionInput,
-                cash: t,
+                cash: numberWithSpacetoNumber(t),
               })
-              checkTransactionInfor("cash", t)
+              checkTransactionInfor("cash", numberWithSpacetoNumber(t))
             }}
             label='Cash'
             placeholder='Input cash'
@@ -386,22 +386,22 @@ const TransactionUpdateForm = ({ transactionId }) => {
           }
         </View>
 
-
-
-
-
-        <View style={hideOnCreate('update')}>
-          <BtnAction title='Delete card' type='delete' onPress={deleteAlert} />
-        </View>
-
-
-        <CalendarPickerModal visible={visible}
-          setTransactionInput={setTransactionInput}
-          transactionInput={transactionInput}
-          hideCalendarPicker={() => setVisible(false)}
-          checkTransactionInfor={checkTransactionInfor}
-          transactionError={transactionError}
+        <BtnAction title='Delete card' type='delete' 
+          onPress={isCheck(transactionError) ? deleteAlert : null}
         />
+
+        {
+          dateTran ?
+            <CalendarPickerModal visible={visible}
+              dayUpdate={dateTran}
+              setTransactionInput={setTransactionInput}
+              transactionInput={transactionInput}
+              hideCalendarPicker={() => setVisible(false)}
+              checkTransactionInfor={checkTransactionInfor}
+              transactionError={transactionError}
+            />
+          : null
+        }
 
       </ScrollView>
     </>

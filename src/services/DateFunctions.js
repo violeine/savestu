@@ -1,4 +1,4 @@
-import { format, addDays, addMonths,addYears } from 'date-fns';
+import { format, addDays, addMonths,addYears,formatISO } from 'date-fns';
 
 
 function formatDateDisplay({date, type}) {
@@ -17,6 +17,9 @@ function formatDateDB({date,type}) {
   if (type=="year") return {year:format(date, 'yy')}
 }
 
+function formartCalendarPicker(date) {
+  return formatISO(new Date(date),{ representation: 'date' })
+}
 
 // Next, Prev
 
@@ -34,4 +37,5 @@ export {
   formatDateDisplay,
   formatDateDB,
   nextDate,
+  formartCalendarPicker
 }

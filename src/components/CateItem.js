@@ -6,7 +6,7 @@ import { LightenDarkenColor, chooseIcon } from '../services/ColorFunction';
 import { TextMoney } from '../services/TextMoney';
 
 
-export default function CateItem({ color, cate, money = 0, visible = true }) {
+export default function CateItem({ id, color, cate, money = 0, visible = true }) {
 
   //Làm mờ màu nếu money=0
   color = money ? color : color + '40';
@@ -17,7 +17,7 @@ export default function CateItem({ color, cate, money = 0, visible = true }) {
 
   const onPressCateItem = () => {
 
-    navigation.navigate('Create',{type : 'transaction',transactionData:{ cateId: 1}})
+    navigation.navigate('Create',{type : 'transaction',transactionData:{ cateId: id}})
     // navigation.navigate('Create',{type : 'category'})
   }
 

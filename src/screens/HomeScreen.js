@@ -96,15 +96,15 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.container}>
       {/* first row */}
       {
-      <ScrollView>
-          <Text>{JSON.stringify({card:cardID,
-            ...date},null,2)}</Text>
-      </ScrollView>
+      // <ScrollView>
+      //     <Text>{JSON.stringify({card:cardID,
+      //       ...date},null,2)}</Text>
+      // </ScrollView>
       }
       <View style={styles.flexBetween}>
         {[1,2,3,4].map((el) => {
           const {id, name, color, sum} = screenData.categories[el];
-          return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+          return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
         })}
       </View>
 
@@ -113,7 +113,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.aside}>
       {[5,6].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
-        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
       </View>
 
@@ -132,7 +132,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.aside}>
       {[7,8].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
-        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
       </View>
       </View>
@@ -142,7 +142,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={styles.flexBetween}>
       {[9,10,11].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
-        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id}/>
+        return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
 
       <CateItem color='#000000' visible={false} />

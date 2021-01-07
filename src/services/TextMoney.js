@@ -7,7 +7,17 @@ function TextMoney(money=0) {
 
 
 function NumberWithSpace(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  if (x != "") {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+  else return ""
 }
 
-export { TextMoney, NumberWithSpace }
+function numberWithSpacetoNumber(x) {
+  if (x != "") {
+    return x.split(" ").join("")
+  }
+  else return ""
+}
+
+export { TextMoney, NumberWithSpace,numberWithSpacetoNumber }
