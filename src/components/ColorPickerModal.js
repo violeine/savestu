@@ -1,8 +1,9 @@
-import React, {useState} from 'react'
-import {View, StyleSheet, Text, Modal, Pressable} from 'react-native'
-import {TriangleColorPicker} from 'react-native-color-picker'
+import React, { useState } from 'react'
+import { View, StyleSheet, Text, Modal, Pressable } from 'react-native'
+import { TriangleColorPicker } from 'react-native-color-picker'
+import BtnAction from './BtnAction'
 
-const ColorPickerModal = ({visible, hideModal, setCategoryInput, categoryInput,checkCategoryInfor, categoryError }) => {
+const ColorPickerModal = ({ visible, hideModal, setCategoryInput, categoryInput, checkCategoryInfor, categoryError }) => {
 
   return (
     <View style={styles.centeredView} >
@@ -11,17 +12,22 @@ const ColorPickerModal = ({visible, hideModal, setCategoryInput, categoryInput,c
         visible={visible}
         transparent={true}
       >
-        <Pressable style={styles.centeredView} onPress={hideModal}>
-          <View style={{marginTop: 10,height: 200, width: 200, alignSelf:'center'}}>
+        <Pressable
+          style={styles.centeredView}
+          onPress={hideModal}
+          >
+            
+          <View style={{ marginTop: 10, height: 200, width: 200, alignSelf: 'center' }}>
             <TriangleColorPicker
               onColorSelected={color => {
-                  setCategoryInput({...categoryInput, 'color' : color})
-                  checkCategoryInfor('color',color)
-                  hideModal()
-                }
+                setCategoryInput({ ...categoryInput, 'color': color })
+                checkCategoryInfor('color', color)
+                hideModal()
               }
-              style={{flex:1}}
+              }
+              style={{ flex: 1 }}
             />
+
           </View>
         </Pressable>
       </Modal>
@@ -54,5 +60,5 @@ const styles = StyleSheet.create({
     elevation: 5
   },
 
-}) 
+})
 export default ColorPickerModal;
