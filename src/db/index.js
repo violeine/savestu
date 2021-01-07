@@ -46,7 +46,7 @@ const defaultCategory = [
   },
   {
     name: "Drinks",
-    color: "#897e2f",
+    color: "#13dfff",
     type: "expense",
   },
   {
@@ -96,7 +96,7 @@ const defaultCategory = [
   },
   {
     name: "Other Income",
-    color: "#13dfff",
+    color: "#897e2f",
     type: "income",
   },
 ];
