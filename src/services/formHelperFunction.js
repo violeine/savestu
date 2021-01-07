@@ -104,9 +104,16 @@ function getEmoji(strName) {
 		"Movie": "🎞️",
 		"using": "💳",
 		"saving": "💰",
-		"": "👛",
+		"Salary": "💰",
+		"Maintenance": "💰",
 	}
-	return emojiObj[strName]
+	
+	if (emojiObj[strName]){
+		return emojiObj[strName]
+	}
+	else {
+		return "💰"
+	}
 }
 
 // input: Create, Update, card, transaction
