@@ -7,7 +7,8 @@ import { getCategoryById } from '../db/category'
 import { TextMoney } from '../services/TextMoney';
 import { changMoneyColor, chooseIcon } from '../services/ColorFunction';
 import { formatDateDisplay } from '../services/DateFunctions';
-import {showDot} from '../services/formHelperFunction'
+import { showDot } from '../services/formHelperFunction';
+
 
 
 
@@ -24,7 +25,7 @@ export default function TransItem({ el, onLongPress, isGroup = false }) {
   // Tự động lấy dữ liệu khi load screen lần đầu
   useEffect(() => {
     fetchDataCate();
-  }, [])
+  }, [el])
 
 
   // console.log('\n----- TRANS ITEM -------\n');
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'lightblue',
   },
 
-  icon:{
+  icon: {
     width: 30,
   },
 

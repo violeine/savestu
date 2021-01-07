@@ -18,7 +18,7 @@ import AddButton from '../components/AddButton';
 
 
 
-export default function HistoryScreen({ navigation }) {
+export default function HistoryScreen({ navigation,route }) {
   // HEADER
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [cardModalVisible, setCardModalVisible] = useState(false);
@@ -37,34 +37,46 @@ export default function HistoryScreen({ navigation }) {
 
   // DATA
   const [transAll, setTransAll] = useState(undefined);
-  const [{id:cardID, money}, date]= [useCardState(), useDateState()];
-  const fetchDataAll = async () => {
-    if (date.type === "date")
-    {const data = await getTransactionByCardAndDate({card:cardID,
-                                                  ...formatDateDB(date)})
-    setTransAll(data);
+  const date=useDateState();
+  const card=useCardState();
+  const {id:cardID, money}=card;
+  const fetchDataAll = async (cardID,date) => {
+
+    if (date.type === "date") {
+      const data = await getTransactionByCardAndDate({
+        card: cardID,
+        ...formatDateDB(date)
+      })
+      setTransAll(data);
     }
 
-    if (date.type === "month")
-    {const data = await getTransactionByCardAndMonth({card:cardID,
-                                                  ...formatDateDB(date)});
-    setTransAll(data); }
-    if (date.type === "year")
-    {const data = await getTransactionByCardAndYear({card:cardID,
-                                                  ...formatDateDB(date)});
-    setTransAll(data); }
-    if (date.type === "all")
-    {const data = await getTransactionByCard(cardID);
-    setTransAll(data); }
+    if (date.type === "month") {
+      const data = await getTransactionByCardAndMonth({
+        card: cardID,
+        ...formatDateDB(date)
+      });
+      setTransAll(data);
+    }
+    if (date.type === "year") {
+      const data = await getTransactionByCardAndYear({
+        card: cardID,
+        ...formatDateDB(date)
+      });
+      setTransAll(data);
+    }
+    if (date.type === "all") {
+      const data = await getTransactionByCard(cardID);
+      setTransAll(data);
+    }
   };
 
   const onLongPressTranItem = (id) => {
-    navigation.navigate('Update', {type: "transaction", id : id })
+    navigation.navigate('Update', { type: "transaction", id: id })
   }
 
   useEffect(() => {
-    fetchDataAll();
-  }, [cardID, date,money])
+    fetchDataAll(cardID,date);
+  }, [cardID, date,money, card,route.params?.update])
 
   // console.log('\n===== HISTORY SCREEN =====\n');
   // console.log('---- data All -----\n', transAll);
@@ -101,26 +113,22 @@ export default function HistoryScreen({ navigation }) {
           </Picker>
         </View>
     </View>
-      <ScrollView style={styles.container}>
+      <ScrollView>
         {
           transAll
             ? transAll.map(el =>
               el.category == 1
                 ? null
                 : el.category <= 3
-                ? <TransItem el={el} key={el.id} onLongPress={showToastError}/>
-                : <TransItem el={el} key={el.id} onLongPress={onLongPressTranItem}/>
+                ? <TransItem el={el} key={el} onLongPress={showToastError}/>
+                : <TransItem el={el} key={el} onLongPress={onLongPressTranItem}/>
             )
             : <Text style={[styles.centerItem, styles.txtNotify]}>You have no transaction</Text>
         }
 
-    {// <BtnAction title='Fetch Data All' type='primary' onPress={fetchDataAll} />
-    }
-
       </ScrollView>
 
       <AddButton />
-
     </View>
   )
 }
@@ -129,6 +137,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fafafa',
+    paddingBottom: 100,
   },
 
   centerItem: {
@@ -142,12 +151,10 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingTop: 20,
     paddingBottom: 10,
-    backgroundColor: "#fafafa",
   },
 
   picker: {
     width: 170,
-    height: 40,
     marginLeft: 5,
     justifyContent: "center",
   },

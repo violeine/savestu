@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { View, StyleSheet, Text, ScrollView, Button } from "react-native";
-
+import { View, StyleSheet, Text, ScrollView, Pressable } from "react-native";
+import { Entypo } from '@expo/vector-icons';
 
 import { useCardDispatch,useCardState,useDateState } from "../db";
 import {formatDateDB} from "../services/DateFunctions"
@@ -102,7 +102,7 @@ const HomeScreen = ({ navigation }) => {
       // </ScrollView>
       }
       <View style={styles.flexBetween}>
-        {[1,2,3,4].map((el) => {
+        {[3,4,5,6].map((el) => {
           const {id, name, color, sum} = screenData.categories[el];
           return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
         })}
@@ -111,7 +111,7 @@ const HomeScreen = ({ navigation }) => {
       {/* second row */}
       <View style={styles.flexBetween}>
       <View style={styles.aside}>
-      {[5,6].map((el) => {
+      {[7,8].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
         return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
@@ -130,7 +130,7 @@ const HomeScreen = ({ navigation }) => {
 
 
       <View style={styles.aside}>
-      {[7,8].map((el) => {
+      {[9,10].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
         return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
@@ -140,13 +140,28 @@ const HomeScreen = ({ navigation }) => {
 
       {/* third round */}
       <View style={styles.flexBetween}>
-      {[9,10,11].map((el) => {
+      {[11,12,13,14].map((el) => {
         const {id, name, color, sum} = screenData.categories[el];
         return <CateItem color={color} cate={ name } money={Math.abs(sum)} key={id} id={id}/>
       })}
 
-      <CateItem color='#000000' visible={false} />
       </View>
+
+       {/* Add Cate */}
+       <View style={{ flexDirection: "row" }}>
+          <Pressable
+              onPress={() => navigation.navigate('Create', {type : 'category'})}
+              style={({ pressed }) =>
+                [
+                  {
+                    backgroundColor: pressed ? '#ececec' : 'transparent'
+                  },
+                  styles.addCate,
+                ]}
+            >
+              <Entypo name="edit" size={20} color="#535353" />
+          </Pressable>
+        </View>
 
       <AddButton />
 
@@ -172,7 +187,14 @@ const styles = StyleSheet.create({ container: {
   },
   aside: {
     justifyContent: 'space-between',
+  },
+
+  addCate:{
+    borderRadius: 100,
+    padding: 15,
+    marginLeft: 10,
   }
+  
 });
 
 export default HomeScreen;

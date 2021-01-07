@@ -15,7 +15,6 @@ const ColorPickerModal = ({visible, hideModal, setCategoryInput, categoryInput,c
           <View style={{marginTop: 10,height: 200, width: 200, alignSelf:'center'}}>
             <TriangleColorPicker
               onColorSelected={color => {
-                  console.log(`Color selected: ${color}`)
                   setCategoryInput({...categoryInput, 'color' : color})
                   checkCategoryInfor('color',color)
                   hideModal()

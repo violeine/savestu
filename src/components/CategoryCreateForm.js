@@ -6,7 +6,8 @@ import { Picker } from '@react-native-picker/picker'
 import { strRegex,
   capitalizeFirstLetter,
   isCheckChangeColor,
-  isCheck
+  isCheck,
+  getEmoji
 } from '../services/formHelperFunction'
 import {
   getCategory,
@@ -16,9 +17,10 @@ import {
 import HeaderForm from './HeaderForm'
 import BtnAction from './BtnAction'
 import ColorPickerModal from './ColorPickerModal'
+import {useNavigation} from "@react-navigation/native"
 
 const CategoryCreateForm = () => {
-
+  const navigation  = useNavigation()
   const [categoryInput, setCategoryInput] = useState({
     "name" : "",
     "color" : "#2cc197",
@@ -76,10 +78,8 @@ const CategoryCreateForm = () => {
   const handleCreateBtn = async () => {
     if (isCheck(categoryError)) {
       try {
-
         console.log(await createCategory(categoryInput))
-        console.log(categoryInput)
-        // navigation.goBack()
+        navigation.goBack()
       }
       catch {
         console.error();
@@ -129,8 +129,8 @@ const CategoryCreateForm = () => {
               prompt='Select Type'
             >
               <Picker.Item label="Pick Type" value=""/>
-              <Picker.Item label="Income" value="income"/>
-              <Picker.Item label="Expense" value="expense"/>
+              <Picker.Item label={getEmoji("income") + "  Income"}value="income"/>
+              <Picker.Item label={getEmoji("expense") + "  Expense"} value="expense"/>
 
             </Picker>
           </View>
