@@ -9,10 +9,14 @@ export {
 
 export const getTransactionByCard = async (card) => {
   try {
-    const [
-      ,
-      { rows },
-    ] = await execSql(`select * from transactions where card=?`, [card]);
+    const [, { rows }] = await execSql(
+      `
+      select * from transactions
+      where card=?
+      order by category asc
+    `,
+      [card]
+    );
     return rows._array;
   } catch (err) {
     console.log(err);
@@ -40,6 +44,7 @@ export const getTransactionByCardAndYear = async ({ card, year }) => {
       `
        SELECT * FROM transactions
        WHERE card=? AND date LIKE (SELECT '%/'||?)
+       ORDER BY category ASC
       `,
       [card, year]
     );
@@ -55,6 +60,7 @@ export const getTransactionByCardAndMonth = async ({ card, month, year }) => {
       `
     SELECT * FROM transactions
     WHERE card=? AND date LIKE (select ?||'/%/'||?)
+    ORDER BY category ASC
   `,
       [card, month, year]
     );
@@ -70,8 +76,9 @@ export const getTransactionByCardAndDate = async ({ card, date }) => {
       `
     SELECT * FROM transactions
     WHERE card=? AND date=?
+    ORDER BY category ASC
   `,
-      [card,date]
+      [card, date]
     );
     return rows._array;
   } catch (err) {
