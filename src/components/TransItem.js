@@ -7,6 +7,7 @@ import { getCategoryById } from '../db/category'
 import { TextMoney } from '../services/TextMoney';
 import { changMoneyColor, chooseIcon } from '../services/ColorFunction';
 import { formatDateDisplay } from '../services/DateFunctions';
+import { showDot } from '../services/formHelperFunction';
 
 
 
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'lightblue',
   },
 
-  icon:{
+  icon: {
     width: 30,
   },
 

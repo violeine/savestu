@@ -1,6 +1,6 @@
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { View, StyleSheet, Text, ScrollView, Button } from "react-native";
-
+import { View, StyleSheet, Text, ScrollView, Pressable } from "react-native";
+import { Entypo } from '@expo/vector-icons';
 
 import { useCardDispatch,useCardState,useDateState } from "../db";
 import {formatDateDB} from "../services/DateFunctions"
@@ -148,6 +148,22 @@ const HomeScreen = ({ navigation }) => {
       <CateItem color='#000000' visible={false} />
       </View>
 
+       {/* Add Cate */}
+       <View style={{ flexDirection: "row" }}>
+          <Pressable
+              onPress={() => console.log('Add Cate Pressed')}
+              style={({ pressed }) =>
+                [
+                  {
+                    backgroundColor: pressed ? '#ececec' : 'transparent'
+                  },
+                  styles.addCate,
+                ]}
+            >
+              <Entypo name="edit" size={20} color="#535353" />
+          </Pressable>
+        </View>
+
       <AddButton />
 
       </View>: null}
@@ -172,7 +188,14 @@ const styles = StyleSheet.create({ container: {
   },
   aside: {
     justifyContent: 'space-between',
+  },
+
+  addCate:{
+    borderRadius: 100,
+    padding: 15,
+    marginLeft: 10,
   }
+  
 });
 
 export default HomeScreen;

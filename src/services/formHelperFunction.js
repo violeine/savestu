@@ -116,5 +116,6 @@ export {
 	objectForUpdate,
 	getEmoji,
 	showToastError,
-	hideOnUsing
+	hideOnUsing,
+	showDot,
 }

@@ -37,7 +37,7 @@ export default function DonutChart({ card, series = [0], sliceColor = ['#ddd'], 
       <Pie
         series={_series}
         sliceColor={_sliceColor}
-        chart_wh={180}
+        chart_wh={170}
         doughnut={true}
         coverRadius={0.85}
         coverFill={'#fafafa'}

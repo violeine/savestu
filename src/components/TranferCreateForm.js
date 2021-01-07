@@ -245,7 +245,7 @@ const TranferCreateForm = () => {
         </View>
 
         {/* note */}
-        <View style={{ alignSelf: "center" }}>
+        {/* <View style={{ alignSelf: "center" }}>
           <TextInput
             onChangeText={(t) => {
               setTranferInput({
@@ -266,7 +266,7 @@ const TranferCreateForm = () => {
               ? null
               : <Text style={isCheckChangeColor(tranferError.note)}>{tranferError.note}</Text>
           }
-        </View>
+        </View> */}
 
       </ScrollView>
     </>

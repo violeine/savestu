@@ -29,7 +29,7 @@ export default function CateItem({ id, color, cate, money = 0, visible = true })
       ]
     }>
 
-      <Text style={{ color: color, textTransform: "capitalize", fontSize: 12 }}>
+      <Text style={{ color: color, textTransform: "capitalize", fontSize: 11 }}>
         {cate}
       </Text>
 

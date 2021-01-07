@@ -189,6 +189,7 @@ const CardUpdateForm = ({ cardId }) => {
             placeholder="Input card name"
             mode='outlined'
             style={styles.input}
+            disabled={true}
           />
         </View>
 
