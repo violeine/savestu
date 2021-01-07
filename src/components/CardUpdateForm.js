@@ -144,7 +144,6 @@ const CardUpdateForm = ({ cardId }) => {
           text: "OK",
           onPress: async () => {
             let card = await deleteCard(cardTest.id)
-            console.log(card)
             navigation.navigate('Card', {cardId: card})
           },
         },
