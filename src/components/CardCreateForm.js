@@ -11,7 +11,6 @@ import {
   isCheck
 } from '../services/formHelperFunction'
 import {NumberWithSpace, numberWithSpacetoNumber} from '../services/TextMoney'
-import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 
 

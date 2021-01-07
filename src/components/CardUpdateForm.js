@@ -12,6 +12,7 @@ import {
   hideOnUsing,
   getEmoji,
   objectForUpdate} from '../services/formHelperFunction'
+import {showToastDeleteCardError} from "../services/formHelperFunction"
 import {NumberWithSpace, numberWithSpacetoNumber} from '../services/TextMoney'
 import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
@@ -19,6 +20,7 @@ import HeaderForm from './HeaderForm'
 
 const CardUpdateForm = ({ cardId }) => {
   const dispatch = useCardDispatch()
+  const globalCard = useCardState()
   const navigation = useNavigation()
   const [cardInput, setCardInput] = useState({
     name: "",
@@ -118,7 +120,6 @@ const CardUpdateForm = ({ cardId }) => {
       }
       else {
         //alert error "No thing to update"
-        console.log(cardError)
         navigation.goBack()
       }
     }
@@ -143,8 +144,14 @@ const CardUpdateForm = ({ cardId }) => {
         {
           text: "OK",
           onPress: async () => {
-            let card = await deleteCard(cardTest.id)
-            navigation.navigate('Card', {cardId: card})
+            if (cardTest.id == globalCard.id) {
+              showToastDeleteCardError()
+              navigation.navigate('Card', {cardId: cardInput})
+            }
+            else {
+              let card = await deleteCard(cardTest.id)
+              navigation.navigate('Card', {cardId: card})
+            }
           },
         },
       ]

@@ -11,7 +11,6 @@ import {
   getEmoji
 } from '../services/formHelperFunction'
 import {
-  getCategory,
   createCategory
 } from '../db/category'
 

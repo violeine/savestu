@@ -13,7 +13,6 @@ import {
   getEmoji
 } from '../services/formHelperFunction'
 import {NumberWithSpace, numberWithSpacetoNumber} from '../services/TextMoney'
-import BtnAction from './BtnAction'
 import HeaderForm from './HeaderForm'
 import CardItem from './CardItem'
 
@@ -94,7 +93,6 @@ const TranferCreateForm = () => {
     if (isCheck(tranferError)) {
       try {
         const data = await transferMoney(tranferInput)
-        console.log(data)
         dispatch(data.sender)
         navigation.goBack()
       }
@@ -105,7 +103,6 @@ const TranferCreateForm = () => {
     }
     else {
       //alert Something Error -> Check Error
-      console.log(tranferError)
       console.log("Something Error -> Check Error")
     }
   }

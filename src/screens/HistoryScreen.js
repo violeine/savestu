@@ -120,8 +120,8 @@ export default function HistoryScreen({ navigation,route }) {
               el.category == 1
                 ? null
                 : el.category <= 3
-                ? <TransItem el={el} key={el} onLongPress={showToastError}/>
-                : <TransItem el={el} key={el} onLongPress={onLongPressTranItem}/>
+                ? <TransItem el={el} key={el + Math.floor(Math.random()*500)} onLongPress={showToastError}/>
+                : <TransItem el={el} key={el + Math.floor(Math.random()*500)} onLongPress={onLongPressTranItem}/>
             )
             : <Text style={[styles.centerItem, styles.txtNotify]}>You have no transaction</Text>
         }

@@ -108,6 +108,9 @@ function showToastError() {
 	ToastAndroid.show("You can't update transfer", ToastAndroid.SHORT);
 }
 
+function showToastDeleteCardError() {
+	ToastAndroid.show("You are using this card. Can't not delete", ToastAndroid.SHORT);
+}
 export {
 	strRegex,
 	capitalizeFirstLetter,
@@ -115,6 +118,7 @@ export {
 	isCheck,
 	objectForUpdate,
 	getEmoji,
+	showToastDeleteCardError,
 	showToastError,
 	hideOnUsing,
 	showDot

@@ -63,8 +63,9 @@ const TransactionCreateForm = ({ transactionData }) => {
   const getOneCategory = async (cateId, _date) => {
     const data = await getCategoryById(cateId)
     await setListCategoires([data])
-    setTransactionInput({ ...transactionInput, category: cateId, card: globalCard.id.toString(), date: _date })
     setCategoryType(data.type)
+    setTransactionInput({ ...transactionInput, category: cateId, card: globalCard.id.toString(), date: _date })
+    checkTransactionInfor('category',cateId)
   }
 
   const checkTransactionInfor = (type, value) => {
