@@ -49,11 +49,11 @@ export default function DonutChart({ card, series = [0], sliceColor = ['#ddd'], 
         card.type == 'using'
           ? (
             <View style={styles.centerItem}>
-              <Text style={[changMoneyColor(expense), styles.txtMoney]}>
+              <Text style={[{ color: '#ff4e4e' }, styles.txtMoney]}>
                 {TextMoney(expense)}
               </Text>
 
-              <Text style={[changMoneyColor(income), styles.txtMoney]}>
+              <Text style={[{ color: '#2cc197' }, styles.txtMoney]}>
                 {TextMoney(income)}
               </Text>
             </View >

@@ -122,7 +122,7 @@ const HomeScreen = ({ navigation }) => {
       <DonutChart
       card={cardData}
       series={screenData.sum.length>0 ? screenData.sum : [1]}
-      sliceColor={screenData.color.length>0?screenData.color:["#fac"]}
+      sliceColor={screenData.color.length>0?screenData.color:["#cacaca"]}
       income={screenData.income}
       expense={screenData.expense}
       />
